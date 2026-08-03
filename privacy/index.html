@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>プライバシーポリシー — ClipDex</title>
+<style>
+  :root { color-scheme: light dark; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0 auto; padding: 48px 24px 96px; max-width: 720px;
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
+    font-size: 16px; line-height: 1.85;
+    color: #1a1a1a; background: #f2f2f2;
+  }
+  h1 { font-size: 26px; margin: 0 0 8px; letter-spacing: .01em; }
+  h2 { font-size: 18px; margin: 44px 0 12px; padding-top: 20px; border-top: 1px solid #d8d8d8; }
+  p, li { margin: 10px 0; }
+  ul { padding-left: 1.3em; }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .9em; }
+  table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; }
+  th, td { border: 1px solid #d8d8d8; padding: 8px 10px; text-align: left; vertical-align: top; }
+  th { background: #e8e8e8; font-weight: 600; }
+  .meta { color: #666; font-size: 14px; margin-bottom: 32px; }
+  a { color: #2f6fd0; }
+  @media (prefers-color-scheme: dark) {
+    body { color: #e6e6e6; background: #1f1f1f; }
+    h2 { border-top-color: #333; }
+    th, td { border-color: #333; }
+    th { background: #262626; }
+    .meta { color: #999; }
+    a { color: #6096e6; }
+  }
+</style>
+</head>
+<body>
+<h1>ClipDex プライバシーポリシー</h1>
+<p class="meta">最終更新: 2026年8月2日</p>
+
+<p>ClipDex（以下「本アプリ」）は、macOS 上でクリップボードの履歴と定型文を扱うアプリケーションです。本アプリは、クリップボードという性質上きわめて機微な情報に触れます。そのため本アプリは、<strong>取得したデータを一切外部に送信しない</strong>という設計を最初から採っています。</p>
+
+<h2>1. 外部送信について</h2>
+<p>本アプリに関連してネットワーク通信が発生するのは、Apple の App Store を通じた<strong>購入と購入の復元</strong>のときだけで、この通信は本アプリではなく Apple の仕組み（StoreKit）がシステム側で行います。本アプリの開発者はサーバーを一切保有していません。本アプリ自体は外向きのネットワーク接続を行う権限を持たない設定でビルドされており、OS のレベルで通信が許可されていません。</p>
+<p>したがって、本アプリが取得するデータのうち、<strong>開発者や第三者に送信されるものはひとつもありません</strong>。解析ツール・広告・クラッシュレポートの外部送信も組み込んでいません。</p>
+
+<h2>2. 保存する場所</h2>
+<p>本アプリが保存するデータは、すべてお使いの Mac の内部、App Sandbox によって本アプリ専用に隔離された次の場所に置かれます。</p>
+<p><code>~/Library/Containers/com.o2z0.ClipDex/Data/Library/Application Support/com.o2z0.ClipDex/</code></p>
+<p>macOS の App Sandbox によって、本アプリ専用の領域として他のアプリから隔離されています。iCloud を含む同期機構も使用していません。</p>
+
+<h2>3. 保存する内容</h2>
+<table>
+<thead>
+<tr><th>内容</th><th>いつ保存されるか</th><th>既定</th><th>保持</th><th>消し方</th></tr>
+</thead>
+<tbody>
+<tr>
+<td>利用統計（コピー・ペーストの回数、文字数、時間帯、コピー元／貼り付け先のアプリ識別子。<strong>本文そのものは含みません</strong>）</td>
+<td>コピーを検出したとき／⌘V を検出したとき</td>
+<td>有効（⌘V 側の計測にはアクセシビリティ権限が必要）</td>
+<td>データ自体は無期限に蓄積されます。画面に表示するのは無料版が直近7日間、Pro版は既定で無制限（設定で7〜365日に変更可）です</td>
+<td>設定 →「すべてのデータ」→「すべて削除」</td>
+</tr>
+<tr>
+<td>クリップボード履歴（コピーしたテキストの本文）</td>
+<td>コピーを検出したとき（この機能を有効にしている場合のみ）</td>
+<td>無効（オプトイン）</td>
+<td>件数の上限を超えると古いものから自動的に削除されます。無料版は30件固定、Pro版は50〜1000件（既定200件）</td>
+<td>設定 →「クリップボード履歴」→「削除」、または「すべてのデータ」</td>
+</tr>
+<tr>
+<td>画像クリップ（コピーした画像とそのサムネイル）</td>
+<td>画像のコピーを検出したとき（この機能を有効にしている場合のみ）</td>
+<td>無効（オプトイン）</td>
+<td>件数・合計容量・1枚あたりの容量の上限を超えると古いものから自動的に削除されます。無料版は15件・合計50MB・1枚10MBまで、Pro版は50〜500件（既定50件）・合計500MB・1枚50MBまで</td>
+<td>クリップボード履歴と同じ場所からまとめて削除されます</td>
+</tr>
+<tr>
+<td>登録したもの（ご自身で保存したテキスト・画像・動画）</td>
+<td>ご自身が新規作成したとき、Finder からドラッグしたとき、または履歴から登録したとき（なお初回起動時に限り、使い方を説明する案内文を本アプリ自身が書き込みます。これはユーザー由来の内容ではありません）</td>
+<td>機能自体は常に使えますが、保存されるのはご自身が操作したときだけです</td>
+<td>自動削除はありません。上限まで保持されます（テキストは無料版10件・Pro版100件、画像・動画は無料版5件・Pro版30〜200件〔既定50件〕、1件あたり画像50MB・動画500MB）</td>
+<td>一覧から個別または複数選択で削除します。<strong>「すべてのデータ」の削除には含まれません</strong></td>
+</tr>
+<tr>
+<td>ペースト記録（貼り付けた文字列、Pro限定）</td>
+<td>⌘V を検出したとき（この機能を有効にしている場合のみ）</td>
+<td>無効（オプトイン、Pro限定）</td>
+<td>無料版は直近7日分、Pro版は既定で無期限（設定で7〜365日に変更可）。期限を過ぎた分は自動的に削除されます</td>
+<td>設定 →「ペースト記録」→「削除」、または「すべてのデータ」</td>
+</tr>
+<tr>
+<td>購入状態（Pro を購入済みかどうか）</td>
+<td>起動時、購入時、復元時</td>
+<td>未購入</td>
+<td>真偽値のみ保持されます。判断のもとになる記録は Apple 側が保持しています</td>
+<td>「すべてのデータ」の削除でこの端末上のキャッシュは未購入状態に戻ります（次回起動、または「購入を復元」で Apple の記録から再判定されます）</td>
+</tr>
+</tbody>
+</table>
+
+<h2>4. 既定で保存しないもの（オプトイン）</h2>
+<p>次の 3 つは<strong>初期状態ではすべて無効</strong>で、設定画面でご自身が明示的に有効にしたときにのみ保存が始まります。</p>
+<ul>
+  <li><strong>クリップボード履歴</strong> — コピーしたテキストの本文</li>
+  <li><strong>画像クリップ</strong> — コピーした画像</li>
+  <li><strong>ペースト記録</strong> — 貼り付けた文字列（Pro 限定）</li>
+</ul>
+<p>有効にしない限り、本アプリが保存するのは回数・文字数・時間帯といった数値と、コピー元／貼り付け先のアプリ識別子だけで、内容そのものは保存されません。</p>
+
+<h2>5. 記録しない仕組み</h2>
+<p>上記のオプトイン機能を有効にしている場合でも、本アプリは次の仕組みで機微な情報を記録から除きます。</p>
+<ul>
+  <li><strong>組み込みの除外アプリ</strong> — パスワード管理アプリなど 5 件（1Password 7 / 1Password 8 以降 / Bitwarden / キーチェーンアクセス / システム設定）でコピーした内容は保存しません</li>
+  <li><strong>コピー元が付けたマーカーの尊重</strong> — コピー元のアプリが「これは機密情報です」という業界標準のマーカーを付けている場合、本文を保存しません。ただし<strong>この仕組みはコピー元のアプリが対応している場合にのみ働き</strong>、すべてのアプリの機密データを検知できるわけではありません</li>
+  <li><strong>ユーザーによる除外アプリの追加</strong> — 設定画面から、起動中のアプリを選んで除外リストに追加できます（組み込みの 5 件に追加されます）</li>
+  <li><strong>一時停止</strong> — メニューバーから 15 / 30 / 60 分の間、記録を一時的に止められます（無期限の一時停止はありません）</li>
+</ul>
+
+<h2>6. アクセシビリティ権限について</h2>
+<p>本アプリは、⌘V が押されたことを検知するため、および履歴からの貼り付けを実行するために、macOS のアクセシビリティ権限を使用します。この権限は<strong>付与しなくても本アプリは動作します</strong>（コピーの記録には権限が不要で、貼り付け機能はクリップボードへのコピーに切り替わります）。権限は設定画面からご自身の操作で付与するもので、本アプリが勝手に取得することはありません。</p>
+
+<h2>7. データの削除</h2>
+<p>設定画面の「すべてのデータ」から、利用統計・クリップボード履歴（画像クリップを含む）・ペースト記録をまとめて削除できます。<strong>登録したものはこの操作の対象外</strong>で、消したい場合は一覧から個別に削除してください。本アプリをアンインストールした場合は、上記の保存場所ごと削除されます。開発者の手元には何も残りません（そもそも送信されていないため）。</p>
+
+<h2>8. お問い合わせ</h2>
+<p>本ポリシーに関するお問い合わせは <a href="mailto:support@o2z0.com">support@o2z0.com</a> までお願いします。</p>
+<p>Masafumi Koyama</p>
+
+<h2>9. 改定</h2>
+<p>本ポリシーを変更する場合は、このページを更新し、最終更新日を改めます。</p>
+</body>
+</html>

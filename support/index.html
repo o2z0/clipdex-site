@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>サポート — ClipDex</title>
+<style>
+  :root { color-scheme: light dark; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0 auto; padding: 48px 24px 96px; max-width: 720px;
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
+    font-size: 16px; line-height: 1.85;
+    color: #1a1a1a; background: #f2f2f2;
+  }
+  h1 { font-size: 26px; margin: 0 0 8px; letter-spacing: .01em; }
+  h2 { font-size: 18px; margin: 44px 0 12px; padding-top: 20px; border-top: 1px solid #d8d8d8; }
+  p, li { margin: 10px 0; }
+  ul { padding-left: 1.3em; }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .9em; }
+  table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; }
+  th, td { border: 1px solid #d8d8d8; padding: 8px 10px; text-align: left; vertical-align: top; }
+  th { background: #e8e8e8; font-weight: 600; }
+  .meta { color: #666; font-size: 14px; margin-bottom: 32px; }
+  a { color: #2f6fd0; }
+  @media (prefers-color-scheme: dark) {
+    body { color: #e6e6e6; background: #1f1f1f; }
+    h2 { border-top-color: #333; }
+    th, td { border-color: #333; }
+    th { background: #262626; }
+    .meta { color: #999; }
+    a { color: #6096e6; }
+  }
+</style>
+</head>
+<body>
+<h1>ClipDex サポート</h1>
+<p class="meta">お困りのことがあればご連絡ください。</p>
+
+<h2>お問い合わせ</h2>
+<p><a href="mailto:support@o2z0.com">support@o2z0.com</a></p>
+<p>不具合のご報告では、macOS のバージョンと、どの操作で何が起きたかを添えていただけると助かります。</p>
+
+<h2>よくある質問</h2>
+
+<h3>アクセシビリティ権限は何に使っていますか</h3>
+<p>⌘V が押されたことの検知と、履歴からの貼り付けの実行に使っています。<strong>付与しなくてもアプリは動きます</strong> — コピーの記録に権限は不要で、貼り付け機能はクリップボードへのコピーに切り替わります。</p>
+
+<h3>コピーした内容は保存されますか</h3>
+<p>初期状態では保存されません。クリップボード履歴・画像クリップ・ペースト記録の 3 つはいずれもオプトインで、設定画面で有効にしたときだけ保存が始まります。詳しくは<a href="/privacy">プライバシーポリシー</a>をご覧ください。</p>
+
+<h3>パスワードが履歴に残らないようにできますか</h3>
+<p>ClipDex は、パスワード管理アプリなど 5 件（1Password 7 / 1Password 8 以降 / Bitwarden / キーチェーンアクセス / システム設定）を組み込みで除外しており、これらのアプリでコピーした内容は保存されません。設定画面からさらに除外するアプリを追加することもできます。</p>
+<p>また、コピー元のアプリが「これは機密情報です」という業界標準のマーカーを付けている場合も保存を控えますが、<strong>この仕組みはコピー元のアプリが対応している場合にのみ働く</strong>ため、すべてのアプリの機密情報を完全に防げるわけではありません。記録そのものをメニューバーから 15 / 30 / 60 分の間、一時的に止めることもできます。</p>
+
+<h3>保存されたデータを消したい</h3>
+<p>設定画面の「すべてのデータ」から、利用統計・クリップボード履歴（画像クリップを含む）・ペースト記録をまとめて削除できます（<strong>登録したものはこの操作の対象外</strong>です）。個別のクリップは、一覧で選んで ⌫ キーでも削除できます。登録したものを消したい場合は、一覧から個別または複数選択して削除してください。</p>
+
+<h3>Pro を購入したのに反映されません / 機種を変えました</h3>
+<p>設定画面の「ClipDex Pro」にある「購入を復元」を押してください。App Store にサインインしているアカウントが購入時と同じであることをご確認ください。</p>
+
+<h3>ショートカットを変えたい</h3>
+<p>設定画面から、履歴を呼び出すショートカット（既定は ⇧⌘C）を変更できます。</p>
+
+<h2>動作環境</h2>
+<p>macOS 14.0 以降</p>
+<p>ペーストの検知（ペーストの回数計測・レポートのペースト傾向・履歴からの自動貼り付け・ペースト記録）には、システム設定の「アクセシビリティ」の許可が必要です。許可しなくてもアプリ自体は動作し、コピー側の機能はそのまま使えます。履歴からの貼り付けは、許可がない場合はコピーのみに切り替わります。</p>
+
+<p><a href="/privacy">プライバシーポリシー</a></p>
+</body>
+</html>
