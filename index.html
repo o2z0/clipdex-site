@@ -105,7 +105,12 @@
   .bridge .a{font-size:clamp(21px,2.6vw,27px); line-height:1.6; font-weight:650; margin-top:var(--s3); color:var(--text)}
 
   /* ---- privacy ---- */
-  .priv{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:14px; overflow:hidden; margin-top:var(--s4)}
+  /* 模式図は本文列いっぱいに広げず 760px で中央に置く。全幅に組み直した案も作ったが、
+     箱が横に伸びるぶん中の流れが間延びして見えたため (docs/lp/privacy-combined.html 組み合わせ①)。 */
+  .diagram{border:1px solid var(--line-2); border-radius:14px; background:var(--surface);
+    padding:var(--s4) var(--s3); margin:var(--s4) auto 0; max-width:760px}
+  .diagram svg{display:block; width:100%; height:auto}
+  .priv{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:14px; overflow:hidden; margin-top:var(--s3)}
   .priv > div{background:var(--surface); padding:var(--s3)}
   .priv p{margin:0; color:var(--text-2); font-size:14px}
 
@@ -283,6 +288,36 @@
     <p class="eyebrow">PRIVACY</p>
     <h2>運んだ記録は、手元から出ない</h2>
     <p class="body">ClipDex はデータを外部に送信しません。分析サーバも、アカウント登録もありません。集計も分類も、すべてあなたの Mac の中で完結します。</p>
+
+    <div class="diagram">
+      <svg viewBox="0 0 520 250" role="img" aria-label="コピーから保存までがあなたの Mac の中で完結し、外へ出ようとする経路が断たれていることを示す図。サーバーへの送信もアカウントもありません。">
+        <defs>
+          <marker id="privArrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+            <path d="M0 0 L8 4 L0 8 z" fill="#9a9a9a"/>
+          </marker>
+        </defs>
+        <rect x="8" y="8" width="504" height="150" rx="12" fill="#1c1c1c" stroke="#3a3a3a"/>
+        <text x="26" y="34" fill="#6e6e6e" font-size="12" letter-spacing="1.6" font-family="-apple-system,sans-serif">あなたの Mac</text>
+        <g font-family="-apple-system,sans-serif" font-size="13" fill="#f2f2f2" text-anchor="middle">
+          <rect x="34" y="62" width="118" height="56" rx="9" fill="#242424" stroke="#3a3a3a"/>
+          <text x="93" y="95">コピー</text>
+          <rect x="201" y="62" width="118" height="56" rx="9" fill="#2e2e2e" stroke="#565656"/>
+          <text x="260" y="88">ClipDex</text>
+          <text x="260" y="106" font-size="11" fill="#9a9a9a">集計・分類</text>
+          <rect x="368" y="62" width="118" height="56" rx="9" fill="#242424" stroke="#3a3a3a"/>
+          <text x="427" y="88">手元のファイル</text>
+          <text x="427" y="106" font-size="11" fill="#9a9a9a">Mac の中だけ</text>
+        </g>
+        <line x1="156" y1="90" x2="196" y2="90" stroke="#9a9a9a" stroke-width="1.4" marker-end="url(#privArrow)"/>
+        <line x1="323" y1="90" x2="363" y2="90" stroke="#9a9a9a" stroke-width="1.4" marker-end="url(#privArrow)"/>
+        <line x1="260" y1="158" x2="260" y2="196" stroke="#4a4a4a" stroke-width="1.4" stroke-dasharray="4 5"/>
+        <g stroke="#6e6e6e" stroke-width="1.6">
+          <line x1="252" y1="188" x2="268" y2="204"/><line x1="268" y1="188" x2="252" y2="204"/>
+        </g>
+        <text x="260" y="234" fill="#6e6e6e" font-size="12.5" text-anchor="middle" font-family="-apple-system,sans-serif">サーバーへの送信も、アカウントも、ありません</text>
+      </svg>
+    </div>
+
     <div class="priv">
       <div><h3>外部送信ゼロ</h3><p>ネットワークへ送るものがありません。アカウントも不要です。</p></div>
       <div><h3>本文の保存は任意</h3><p>コピーした内容そのものを残すかどうかは、あなたが選びます。既定はオフです。</p></div>
