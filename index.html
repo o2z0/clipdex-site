@@ -66,19 +66,12 @@
   h1{font-size:clamp(32px,5vw,52px); line-height:1.28; letter-spacing:.01em; margin:0 0 var(--s3); font-weight:700}
   .lede{color:var(--text-2); font-size:17px; margin:0 0 var(--s4); max-width:34em}
   .req{color:var(--text-3); font-size:13px; margin:var(--s2) 0 0}
+  /* 画像は tools/lp/crop.py が提出パック (2880x1800) から切り出したもの。
+     窓の外形を実測して「窓が枠を占める割合」を全カットで 94.3% に揃えてあるので、
+     CSS 側で位置や倍率を触る必要はない (触ると揃いが壊れる)。
+     縦横比は各カットの成り行き = width/height 属性が真。 */
   .shot{border:1px solid var(--line-2); border-radius:14px; overflow:hidden; background:var(--surface)}
-  .shot img{width:100%}
-  /* 提出用スクショ (2880x1800) は上部に見出し帯が焼き込まれ、01 は左半分が
-     タイトル + ロゴ。画像は無加工のまま、CSS で見せたい領域だけを切り出す。
-     数値は「元画像に対する割合」から算出した固定値。 */
-  .shot-crop{position:relative; overflow:hidden}
-  .shot-crop img{position:absolute; height:auto; max-width:none}
-  /* セクション: x 12%→88% / y 26%→100% → 比 (0.76*2880)/(0.74*1800)=1.64 */
-  .feat .shot-crop{aspect-ratio:1.64}
-  .feat .shot-crop img{width:131.6%; left:-15.8%; top:-35.1%}
-  /* ヒーロー: x 50%→100% / y 14%→83% → 比 (0.50*2880)/(0.69*1800)=1.16 */
-  .hero .shot-crop{aspect-ratio:1.16}
-  .hero .shot-crop img{width:200%; left:-100%; top:-23.3%}
+  .shot img{width:100%; height:auto}
   @media (max-width:860px){
     .hero{padding:var(--s5) 0}
     .hero-grid{grid-template-columns:1fr; gap:var(--s4)}
@@ -87,10 +80,14 @@
   /* ---- generic section ---- */
   section{padding:var(--s6) 0; border-bottom:1px solid var(--line)}
   .eyebrow{font-size:12px; letter-spacing:.18em; color:var(--text-3); margin:0 0 var(--s2); font-weight:650}
-  h2{font-size:clamp(23px,3vw,32px); line-height:1.45; margin:0 0 var(--s3); font-weight:700; letter-spacing:.01em}
+  h2{font-size:clamp(23px,2.7vw,30px); line-height:1.45; margin:0 0 var(--s3); font-weight:700; letter-spacing:.01em}
   h3{font-size:17px; margin:0 0 var(--s1); font-weight:650}
   .body{color:var(--text-2); margin:0; max-width:38em}
   .feat{display:grid; grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr); gap:var(--s5); align-items:center}
+  /* 左右を入れ替える行は、列の比も一緒に入れ替える。order だけを付けると
+     画像が .9fr 側に入って **画像だけ 18% 縮む** (実測 532px → 436px)。
+     これが「STOCK だけ小さく見える」の正体だった (2026-08-19)。 */
+  .feat.rev{grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr)}
   .feat.rev .feat-txt{order:2}
   .facts{list-style:none; padding:0; margin:var(--s3) 0 0; color:var(--text-2); font-size:15px}
   .facts li{padding-left:1.15em; position:relative; margin:6px 0}
@@ -169,10 +166,8 @@
       <p class="req">macOS 14.0 以降 / Apple Silicon・Intel 両対応</p>
     </div>
     <div class="shot">
-      <div class="shot-crop">
-        <img src="/assets/01-hero.png" width="1600" height="1000"
-             alt="ClipDex の統合ウインドウ。コピーの履歴が新しい順に並び、各行にコピー元アプリのアイコンが付いている。">
-      </div>
+      <img src="/assets/01-hero.png" width="1600" height="1185"
+           alt="ClipDex の統合ウインドウ。コピーの履歴が新しい順に並び、各行にコピー元アプリのアイコンが付いている。">
     </div>
   </div>
 </div>
@@ -199,10 +194,10 @@
         <li>無料で 30 件、Pro で 50〜1000 件（既定 200 件）</li>
       </ul>
     </div>
-    <div class="shot"><div class="shot-crop">
-      <img loading="lazy" src="/assets/02-history.png" width="1600" height="1000"
+    <div class="shot">
+      <img loading="lazy" src="/assets/02-history.png" width="1600" height="958"
            alt="クリップボード履歴の一覧。画像・コード・URL・チャットの文章・メモが、それぞれのコピー元アプリのアイコンと時刻つきで並んでいる。">
-    </div></div>
+    </div>
   </div>
 </section>
 
@@ -218,10 +213,10 @@
         <li>並べ替え・グループ移動・削除は <kbd>⌘</kbd><kbd>Z</kbd> で何段でも取り消せる</li>
       </ul>
     </div>
-    <div class="shot"><div class="shot-crop">
-      <img loading="lazy" src="/assets/03-registered.png" width="1600" height="1000"
+    <div class="shot">
+      <img loading="lazy" src="/assets/03-registered.png" width="1600" height="1016"
            alt="登録したものの一覧。画像素材と定型文が「定型文」「コード」「住所・連絡先」のグループに分かれて並んでいる。">
-    </div></div>
+    </div>
   </div>
 </section>
 
@@ -236,10 +231,10 @@
         <li>「Slack から」「今日」のような条件を重ねて絞れる</li>
       </ul>
     </div>
-    <div class="shot"><div class="shot-crop">
-      <img loading="lazy" src="/assets/04-search.png" width="1600" height="1000"
+    <div class="shot">
+      <img loading="lazy" src="/assets/04-search.png" width="1600" height="871"
            alt="横断検索の画面。「ありがとう」で検索した結果がクリップボード履歴と登録したものに分かれて表示され、アプリ・グループ・日付の絞り込みパネルが開いている。">
-    </div></div>
+    </div>
   </div>
 </section>
 
@@ -247,7 +242,7 @@
   <div class="wrap feat rev">
     <div class="feat-txt">
       <p class="eyebrow">QUICK</p>
-      <h2>ショートカットキーで呼び出して、<br>すぐに貼れる</h2>
+      <h2>ショートカットキーで<br>呼び出して、すぐに貼れる</h2>
       <p class="body">作業中のアプリから手を離さずに <kbd>⇧</kbd><kbd>⌘</kbd><kbd>V</kbd>。カーソルの近くに軽いパネルが出て、選んで <kbd>Enter</kbd> で貼り終わります。キーは好きな組み合わせに変えられます。</p>
       <ul class="facts">
         <li>履歴・登録・グループをタブで切り替えられる</li>
@@ -255,10 +250,10 @@
         <li><kbd>esc</kbd> で閉じる。使い終わったら元のアプリに戻ります</li>
       </ul>
     </div>
-    <div class="shot"><div class="shot-crop">
-      <img loading="lazy" src="/assets/05-picker.png" width="1600" height="1000"
+    <div class="shot">
+      <img loading="lazy" src="/assets/05-picker.png" width="1600" height="1013"
            alt="ショートカットキーで呼び出したクイックパネル。画像とテキストが並び、選択中の画像が原寸でプレビュー表示されている。">
-    </div></div>
+    </div>
   </div>
 </section>
 
@@ -275,10 +270,10 @@
         <li>今日・週次・直近 4 週間・今月・今年の 5 期間</li>
       </ul>
     </div>
-    <div class="shot"><div class="shot-crop">
-      <img loading="lazy" src="/assets/06-report.png" width="1600" height="1000"
+    <div class="shot">
+      <img loading="lazy" src="/assets/06-report.png" width="1600" height="1016"
            alt="週次レポート。コピー 308 件・ペースト 267 件・16,821 文字の集計と、アプリ別・内容別の内訳バー、曜日と時間のヒートマップが表示されている。">
-    </div></div>
+    </div>
   </div>
 </section>
 
