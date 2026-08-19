@@ -3,42 +3,349 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ClipDex</title>
+<title>ClipDex — ちょうどいいクリップボード</title>
+<meta name="description" content="macOS のメニューバーに常駐するクリップボードマネージャ。コピーしたものが残り、よく使うものを置いておけて、あとから探せる。記録はすべて手元に残り、外へは出ません。">
+<meta property="og:title" content="ClipDex — ちょうどいいクリップボード">
+<meta property="og:description" content="コピーしたものが残る。よく使うものを置いておける。あとから探せる。記録は手元から出ない。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://clipdex.o2z0.com/">
+<meta property="og:image" content="https://clipdex.o2z0.com/assets/01-hero.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://clipdex.o2z0.com/">
 <style>
-  :root { color-scheme: light dark; }
-  html { -webkit-text-size-adjust: 100%; }
-  body {
-    margin: 0 auto; padding: 48px 24px 96px; max-width: 720px;
-    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
-    font-size: 16px; line-height: 1.85;
-    color: #1a1a1a; background: #f2f2f2;
+  :root{
+    color-scheme: dark;
+    --bg:#0e0e0e; --surface:#161616; --surface-2:#1c1c1c;
+    --text:#f2f2f2; --text-2:#9a9a9a; --text-3:#6e6e6e;
+    --line:#262626; --line-2:#333;
+    --maxw:1080px;
+    --s1:8px; --s2:16px; --s3:24px; --s4:40px; --s5:64px; --s6:96px; --s7:140px;
   }
-  h1 { font-size: 26px; margin: 0 0 8px; letter-spacing: .01em; }
-  h2 { font-size: 18px; margin: 44px 0 12px; padding-top: 20px; border-top: 1px solid #d8d8d8; }
-  p, li { margin: 10px 0; }
-  ul { padding-left: 1.3em; }
-  code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .9em; }
-  table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; }
-  th, td { border: 1px solid #d8d8d8; padding: 8px 10px; text-align: left; vertical-align: top; }
-  th { background: #e8e8e8; font-weight: 600; }
-  .meta { color: #666; font-size: 14px; margin-bottom: 32px; }
-  a { color: #2f6fd0; }
-  @media (prefers-color-scheme: dark) {
-    body { color: #e6e6e6; background: #1f1f1f; }
-    h2 { border-top-color: #333; }
-    th, td { border-color: #333; }
-    th { background: #262626; }
-    .meta { color: #999; }
-    a { color: #6096e6; }
+  *,*::before,*::after{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%; scroll-behavior:smooth}
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} }
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;
+    font-size:16px; line-height:1.85;
+    -webkit-font-smoothing:antialiased;
   }
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 var(--s3)}
+  a{color:var(--text); text-underline-offset:.22em; text-decoration-color:var(--line-2)}
+  a:hover{text-decoration-color:var(--text-2)}
+  img{max-width:100%; display:block}
+
+  /* ---- header ---- */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(14,14,14,.82); backdrop-filter:saturate(180%) blur(14px);
+    border-bottom:1px solid var(--line);
+  }
+  .navrow{display:flex; align-items:center; gap:var(--s4); height:56px}
+  .brand{font-weight:650; letter-spacing:.06em; text-decoration:none; font-size:15px}
+  .navlinks{display:flex; gap:var(--s3); margin-left:auto; align-items:center}
+  .navlinks a{color:var(--text-2); text-decoration:none; font-size:14px}
+  .navlinks a:hover{color:var(--text)}
+  @media (max-width:640px){ .navlinks .opt{display:none} }
+
+  /* ---- buttons ---- */
+  .btn{
+    display:inline-block; padding:12px 26px; border-radius:10px;
+    background:var(--text); color:#0b0b0b; font-weight:650; font-size:15px;
+    text-decoration:none; border:1px solid var(--text); line-height:1.4;
+  }
+  .btn:hover{background:#fff}
+  .btn[aria-disabled="true"]{
+    background:transparent; color:var(--text-2); border-color:var(--line-2); cursor:default;
+  }
+  .btn-sm{padding:8px 18px; font-size:14px; border-radius:8px}
+
+  /* ---- hero ---- */
+  .hero{padding:var(--s7) 0 var(--s6); border-bottom:1px solid var(--line)}
+  .hero-grid{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.15fr); gap:var(--s5); align-items:center}
+  h1{font-size:clamp(32px,5vw,52px); line-height:1.28; letter-spacing:.01em; margin:0 0 var(--s3); font-weight:700}
+  .lede{color:var(--text-2); font-size:17px; margin:0 0 var(--s4); max-width:34em}
+  .req{color:var(--text-3); font-size:13px; margin:var(--s2) 0 0}
+  .shot{border:1px solid var(--line-2); border-radius:14px; overflow:hidden; background:var(--surface)}
+  .shot img{width:100%}
+  /* 提出用スクショ (2880x1800) は上部に見出し帯が焼き込まれ、01 は左半分が
+     タイトル + ロゴ。画像は無加工のまま、CSS で見せたい領域だけを切り出す。
+     数値は「元画像に対する割合」から算出した固定値。 */
+  .shot-crop{position:relative; overflow:hidden}
+  .shot-crop img{position:absolute; height:auto; max-width:none}
+  /* セクション: x 12%→88% / y 26%→100% → 比 (0.76*2880)/(0.74*1800)=1.64 */
+  .feat .shot-crop{aspect-ratio:1.64}
+  .feat .shot-crop img{width:131.6%; left:-15.8%; top:-35.1%}
+  /* ヒーロー: x 50%→100% / y 14%→83% → 比 (0.50*2880)/(0.69*1800)=1.16 */
+  .hero .shot-crop{aspect-ratio:1.16}
+  .hero .shot-crop img{width:200%; left:-100%; top:-23.3%}
+  @media (max-width:860px){
+    .hero{padding:var(--s5) 0}
+    .hero-grid{grid-template-columns:1fr; gap:var(--s4)}
+  }
+
+  /* ---- generic section ---- */
+  section{padding:var(--s6) 0; border-bottom:1px solid var(--line)}
+  .eyebrow{font-size:12px; letter-spacing:.18em; color:var(--text-3); margin:0 0 var(--s2); font-weight:650}
+  h2{font-size:clamp(23px,3vw,32px); line-height:1.45; margin:0 0 var(--s3); font-weight:700; letter-spacing:.01em}
+  h3{font-size:17px; margin:0 0 var(--s1); font-weight:650}
+  .body{color:var(--text-2); margin:0; max-width:38em}
+  .feat{display:grid; grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr); gap:var(--s5); align-items:center}
+  .feat.rev .feat-txt{order:2}
+  .facts{list-style:none; padding:0; margin:var(--s3) 0 0; color:var(--text-2); font-size:15px}
+  .facts li{padding-left:1.15em; position:relative; margin:6px 0}
+  .facts li::before{content:"—"; position:absolute; left:0; color:var(--text-3)}
+  kbd{
+    font:inherit; font-size:.86em; padding:2px 7px; border:1px solid var(--line-2);
+    border-radius:6px; background:var(--surface-2); color:var(--text);
+  }
+  @media (max-width:860px){ .feat{grid-template-columns:1fr; gap:var(--s3)} .feat.rev .feat-txt{order:0} }
+
+  /* ---- bridge ---- */
+  .bridge{text-align:center; padding:var(--s6) 0}
+  .bridge p{margin:0 auto; max-width:30em}
+  .bridge .q{color:var(--text-2); font-size:17px}
+  .bridge .a{font-size:clamp(21px,2.6vw,27px); line-height:1.6; font-weight:650; margin-top:var(--s3); color:var(--text)}
+
+  /* ---- privacy ---- */
+  .priv{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:14px; overflow:hidden; margin-top:var(--s4)}
+  .priv > div{background:var(--surface); padding:var(--s3)}
+  .priv p{margin:0; color:var(--text-2); font-size:14px}
+
+  /* ---- bento ---- */
+  .bento{display:grid; grid-template-columns:repeat(3,1fr); gap:var(--s2); margin-top:var(--s4)}
+  .bento .cell{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:var(--s3)}
+  .bento .w2{grid-column:span 2}
+  .bento .full{grid-column:1/-1}
+  .bento p{margin:0; color:var(--text-2); font-size:14px}
+  @media (max-width:720px){ .bento{grid-template-columns:1fr} .bento .w2,.bento .full{grid-column:auto} }
+
+  /* ---- who ---- */
+  .who{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:var(--s3); margin-top:var(--s4)}
+  .who div{border-top:1px solid var(--line-2); padding-top:var(--s2)}
+  .who p{margin:0; color:var(--text-2); font-size:14px}
+
+  /* ---- cta ---- */
+  .cta{text-align:center; padding:var(--s7) 0}
+  .cta h2{margin-bottom:var(--s4)}
+  .note{color:var(--text-3); font-size:13px; margin-top:var(--s3)}
+
+  /* ---- footer ---- */
+  footer{border-bottom:none; padding:var(--s5) 0; color:var(--text-3); font-size:14px}
+  .footrow{display:flex; gap:var(--s3); flex-wrap:wrap; align-items:center}
+  footer a{color:var(--text-2); text-decoration:none}
+  footer a:hover{color:var(--text)}
+  .copy{margin-left:auto; color:var(--text-3)}
+  @media (max-width:640px){ .copy{margin-left:0; width:100%} }
 </style>
 </head>
 <body>
-<h1>ClipDex</h1>
-<p class="meta">macOS のメニューバーに常駐するクリップボードマネージャです。</p>
-<ul>
-  <li><a href="/privacy">プライバシーポリシー</a></li>
-  <li><a href="/support">サポート</a></li>
-</ul>
+
+<header>
+  <div class="wrap navrow">
+    <a class="brand" href="/">CLIPDEX</a>
+    <nav class="navlinks">
+      <a class="opt" href="#features">機能</a>
+      <a class="opt" href="#privacy">プライバシー</a>
+      <a class="opt" href="/support">サポート</a>
+      <a class="btn btn-sm" href="#download" aria-disabled="true">まもなく公開</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<!-- ============ ヒーロー ============ -->
+<div class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <h1>ちょうどいい<br>クリップボード</h1>
+      <p class="lede">
+        コピーしたものが、そのまま残る。よく使うものは、置いておける。
+        <kbd>⇧</kbd><kbd>⌘</kbd><kbd>V</kbd> で呼び出して、そのまま貼る。
+        記録はすべて手元に残り、外には出ません。
+      </p>
+      <a class="btn" href="#download" aria-disabled="true">まもなく App Store で公開</a>
+      <p class="req">macOS 14.0 以降 / Apple Silicon・Intel 両対応</p>
+    </div>
+    <div class="shot">
+      <div class="shot-crop">
+        <img src="/assets/01-hero.png" width="1600" height="1000"
+             alt="ClipDex の統合ウインドウ。コピーの履歴が新しい順に並び、各行にコピー元アプリのアイコンが付いている。">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ ブリッジ ============ -->
+<div class="bridge wrap">
+  <p class="q">コピーしたはずのものを、もう一度探しに戻る。<br>さっきの URL、さっきのコード、さっきの一文。</p>
+  <p class="a">一日のあいだに、あなたが何を運んだか。<br>ClipDex はそれを、ぜんぶ手元に残します。</p>
+</div>
+
+<!-- ============ 機能 ============ -->
+<div id="features"></div>
+
+<section>
+  <div class="wrap feat">
+    <div class="feat-txt">
+      <p class="eyebrow">COPY &amp; PASTE</p>
+      <h2>コピーしたものを、<br>あとから探してすぐ貼れる</h2>
+      <p class="body">運んだものが残る。行を選んで <kbd>Enter</kbd> かダブルクリックすると、直前まで使っていたアプリに戻って、そのまま貼り付けます。コピーし直す手間がありません。</p>
+      <ul class="facts">
+        <li>行にコピー元アプリのアイコンが出るので、どこから持ってきたか一目でわかる</li>
+        <li>複数選択すると、新しい順に連結して 1 回で貼れる</li>
+        <li>他のアプリへドラッグしてそのまま渡せる</li>
+        <li>無料で 30 件、Pro で 50〜1000 件（既定 200 件）</li>
+      </ul>
+    </div>
+    <div class="shot"><div class="shot-crop">
+      <img loading="lazy" src="/assets/02-history.png" width="1600" height="1000"
+           alt="クリップボード履歴の一覧。画像・コード・URL・チャットの文章・メモが、それぞれのコピー元アプリのアイコンと時刻つきで並んでいる。">
+    </div></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap feat rev">
+    <div class="feat-txt">
+      <p class="eyebrow">STOCK</p>
+      <h2>よく使う文章や画像・動画を、<br>グループごとに整理</h2>
+      <p class="body">よく運ぶものは、置いておく。定型文・コード片・住所や連絡先を自分のグループに分けて、必要なときに呼び出せます。履歴の行を右クリックすれば、そのまま登録に回せます。</p>
+      <ul class="facts">
+        <li>テキストは無料で 10 件、Pro で 300 件</li>
+        <li>画像・動画は別枠で、無料 5 件 / Pro 300 件</li>
+        <li>並べ替え・グループ移動・削除は <kbd>⌘</kbd><kbd>Z</kbd> で何段でも取り消せる</li>
+      </ul>
+    </div>
+    <div class="shot"><div class="shot-crop">
+      <img loading="lazy" src="/assets/03-registered.png" width="1600" height="1000"
+           alt="登録したものの一覧。画像素材と定型文が「定型文」「コード」「住所・連絡先」のグループに分かれて並んでいる。">
+    </div></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap feat">
+    <div class="feat-txt">
+      <p class="eyebrow">SEARCH</p>
+      <h2>履歴と登録したものを、<br>横断して検索</h2>
+      <p class="body">過去に運んだものを引く。履歴と登録を分けずに一度に検索して、ヒットした箇所をハイライトします。アプリ・グループ・日付での絞り込みも、検索欄にそのまま足せます。</p>
+      <ul class="facts">
+        <li>日本語・英語・コードが混ざっていても引ける</li>
+        <li>「Slack から」「今日」のような条件を重ねて絞れる</li>
+      </ul>
+    </div>
+    <div class="shot"><div class="shot-crop">
+      <img loading="lazy" src="/assets/04-search.png" width="1600" height="1000"
+           alt="横断検索の画面。「ありがとう」で検索した結果がクリップボード履歴と登録したものに分かれて表示され、アプリ・グループ・日付の絞り込みパネルが開いている。">
+    </div></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap feat rev">
+    <div class="feat-txt">
+      <p class="eyebrow">QUICK</p>
+      <h2>ショートカットキーで呼び出して、<br>すぐに貼れる</h2>
+      <p class="body">作業中のアプリから手を離さずに <kbd>⇧</kbd><kbd>⌘</kbd><kbd>V</kbd>。カーソルの近くに軽いパネルが出て、選んで <kbd>Enter</kbd> で貼り終わります。キーは好きな組み合わせに変えられます。</p>
+      <ul class="facts">
+        <li>履歴・登録・グループをタブで切り替えられる</li>
+        <li>画像はその場で原寸プレビューできる</li>
+        <li><kbd>esc</kbd> で閉じる。使い終わったら元のアプリに戻ります</li>
+      </ul>
+    </div>
+    <div class="shot"><div class="shot-crop">
+      <img loading="lazy" src="/assets/05-picker.png" width="1600" height="1000"
+           alt="ショートカットキーで呼び出したクイックパネル。画像とテキストが並び、選択中の画像が原寸でプレビュー表示されている。">
+    </div></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap feat">
+    <div class="feat-txt">
+      <p class="eyebrow">REPORT</p>
+      <h2>コピーとペーストの傾向を、<br>期間ごとに確認できる</h2>
+      <p class="body">何をどれだけ運んだかが見える。タイムトラッキングはアプリ単位で測りますが、ClipDex は<strong>クリップボード単位</strong>で測ります。開いていた時間ではなく、実際に手を動かして運んだものの記録です。</p>
+      <ul class="facts">
+        <li>どのアプリから運んだかの内訳</li>
+        <li>コード / URL / 数値 / 自然文の 4 分類</li>
+        <li>曜日 × 時間のヒートマップ</li>
+        <li>今日・週次・直近 4 週間・今月・今年の 5 期間</li>
+      </ul>
+    </div>
+    <div class="shot"><div class="shot-crop">
+      <img loading="lazy" src="/assets/06-report.png" width="1600" height="1000"
+           alt="週次レポート。コピー 308 件・ペースト 267 件・16,821 文字の集計と、アプリ別・内容別の内訳バー、曜日と時間のヒートマップが表示されている。">
+    </div></div>
+  </div>
+</section>
+
+<!-- ============ プライバシー ============ -->
+<section id="privacy">
+  <div class="wrap">
+    <p class="eyebrow">PRIVACY</p>
+    <h2>運んだ記録は、手元から出ない</h2>
+    <p class="body">ClipDex はデータを外部に送信しません。分析サーバも、アカウント登録もありません。集計も分類も、すべてあなたの Mac の中で完結します。</p>
+    <div class="priv">
+      <div><h3>外部送信ゼロ</h3><p>ネットワークへ送るものがありません。アカウントも不要です。</p></div>
+      <div><h3>本文の保存は任意</h3><p>コピーした内容そのものを残すかどうかは、あなたが選びます。既定はオフです。</p></div>
+      <div><h3>パスワード管理アプリは既定で除外</h3><p>1Password・Bitwarden・キーチェーンなど 8 つを最初から記録対象外にしています。追加もできます。</p></div>
+      <div><h3>いつでも一時停止</h3><p>メニューバーから 15 分・30 分・1 時間の停止。すべての記録の削除も 1 操作です。</p></div>
+    </div>
+    <p class="note">詳しくは <a href="/privacy">プライバシーポリシー</a> をご覧ください。</p>
+  </div>
+</section>
+
+<!-- ============ ベントー ============ -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow">MORE</p>
+    <h2>そのほかにできること</h2>
+    <div class="bento">
+      <div class="cell w2"><h3>画像もそのまま履歴に</h3><p>スクリーンショットや Finder の画像ファイルをコピーすると、サムネイル付きで履歴に残ります。貼り付け先に応じて、画像としてもファイル名としても渡せます。</p></div>
+      <div class="cell"><h3>ドラッグで渡す</h3><p>行をつかんで、他のアプリへ直接。</p></div>
+      <div class="cell w2"><h3><kbd>⌘</kbd><kbd>Z</kbd> で取り消せる</h3><p>削除も並べ替えもグループの移動も、多段で戻せます。<kbd>⇧</kbd><kbd>⌘</kbd><kbd>Z</kbd> でやり直しも。</p></div>
+      <div class="cell"><h3>キーは変えられる</h3><p>呼び出しのショートカットは自由に。</p></div>
+      <div class="cell full"><h3>書き出しとバックアップ</h3><p>レポートは PNG・PDF で、集計は CSV・JSON で書き出せます。バックアップからの復元にも対応しています。（Pro）</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 対象者 ============ -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow">WHO</p>
+    <h2>こんな人に</h2>
+    <div class="who">
+      <div><h3>エンジニア</h3><p>コードやログの断片を並行で抱える人。内容別の内訳で「コード」の比率が見えます。</p></div>
+      <div><h3>デザイナー</h3><p>カラーコード・アセットの URL・画像を横断で持ち回る人。画像クリップが効きます。</p></div>
+      <div><h3>ライター・マーケター</h3><p>参考文や見出し案をためておく人。自然文の比率と、手が動く時間帯が見えます。</p></div>
+      <div><h3>サポート・営業</h3><p>定型文をよく使う人。登録しておいて <kbd>Enter</kbd> で貼れます。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section class="cta" id="download">
+  <div class="wrap">
+    <h2>今日から、運んだものを残す</h2>
+    <a class="btn" href="#download" aria-disabled="true">まもなく App Store で公開</a>
+    <p class="req">macOS 14.0 以降 / Apple Silicon・Intel 両対応</p>
+    <p class="note">基本の機能は無料で使えます。件数の上限を広げる ClipDex Pro は買い切りです。</p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap footrow">
+    <a href="/privacy">プライバシーポリシー</a>
+    <a href="/support">サポート</a>
+    <span class="copy">© 2026 Masafumi Koyama</span>
+  </div>
+</footer>
+
 </body>
 </html>
