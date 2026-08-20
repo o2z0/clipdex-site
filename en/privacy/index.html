@@ -58,9 +58,9 @@
 </thead>
 <tbody>
 <tr>
-<td>Usage statistics (how many times you copied and pasted, character counts, time of day, and the identifiers of the apps you copied from and pasted into. <strong>The content itself is not included</strong>)</td>
-<td>When a copy is detected, or when ⌘V is detected</td>
-<td>Enabled (measuring ⌘V requires the Accessibility permission)</td>
+<td>Usage statistics (how many times you copied, character counts, time of day, and the identifiers of the apps you copied from. <strong>The content itself is not included</strong>)</td>
+<td>When a copy is detected</td>
+<td>Enabled</td>
 <td>The data itself accumulates indefinitely. What is shown on screen is the last 7 days on the free plan; on Pro it is unrestricted by default and can be set to 7–365 days</td>
 <td>Settings → "All Data" → "Delete All"</td>
 </tr>
@@ -86,13 +86,6 @@
 <td>Delete them individually or by multiple selection from the list. <strong>They are not included in "Delete All"</strong></td>
 </tr>
 <tr>
-<td>Paste records (the text you pasted; Pro only)</td>
-<td>When ⌘V is detected (only while this feature is enabled)</td>
-<td>Off (opt-in, Pro only)</td>
-<td>The last 7 days on the free plan; on Pro, kept without a time limit by default and can be set to 7–365 days. Anything older than the limit is deleted automatically</td>
-<td>Settings → "Paste Records" → "Delete", or "All Data"</td>
-</tr>
-<tr>
 <td>Purchase status (whether Pro has been purchased)</td>
 <td>At launch, at purchase, and when restoring</td>
 <td>Not purchased</td>
@@ -103,13 +96,12 @@
 </table>
 
 <h2>4. What is not stored by default (opt-in)</h2>
-<p>The following three are <strong>all off initially</strong> and only begin storing content once you explicitly turn them on in Settings.</p>
+<p>The following two are <strong>all off initially</strong> and only begin storing content once you explicitly turn them on in Settings.</p>
 <ul>
   <li><strong>Clipboard history</strong> — the text you copied, together with its formatting data (RTF / HTML)</li>
   <li><strong>Image clips</strong> — images you copied</li>
-  <li><strong>Paste records</strong> — the text you pasted (Pro only)</li>
 </ul>
-<p>Unless you turn these on, all the app stores are numbers — counts, character counts, times of day — and the identifiers of the apps you copied from and pasted into. The content itself is not stored.</p>
+<p>Unless you turn these on, all the app stores are numbers — counts, character counts, times of day — and the identifiers of the apps you copied from. The content itself is not stored.</p>
 
 <p><strong>About formatting data (added in version 1.1)</strong>: While clipboard history is enabled, the app stores not only the text you copied but also the formatting data (RTF / HTML) that the source app placed on the clipboard. Formatting data is <strong>stored exactly as the source app produced it; the app neither parses nor modifies it</strong>. As a result, that data may contain the URLs of any links inside the range you copied and, depending on the app (Word and Excel in the developer's own measurements), the path of a local temporary file (which includes your macOS user name) or the name and version of the app used to copy — in other words, <strong>information embedded by the source app</strong>. None of it is added by ClipDex. Stored formatting data is never transmitted, just like every other kind of data (see section 1). There is no separate switch for formatting data; it follows the clipboard history switch. The size limit is 2 MB per format in history and 512 KB per format when an item is moved into Saved Items. Beyond that, only the formatting for that format is dropped and the plain text is stored as usual.</p>
 
@@ -123,10 +115,10 @@
 </ul>
 
 <h2>6. About the Accessibility permission</h2>
-<p>The app uses the macOS Accessibility permission to detect that ⌘V was pressed and to perform pasting from history. <strong>The app works without granting it</strong> — recording copies needs no permission, and the paste feature falls back to copying to the clipboard. The permission is granted by your own action from Settings; the app never obtains it on its own.</p>
+<p>The app uses the macOS Accessibility permission for <strong>one thing only: automatically pasting the item you selected from history or Saved Items into the previous app (sending a single ⌘V)</strong>. It is never used to monitor keyboard input. <strong>Every feature works without granting it</strong> — pasting falls back to copying the selected item and bringing the target app to the front, and you press ⌘V yourself. The permission is granted by your own action from Settings; the app never obtains it on its own.</p>
 
 <h2>7. Deleting your data</h2>
-<p>From "All Data" in Settings you can delete usage statistics, clipboard history (including image clips), and paste records together. <strong>Saved Items are not covered by that action</strong>; delete them individually from the list instead. Uninstalling the app removes the storage location described above along with it. Nothing remains with the developer — because nothing was ever sent.</p>
+<p>From "All Data" in Settings you can delete usage statistics and clipboard history (including image clips) together. <strong>Saved Items are not covered by that action</strong>; delete them individually from the list instead. Uninstalling the app removes the storage location described above along with it. Nothing remains with the developer — because nothing was ever sent.</p>
 
 <h2>8. Contact</h2>
 <p>For questions about this policy, please write to <a href="mailto:support@o2z0.com">support@o2z0.com</a>.</p>
