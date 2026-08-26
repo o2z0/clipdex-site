@@ -91,14 +91,14 @@
   h2{font-size:clamp(23px,2.7vw,30px); line-height:1.45; margin:0 0 var(--s3); font-weight:700; letter-spacing:.01em; text-wrap:balance}
   h3{font-size:17px; margin:0 0 var(--s1); font-weight:650; text-wrap:balance}
   .body{color:var(--text-2); margin:0; max-width:38em; text-wrap:pretty}
+  /* 横並びの節は 1 つの列比を共有する。分割線が節ごとにずれると
+     「揃っていない」ように見えるため、テキスト幅・画像の左端・画像幅を
+     全節で同じにする (1280px 実測: テキスト 436 / 画像 左端 616・幅 532)。
+     リズムは縦積み (.feat-stack) との対比で出す。 */
   .feat{display:grid; grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr); gap:var(--s5); align-items:center}
-  /* 中核動作: 縦積みで画像を大きく見せる */
+  /* 中核動作とレポート: 縦積みで画像を大きく見せる */
   .feat-stack{display:grid; grid-template-columns:1fr; gap:var(--s3)}
   .feat-stack .feat-txt{max-width:38em}
-  /* 検索: 結果は横方向に情報が広いので画像側を広く取る */
-  .feat-wide{display:grid; grid-template-columns:minmax(0,.55fr) minmax(0,1.45fr); gap:var(--s5); align-items:center}
-  /* 呼び出し: キー操作の説明なので画面を大きく見せる必要がない */
-  .feat-compact{display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr); gap:var(--s5); align-items:center}
   .facts{list-style:none; padding:0; margin:var(--s3) 0 0; color:var(--text-2); font-size:15px}
   .facts li{padding-left:1.15em; position:relative; margin:6px 0}
   .facts li::before{content:"—"; position:absolute; left:0; color:var(--text-3)}
@@ -106,7 +106,7 @@
     font:inherit; font-size:.86em; padding:2px 7px; border:1px solid var(--line-2);
     border-radius:6px; background:var(--surface-2); color:var(--text);
   }
-  @media (max-width:860px){ .feat,.feat-wide,.feat-compact{grid-template-columns:1fr; gap:var(--s3)} }
+  @media (max-width:860px){ .feat{grid-template-columns:1fr; gap:var(--s3)} }
 
   /* ---- bridge ---- */
   .bridge{text-align:center; padding:var(--s6) 0}
@@ -252,7 +252,7 @@
 </section>
 
 <section>
-  <div class="wrap feat-wide">
+  <div class="wrap feat">
     <div class="feat-txt">
       <h2>履歴も登録も、<br>横断して検索</h2>
       <p class="body">過去に運んだものを引く。履歴と登録を分けずに一度に検索して、ヒットした箇所をハイライトします。アプリ・グループ・日付での絞り込みも、検索欄にそのまま足せます。</p>
@@ -269,13 +269,13 @@
 </section>
 
 <section>
-  <div class="wrap feat-compact">
+  <div class="wrap feat">
     <div class="feat-txt">
       <h2>ショートカットキーで<br>呼び出して、すぐに貼れる</h2>
       <p class="body">作業中のアプリから手を離さずに <kbd>⇧</kbd><kbd>⌘</kbd><kbd>V</kbd>。カーソルの近くに軽いパネルが出て、選んで <kbd>Enter</kbd> を押すと元のアプリに戻ります。キーは好きな組み合わせに変えられます。</p>
       <ul class="facts">
         <li>履歴・登録・グループをタブで切り替えられる</li>
-        <li>画像はその場で大きく確認できる（寸法とファイルサイズも出ます）</li>
+        <li>画像はその場で大きく確認できる（寸法とファイル容量も）</li>
         <li><kbd>esc</kbd> で閉じる。<kbd>⌘</kbd> を押しながら選べば窓に留まり、続けてコピーできる</li>
       </ul>
     </div>
