@@ -19,6 +19,7 @@
     --text:#f2f2f2; --text-2:#9a9a9a; --text-3:#6e6e6e;
     --line:#262626; --line-2:#333;
     --maxw:1080px;
+    --radius:12px; --radius-sm:6px;
     --s1:8px; --s2:16px; --s3:24px; --s4:40px; --s5:64px; --s6:96px; --s7:140px;
   }
   *,*::before,*::after{box-sizing:border-box}
@@ -50,7 +51,7 @@
 
   /* ---- buttons ---- */
   .btn{
-    display:inline-block; padding:12px 26px; border-radius:10px;
+    display:inline-block; padding:12px 26px; border-radius:var(--radius-sm);
     background:var(--text); color:#0b0b0b; font-weight:650; font-size:15px;
     text-decoration:none; border:1px solid var(--text); line-height:1.4;
   }
@@ -58,7 +59,7 @@
   .btn[aria-disabled="true"]{
     background:transparent; color:var(--text-2); border-color:var(--line-2); cursor:default;
   }
-  .btn-sm{padding:8px 18px; font-size:14px; border-radius:8px}
+  .btn-sm{padding:8px 18px; font-size:14px; border-radius:var(--radius-sm)}
 
   /* ---- hero ---- */
   .hero{padding:var(--s7) 0 var(--s6); border-bottom:1px solid var(--line)}
@@ -70,7 +71,7 @@
      窓の外形を実測して「窓が枠を占める割合」を全カットで 94.3% に揃えてあるので、
      CSS 側で位置や倍率を触る必要はない (触ると揃いが壊れる)。
      縦横比は各カットの成り行き = width/height 属性が真。 */
-  .shot{border:1px solid var(--line-2); border-radius:14px; overflow:hidden; background:var(--surface)}
+  .shot{border:1px solid var(--line-2); border-radius:var(--radius); overflow:hidden; background:var(--surface)}
   .shot img{width:100%; height:auto}
   @media (max-width:860px){
     .hero{padding:var(--s5) 0}
@@ -107,24 +108,24 @@
   /* ---- privacy ---- */
   /* 模式図は本文列いっぱいに広げず 760px で中央に置く。全幅に組み直した案も作ったが、
      箱が横に伸びるぶん中の流れが間延びして見えたため (docs/lp/privacy-combined.html 組み合わせ①)。 */
-  .diagram{border:1px solid var(--line-2); border-radius:14px; background:var(--surface);
+  .diagram{border:1px solid var(--line-2); border-radius:var(--radius); background:var(--surface);
     padding:var(--s4) var(--s3); margin:var(--s4) auto 0; max-width:760px}
   .diagram svg{display:block; width:100%; height:auto}
   /* 案 A: 図 (主) + 実物 1 枚 (従) の 2 列。2 列に入れるときは図の中央寄せ制限を解く。 */
   .a-grid{display:grid; grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);
     gap:var(--s3); align-items:stretch; margin-top:var(--s4)}
   .a-grid .diagram{margin:0; max-width:none}
-  .a-grid .shot-real{border:1px solid var(--line-2); border-radius:14px; background:var(--surface);
+  .a-grid .shot-real{border:1px solid var(--line-2); border-radius:var(--radius); background:var(--surface);
     overflow:hidden; display:flex; align-items:center; justify-content:center}
   .a-grid .shot-real img{display:block; width:100%; height:auto}
   @media (max-width:860px){ .a-grid{grid-template-columns:1fr} }
-  .priv{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:14px; overflow:hidden; margin-top:var(--s3)}
+  .priv{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; margin-top:var(--s3)}
   .priv > div{background:var(--surface); padding:var(--s3)}
   .priv p{margin:0; color:var(--text-2); font-size:14px}
 
   /* ---- bento ---- */
   .bento{display:grid; grid-template-columns:repeat(3,1fr); gap:var(--s2); margin-top:var(--s4)}
-  .bento .cell{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:var(--s3)}
+  .bento .cell{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:var(--s3)}
   .bento .w2{grid-column:span 2}
   .bento .full{grid-column:1/-1}
   .bento p{margin:0; color:var(--text-2); font-size:14px}
