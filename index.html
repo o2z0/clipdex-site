@@ -128,6 +128,10 @@
   .priv{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; margin-top:var(--s3)}
   .priv > div{background:var(--surface); padding:var(--s3)}
   .priv p{margin:0; color:var(--text-2); font-size:14px}
+  /* 語の途中で折り返させたくない塊 (例: 「パスワード管理アプリは」)。
+     この塊は 186px。.priv の見出し幅は 1280px で 209px / 900px で 230px /
+     320px でも 222px あり、いずれも収まる (2026-08-26 実測)。 */
+  .nb{white-space:nowrap}
 
   /* ---- bento ---- */
   .bento{display:grid; grid-template-columns:repeat(3,1fr); gap:var(--s2); margin-top:var(--s4)}
@@ -234,7 +238,7 @@
       <ul class="facts">
         <li>テキストは無料で 10 件、Pro で 300 件</li>
         <li>画像・動画は別枠で、無料 5 件 / Pro 300 件</li>
-        <li>並べ替え・グループ移動・削除は <kbd>⌘</kbd><kbd>Z</kbd> で何段でも取り消せる</li>
+        <li>並べ替え・グループ移動・削除は <kbd>⌘</kbd><kbd>Z</kbd> で多段に取り消せる</li>
       </ul>
     </div>
     <div class="shot">
@@ -247,7 +251,7 @@
 <section>
   <div class="wrap feat-wide">
     <div class="feat-txt">
-      <h2>履歴と登録したものを、<br>横断して検索</h2>
+      <h2>履歴も登録も、<br>横断して検索</h2>
       <p class="body">過去に運んだものを引く。履歴と登録を分けずに一度に検索して、ヒットした箇所をハイライトします。アプリ・グループ・日付での絞り込みも、検索欄にそのまま足せます。</p>
       <ul class="facts">
         <li>日本語・英語・コードが混ざっていても引ける</li>
@@ -343,7 +347,7 @@
     <div class="priv">
       <div><h3>外部送信ゼロ</h3><p>ネットワークへ送るものがありません。アカウントも不要です。</p></div>
       <div><h3>本文の保存は任意</h3><p>コピーした内容そのものを残すかどうかは、あなたが選びます。既定はオフです。</p></div>
-      <div><h3>パスワード管理アプリは既定で除外</h3><p>1Password・Bitwarden・キーチェーンなど 8 つを最初から記録対象外にしています。追加もできます。</p></div>
+      <div><h3><span class="nb">パスワード管理アプリは</span>既定で除外</h3><p>1Password・Bitwarden・キーチェーンなど 8 つを最初から記録対象外にしています。追加もできます。</p></div>
       <div><h3>いつでも一時停止</h3><p>メニューバーから 15 分・30 分・1 時間の停止。すべての記録の削除も 1 操作です。</p></div>
     </div>
     <p class="note">詳しくは <a href="/privacy">プライバシーポリシー</a> をご覧ください。</p>
