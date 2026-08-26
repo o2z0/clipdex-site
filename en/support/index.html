@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Support — ClipDex</title>
+<style>
+  :root { color-scheme: light dark; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0 auto; padding: 48px 24px 96px; max-width: 720px;
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
+    font-size: 16px; line-height: 1.85;
+    color: #1a1a1a; background: #f2f2f2;
+  }
+  h1 { font-size: 26px; margin: 0 0 8px; letter-spacing: .01em; }
+  h2 { font-size: 18px; margin: 44px 0 12px; padding-top: 20px; border-top: 1px solid #d8d8d8; }
+  p, li { margin: 10px 0; }
+  ul { padding-left: 1.3em; }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .9em; }
+  table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; }
+  th, td { border: 1px solid #d8d8d8; padding: 8px 10px; text-align: left; vertical-align: top; }
+  th { background: #e8e8e8; font-weight: 600; }
+  .meta { color: #666; font-size: 14px; margin-bottom: 8px; }
+  .lang { font-size: 14px; margin: 0 0 32px; }
+  a { color: #2f6fd0; }
+  @media (prefers-color-scheme: dark) {
+    body { color: #e6e6e6; background: #1f1f1f; }
+    h2 { border-top-color: #333; }
+    th, td { border-color: #333; }
+    th { background: #262626; }
+    .meta { color: #999; }
+    a { color: #6096e6; }
+  }
+</style>
+</head>
+<body>
+<h1>ClipDex Support</h1>
+<p class="meta">If something isn't working, please get in touch.</p>
+<p class="lang"><a href="/support">日本語</a></p>
+
+<h2>Contact</h2>
+<p><a href="mailto:support@o2z0.com">support@o2z0.com</a></p>
+<p>When reporting a problem, it helps to include your macOS version and what you did just before it happened.</p>
+
+<h2>Frequently asked questions</h2>
+
+<h3>Does ClipDex need the Accessibility permission (or any other)?</h3>
+<p>No. ClipDex <strong>does not request any special macOS permissions (such as Accessibility)</strong>, and it never monitors keyboard input. Pasting works by copying the selected item and bringing the previous app to the front — you press ⌘V yourself.</p>
+
+<h3>Is what I copy stored?</h3>
+<p>Not initially. Clipboard history and image clips are both opt-in, and storing begins only once you turn them on in Settings. See the <a href="/en/privacy">Privacy Policy</a> for details.</p>
+
+<h3>Can I keep passwords out of my history?</h3>
+<p>ClipDex has eight built-in exclusions, mostly password managers (1Password 7, 1Password 8 and later, Bitwarden, KeePassXC, LastPass for Safari, Dashlane, Keychain Access, and System Settings). Anything copied in those apps is not stored. You can add more apps to the exclusion list from Settings.</p>
+<p>The app also holds back when the source app attaches the industry-standard "this is confidential" marker — but <strong>that only works when the source app supports it</strong>, so it cannot fully prevent confidential data from every app. You can also pause recording entirely from the menu bar for 15 minutes, 30 minutes, or 1 hour.</p>
+
+<h3>How do I delete stored data?</h3>
+<p>"All Data" in Settings deletes usage statistics and clipboard history (including image clips) together (<strong>Saved Items are not covered</strong>). Individual clips can also be removed by selecting them in the list and pressing ⌫. To remove Saved Items, select them individually or in bulk from the list and delete them there.</p>
+
+<h3>I bought Pro but it isn't showing / I changed machines</h3>
+<p>Press "Restore Purchase" under "ClipDex Pro" in Settings. Make sure the account signed in to the App Store is the same one used for the purchase.</p>
+
+<h3>Why do clips copied on my iPhone appear in the history?</h3>
+<p>That's Apple's Universal Clipboard (part of Handoff) at work. When Handoff is enabled with the same Apple Account, content you copy on your iPhone, iPad, or another Mac also arrives on this Mac's clipboard, and ClipDex records it like any other copy. Since the source app isn't known for these items, they are shown as <strong>"Other Device"</strong> (since version 1.1). If you'd rather not record them, disable Handoff in macOS, or use ClipDex's Pause or turn history off. Like every other clip, they are stored only on this Mac.</p>
+
+<h3>Can I change the shortcut?</h3>
+<p>Yes — the shortcut that summons your history (⇧⌘V by default) can be changed from Settings.</p>
+
+<h2>Requirements</h2>
+<p>macOS 14.0 or later</p>
+<p>No special permissions are required. Pasting from history and Saved Items works by copying the selected item and bringing the target app to the front — you press ⌘V yourself.</p>
+
+<p><a href="/en/privacy">Privacy Policy</a></p>
+</body>
+</html>

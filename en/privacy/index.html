@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy Policy — ClipDex</title>
+<style>
+  :root { color-scheme: light dark; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0 auto; padding: 48px 24px 96px; max-width: 720px;
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
+    font-size: 16px; line-height: 1.85;
+    color: #1a1a1a; background: #f2f2f2;
+  }
+  h1 { font-size: 26px; margin: 0 0 8px; letter-spacing: .01em; }
+  h2 { font-size: 18px; margin: 44px 0 12px; padding-top: 20px; border-top: 1px solid #d8d8d8; }
+  p, li { margin: 10px 0; }
+  ul { padding-left: 1.3em; }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .9em; }
+  table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; }
+  th, td { border: 1px solid #d8d8d8; padding: 8px 10px; text-align: left; vertical-align: top; }
+  th { background: #e8e8e8; font-weight: 600; }
+  .meta { color: #666; font-size: 14px; margin-bottom: 8px; }
+  .lang { font-size: 14px; margin: 0 0 32px; }
+  a { color: #2f6fd0; }
+  @media (prefers-color-scheme: dark) {
+    body { color: #e6e6e6; background: #1f1f1f; }
+    h2 { border-top-color: #333; }
+    th, td { border-color: #333; }
+    th { background: #262626; }
+    .meta { color: #999; }
+    a { color: #6096e6; }
+  }
+</style>
+</head>
+<body>
+<h1>ClipDex Privacy Policy</h1>
+<p class="meta">Last updated: August 25, 2026</p>
+<p class="lang"><a href="/privacy">日本語</a></p>
+
+<p>ClipDex ("the app") manages clipboard history and saved snippets on macOS. By its very nature, the app touches highly sensitive information. That is why it was built from the start around a single principle: <strong>none of the data it collects is ever sent anywhere</strong>.</p>
+
+<h2>1. Nothing is transmitted</h2>
+<p>The only network activity related to the app is <strong>purchasing and restoring a purchase</strong> through Apple's App Store, and that communication is handled by Apple's own mechanism (StoreKit) at the system level, not by the app. The developer operates no servers of any kind. The app itself is built without the entitlement to make outgoing network connections, so such connections are not permitted at the operating-system level.</p>
+<p>Consequently, <strong>none of the data the app collects is sent to the developer or to any third party</strong>. There is no analytics, no advertising, and no external crash reporting.</p>
+
+<h2>2. Where data is stored</h2>
+<p>Everything the app stores stays inside your Mac, in a location isolated for this app alone by the App Sandbox:</p>
+<p><code>~/Library/Containers/com.o2z0.ClipDex/Data/Library/Application Support/com.o2z0.ClipDex/</code></p>
+<p>The macOS App Sandbox keeps this area separate from other apps. No synchronization mechanism is used, including iCloud.</p>
+
+<h2>3. What is stored</h2>
+<table>
+<thead>
+<tr><th>Data</th><th>When it is stored</th><th>Default</th><th>Retention</th><th>How to delete it</th></tr>
+</thead>
+<tbody>
+<tr>
+<td>Usage statistics (how many times you copied, character counts, time of day, and the identifiers of the apps you copied from. <strong>The content itself is not included</strong>)</td>
+<td>When a copy is detected</td>
+<td>Enabled</td>
+<td>The data itself accumulates indefinitely. What is shown on screen is the last 7 days on the free plan; on Pro it is unrestricted by default and can be set to 7–365 days</td>
+<td>Settings → "All Data" → "Delete All"</td>
+</tr>
+<tr>
+<td>Clipboard history (the text you copied, together with its formatting data [RTF / HTML])</td>
+<td>When a copy is detected (only while this feature is enabled)</td>
+<td>Off (opt-in)</td>
+<td>Once the item limit is exceeded, the oldest entries are removed automatically. The free plan is fixed at 30 items; Pro is 50–1,000 (200 by default). Formatting data is treated as part of the text and is deleted along with it</td>
+<td>Settings → "Clipboard History" → "Delete", or "All Data"</td>
+</tr>
+<tr>
+<td>Image clips (images you copied, and their thumbnails)</td>
+<td>When an image copy is detected (only while this feature is enabled)</td>
+<td>Off (opt-in)</td>
+<td>Once the limit on item count, total size, or per-image size is exceeded, the oldest entries are removed automatically. Free: 15 items, 50 MB total, 10 MB per image. Pro: 50–500 items (50 by default), 1 GB total, 100 MB per image</td>
+<td>Deleted together with clipboard history, from the same place</td>
+</tr>
+<tr>
+<td>Saved Items (text, images, and videos you saved yourself)</td>
+<td>When you create one, drag one in from the Finder, or save one from history (saving from history brings any formatting data along with it. Note that on the very first launch only, the app itself writes a short set of how-to cards — that content does not come from you)</td>
+<td>The feature is always available, but nothing is stored unless you act</td>
+<td>Nothing is removed automatically; items are kept up to the limits. Text: 10 on the free plan, 300 on Pro. Images and videos are counted separately: 5 on the free plan, 300 on Pro. Per item, 100 MB for an image and 500 MB for a video. Formatting data is discarded the moment you edit the text</td>
+<td>Delete them individually or by multiple selection from the list. <strong>They are not included in "Delete All"</strong></td>
+</tr>
+<tr>
+<td>Purchase status (whether Pro has been purchased)</td>
+<td>At launch, at purchase, and when restoring</td>
+<td>Not purchased</td>
+<td>Only a true/false value is kept. The record it is derived from is held by Apple</td>
+<td>"Delete All" resets the cached value on this Mac to not-purchased (it is re-checked against Apple's record at the next launch, or via "Restore Purchase")</td>
+</tr>
+</tbody>
+</table>
+
+<h2>4. What is not stored by default (opt-in)</h2>
+<p>The following two are <strong>all off initially</strong> and only begin storing content once you explicitly turn them on in Settings.</p>
+<ul>
+  <li><strong>Clipboard history</strong> — the text you copied, together with its formatting data (RTF / HTML)</li>
+  <li><strong>Image clips</strong> — images you copied</li>
+</ul>
+<p>Unless you turn these on, all the app stores are numbers — counts, character counts, times of day — and the identifiers of the apps you copied from. The content itself is not stored.</p>
+
+<p><strong>About formatting data (added in version 1.1)</strong>: While clipboard history is enabled, the app stores not only the text you copied but also the formatting data (RTF / HTML) that the source app placed on the clipboard. Formatting data is <strong>stored exactly as the source app produced it; the app neither parses nor modifies it</strong>. As a result, that data may contain the URLs of any links inside the range you copied and, depending on the app (Word and Excel in the developer's own measurements), the path of a local temporary file (which includes your macOS user name) or the name and version of the app used to copy — in other words, <strong>information embedded by the source app</strong>. None of it is added by ClipDex. Stored formatting data is never transmitted, just like every other kind of data (see section 1). There is no separate switch for formatting data; it follows the clipboard history switch. The size limit is 2 MB per format in history and 512 KB per format when an item is moved into Saved Items. Beyond that, only the formatting for that format is dropped and the plain text is stored as usual.</p>
+
+<h2>5. How sensitive content is kept out</h2>
+<p>Even with the opt-in features above turned on, the app excludes sensitive information from its records in the following ways.</p>
+<ul>
+  <li><strong>Built-in app exclusions</strong> — anything copied in one of eight apps, mostly password managers (1Password 7, 1Password 8 and later, Bitwarden, KeePassXC, LastPass for Safari, Dashlane, Keychain Access, and System Settings), is not stored</li>
+  <li><strong>Respecting markers set by the source app</strong> — when the app you copied from attaches the industry-standard "this is confidential" marker, the content is not stored. However, <strong>this only works when the source app supports it</strong>, so it cannot detect confidential data in every app</li>
+  <li><strong>Exclusions you add yourself</strong> — from Settings you can pick a running app and add it to the exclusion list (in addition to the eight built-in ones)</li>
+  <li><strong>Pause</strong> — from the menu bar you can pause recording for 15 minutes, 30 minutes, or 1 hour (there is no indefinite pause)</li>
+</ul>
+
+<h2>6. About permissions</h2>
+<p>ClipDex <strong>does not request any special macOS permissions (such as Accessibility)</strong>, and it never monitors keyboard input. Pasting an item you selected from history or Saved Items works by copying the item and bringing the previous app to the front; you press ⌘V yourself (an on-screen confirmation explains this each time).</p>
+
+<h2>7. Deleting your data</h2>
+<p>From "All Data" in Settings you can delete usage statistics and clipboard history (including image clips) together. <strong>Saved Items are not covered by that action</strong>; delete them individually from the list instead. Uninstalling the app removes the storage location described above along with it. Nothing remains with the developer — because nothing was ever sent.</p>
+
+<h2>8. Contact</h2>
+<p>For questions about this policy, please write to <a href="mailto:support@o2z0.com">support@o2z0.com</a>.</p>
+
+<h2>9. Changes</h2>
+<p>If this policy changes, this page will be updated and the last-updated date revised.</p>
+</body>
+</html>
