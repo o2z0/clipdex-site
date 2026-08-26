@@ -89,11 +89,13 @@
   h3{font-size:17px; margin:0 0 var(--s1); font-weight:650; text-wrap:balance}
   .body{color:var(--text-2); margin:0; max-width:38em; text-wrap:pretty}
   .feat{display:grid; grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr); gap:var(--s5); align-items:center}
-  /* 左右を入れ替える行は、列の比も一緒に入れ替える。order だけを付けると
-     画像が .9fr 側に入って **画像だけ 18% 縮む** (実測 532px → 436px)。
-     これが「STOCK だけ小さく見える」の正体だった (2026-08-19)。 */
-  .feat.rev{grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr)}
-  .feat.rev .feat-txt{order:2}
+  /* 中核動作: 縦積みで画像を大きく見せる */
+  .feat-stack{display:grid; grid-template-columns:1fr; gap:var(--s3)}
+  .feat-stack .feat-txt{max-width:38em}
+  /* 検索: 結果は横方向に情報が広いので画像側を広く取る */
+  .feat-wide{display:grid; grid-template-columns:minmax(0,.55fr) minmax(0,1.45fr); gap:var(--s5); align-items:center}
+  /* 呼び出し: キー操作の説明なので画面を大きく見せる必要がない */
+  .feat-compact{display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr); gap:var(--s5); align-items:center}
   .facts{list-style:none; padding:0; margin:var(--s3) 0 0; color:var(--text-2); font-size:15px}
   .facts li{padding-left:1.15em; position:relative; margin:6px 0}
   .facts li::before{content:"—"; position:absolute; left:0; color:var(--text-3)}
@@ -101,7 +103,7 @@
     font:inherit; font-size:.86em; padding:2px 7px; border:1px solid var(--line-2);
     border-radius:6px; background:var(--surface-2); color:var(--text);
   }
-  @media (max-width:860px){ .feat{grid-template-columns:1fr; gap:var(--s3)} .feat.rev .feat-txt{order:0} }
+  @media (max-width:860px){ .feat,.feat-wide,.feat-compact{grid-template-columns:1fr; gap:var(--s3)} }
 
   /* ---- bridge ---- */
   .bridge{text-align:center; padding:var(--s6) 0}
@@ -206,7 +208,7 @@
 <div id="features"></div>
 
 <section>
-  <div class="wrap feat">
+  <div class="wrap feat-stack">
     <div class="feat-txt">
       <h2>コピーしたものを、<br>あとから探してすぐ貼れる</h2>
       <p class="body">運んだものが残る。行を選んで <kbd>Enter</kbd> かダブルクリックすると、その内容をコピーして、直前まで使っていたアプリに戻ります。あとは <kbd>⌘</kbd><kbd>V</kbd> を押すだけです。</p>
@@ -225,7 +227,7 @@
 </section>
 
 <section>
-  <div class="wrap feat rev">
+  <div class="wrap feat">
     <div class="feat-txt">
       <h2>よく使う文章や画像・動画を、<br>グループごとに整理</h2>
       <p class="body">よく運ぶものは、置いておく。定型文・コード片・住所や連絡先を自分のグループに分けて、必要なときに呼び出せます。履歴の行を右クリックすれば、そのまま登録に回せます。</p>
@@ -243,7 +245,7 @@
 </section>
 
 <section>
-  <div class="wrap feat">
+  <div class="wrap feat-wide">
     <div class="feat-txt">
       <h2>履歴と登録したものを、<br>横断して検索</h2>
       <p class="body">過去に運んだものを引く。履歴と登録を分けずに一度に検索して、ヒットした箇所をハイライトします。アプリ・グループ・日付での絞り込みも、検索欄にそのまま足せます。</p>
@@ -260,7 +262,7 @@
 </section>
 
 <section>
-  <div class="wrap feat rev">
+  <div class="wrap feat-compact">
     <div class="feat-txt">
       <h2>ショートカットキーで<br>呼び出して、すぐに貼れる</h2>
       <p class="body">作業中のアプリから手を離さずに <kbd>⇧</kbd><kbd>⌘</kbd><kbd>V</kbd>。カーソルの近くに軽いパネルが出て、選んで <kbd>Enter</kbd> を押すと元のアプリに戻ります。キーは好きな組み合わせに変えられます。</p>
@@ -278,7 +280,7 @@
 </section>
 
 <section>
-  <div class="wrap feat">
+  <div class="wrap feat-stack">
     <div class="feat-txt">
       <h2>コピーの傾向を、<br>期間ごとに確認できる</h2>
       <p class="body">何をどれだけ運んだかが見える。タイムトラッキングはアプリ単位で測りますが、ClipDex は<strong>クリップボード単位</strong>で測ります。開いていた時間ではなく、実際に手を動かして運んだものの記録です。</p>
