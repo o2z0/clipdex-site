@@ -32,6 +32,9 @@
     margin:0; background:var(--bg); color:var(--text);
     font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;
     font-size:16px; line-height:1.85;
+    /* 既定の line-break:auto は小書きカナの行頭を許す (「キーチ / ェーン」)。
+       strict にすると小書きカナ・長音も禁則対象になる。 */
+    line-break:strict;
     -webkit-font-smoothing:antialiased;
   }
   .wrap{max-width:var(--maxw); margin:0 auto; padding:0 var(--s3)}
@@ -273,7 +276,7 @@
       <ul class="facts">
         <li>履歴・登録・グループをタブで切り替えられる</li>
         <li>画像はその場で大きく確認できる（寸法とファイルサイズも出ます）</li>
-        <li><kbd>esc</kbd> で閉じる。使い終わったら元のアプリに戻ります</li>
+        <li><kbd>esc</kbd> で閉じる。<kbd>⌘</kbd> を押しながら選べば窓に留まり、続けてコピーできる</li>
       </ul>
     </div>
     <div class="shot">
