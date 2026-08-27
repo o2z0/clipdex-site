@@ -151,6 +151,21 @@
      320px でも 222px あり、いずれも収まる (2026-08-26 実測)。 */
   .nb{white-space:nowrap}
 
+  /* ---- compare ---- */
+  /* 5 列あるので本文コンテナ (1032) をいっぱいに使う。狭幅では表だけを
+     横スクロールさせ、ページ本体は横に動かさない。 */
+  .cmp-scroll{overflow-x:auto; margin-top:var(--s4)}
+  .cmp{border-collapse:collapse; width:100%; min-width:760px; font-size:13px; line-height:1.7}
+  .cmp th, .cmp td{border:1px solid var(--line); padding:12px 14px; text-align:left; vertical-align:top}
+  .cmp thead th{color:var(--text); font-weight:650; font-size:14px; white-space:nowrap}
+  .cmp tbody th{color:var(--text); font-weight:650; width:19%}
+  .cmp td{color:var(--text-2)}
+  .cmp td strong{color:var(--text); font-weight:650}
+  /* 自分の列だけ地を一段起こす。塗りは 2 段までの原則に収める。 */
+  .cmp .mine{background:var(--surface)}
+  .cmp thead .mine{color:var(--text)}
+  .cmp-note{color:var(--text-3); font-size:13px; margin:var(--s3) 0 0}
+
   /* ---- faq ---- */
   /* details/summary の素の開閉を使う (JS なし)。マーカーは自前の + / − で、
      ::-webkit-details-marker と list-style の両方を消してから足す。 */
@@ -432,6 +447,86 @@
       <div><h3>素材を横断で運ぶ人</h3><p>画像や動画をアプリ間で持ち回る。登録しておけばドラッグで渡せます。</p></div>
       <div><h3>同じ文を何度も打つ人</h3><p>定型文を登録しておけば、呼び出して <kbd>⌘</kbd><kbd>V</kbd> で済みます。</p></div>
     </div>
+  </div>
+</section>
+
+<!-- ============ 比較 ============ -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow">COMPARE</p>
+    <h2>ほかのアプリと比べると</h2>
+    <p class="body">同じ macOS のクリップボード管理から 2 つ。サブスク中心の高機能なものを A、無料で使える定番を B としています。</p>
+
+    <div class="cmp-scroll">
+      <table class="cmp">
+        <thead>
+          <tr>
+            <td></td>
+            <th scope="col" class="mine">ClipDex 無料</th>
+            <th scope="col" class="mine">ClipDex Pro</th>
+            <th scope="col">A アプリ</th>
+            <th scope="col">B アプリ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">料金</th>
+            <td class="mine">¥0</td>
+            <td class="mine"><strong>¥1,500 買い切り</strong></td>
+            <td>永年無料なし（7 日体験）。サブスク、または買い切り ¥15,000</td>
+            <td>配布元から入手すれば ¥0 / App Store 版 ¥1,500</td>
+          </tr>
+          <tr>
+            <th scope="row">選んだ項目の貼り付け</th>
+            <td class="mine" colspan="2"><strong>コピーして元のアプリに戻る。⌘V は自分で押す</strong></td>
+            <td>既定で自動（権限が要る）</td>
+            <td>既定はコピーのみ。設定で自動にもできる（権限が要る）</td>
+          </tr>
+          <tr>
+            <th scope="row">必要な権限</th>
+            <td class="mine" colspan="2"><strong>なし</strong></td>
+            <td>アクセシビリティ</td>
+            <td>自動で貼り付けるならアクセシビリティ</td>
+          </tr>
+          <tr>
+            <th scope="row">データの置き場所</th>
+            <td class="mine" colspan="2"><strong>この Mac の中だけ</strong></td>
+            <td>ほかのデバイスと同期</td>
+            <td>この Mac の中だけ</td>
+          </tr>
+          <tr>
+            <th scope="row">クリップボード履歴</th>
+            <td class="mine">30 件</td>
+            <td class="mine"><strong>50〜1000 件</strong></td>
+            <td>期間で保持（既定 30 日、無期限も選べる）</td>
+            <td>既定 200 件（1〜999 件）</td>
+          </tr>
+          <tr>
+            <th scope="row">定型文の登録</th>
+            <td class="mine">10 件・<strong>グループ分け可</strong></td>
+            <td class="mine"><strong>300 件</strong>・グループ分け可</td>
+            <td>置き場あり・グループ分け可</td>
+            <td>ピン留めのみ・<strong>グループ分けなし</strong></td>
+          </tr>
+          <tr>
+            <th scope="row">画像・動画のストック</th>
+            <td class="mine">5 件</td>
+            <td class="mine"><strong>300 件</strong></td>
+            <td>画像は置ける（動画は確認できず）</td>
+            <td><strong>なし</strong></td>
+          </tr>
+          <tr>
+            <th scope="row">コピーの傾向レポート</th>
+            <td class="mine"><strong>直近 7 日</strong></td>
+            <td class="mine"><strong>全期間</strong></td>
+            <td>確認した範囲では見当たらない</td>
+            <td>確認した範囲では見当たらない</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="cmp-note">A・B の内容は 2026 年 8 月時点で公開されている情報を確認したものです。各アプリの仕様や価格は変わることがあります。</p>
   </div>
 </section>
 
