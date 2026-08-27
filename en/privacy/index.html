@@ -16,7 +16,7 @@
 <main>
 <div class="wrap">
 <h1>ClipDex Privacy Policy</h1>
-<p class="meta">Last updated: August 25, 2026</p>
+<p class="meta">Last updated: August 27, 2026</p>
 <p>ClipDex ("the app") manages clipboard history and saved snippets on macOS. By its very nature, the app touches highly sensitive information. That is why it was built from the start around a single principle: <strong>none of the data it collects is ever sent anywhere</strong>.</p>
 
 <h2>1. Nothing is transmitted</h2>
@@ -80,7 +80,14 @@
 </ul>
 <p>Unless you turn these on, all the app stores are numbers — counts, character counts, times of day — and the identifiers of the apps you copied from. The content itself is not stored.</p>
 
-<p><strong>About formatting data (added in version 1.1)</strong>: While clipboard history is enabled, the app stores not only the text you copied but also the formatting data (RTF / HTML) that the source app placed on the clipboard. Formatting data is <strong>stored exactly as the source app produced it; the app neither parses nor modifies it</strong>. As a result, that data may contain the URLs of any links inside the range you copied and, depending on the app (Word and Excel in the developer's own measurements), the path of a local temporary file (which includes your macOS user name) or the name and version of the app used to copy — in other words, <strong>information embedded by the source app</strong>. None of it is added by ClipDex. Stored formatting data is never transmitted, just like every other kind of data (see section 1). There is no separate switch for formatting data; it follows the clipboard history switch. The size limit is 2 MB per format in history and 512 KB per format when an item is moved into Saved Items. Beyond that, only the formatting for that format is dropped and the plain text is stored as usual.</p>
+<p><strong>About formatting data (added in version 1.1)</strong>: While clipboard history is enabled, the app stores not only the text you copied but also the formatting data (RTF / HTML) that the source app placed on the clipboard. Formatting data is <strong>stored exactly as the source app produced it; the app neither parses nor modifies it</strong>.</p>
+<p>As a result, that data may contain <strong>information embedded by the source app</strong>. None of it is added by ClipDex.</p>
+<ul>
+<li>The URLs of any links inside the range you copied</li>
+<li>The path of a local temporary file, which includes your macOS user name (Word and Excel in the developer's own measurements)</li>
+<li>The name and version of the app used to copy</li>
+</ul>
+<p>Stored formatting data is never transmitted, just like every other kind of data (see section 1). There is no separate switch for formatting data; it follows the clipboard history switch. The size limit is 2 MB per format in history and 512 KB per format when an item is moved into Saved Items. Beyond that, only the formatting for that format is dropped and the plain text is stored as usual.</p>
 
 <h2>5. How sensitive content is kept out</h2>
 <p>Even with the opt-in features above turned on, the app excludes sensitive information from its records in the following ways.</p>
@@ -97,10 +104,14 @@
 <h2>7. Deleting your data</h2>
 <p>From "All Data" in Settings you can delete usage statistics and clipboard history (including image clips) together. <strong>Saved Items are not covered by that action</strong>; delete them individually from the list instead. Uninstalling the app removes the storage location described above along with it. Nothing remains with the developer — because nothing was ever sent.</p>
 
-<h2>8. Contact</h2>
+<h2>8. In-app purchase</h2>
+<p>ClipDex Pro is a one-time in-app purchase. <strong>Payment is handled by Apple's App Store, and the developer never receives your payment details such as a credit card number.</strong> All the developer can learn is the result Apple returns: whether the purchase exists.</p>
+<p>The app stores that result on this Mac as a single true/false value (the "Purchase status" row in section 3). The purchase and restore requests are made by Apple's own machinery (StoreKit) at the system level; no server belonging to the developer is involved (see section 1).</p>
+
+<h2>9. Contact</h2>
 <p>For questions about this policy, please write to <a href="mailto:support@o2z0.com">support@o2z0.com</a>.</p>
 
-<h2>9. Changes</h2>
+<h2>10. Changes</h2>
 <p>If this policy changes, this page will be updated and the last-updated date revised.</p>
 </div>
 </main>
