@@ -110,14 +110,10 @@
   h2{font-size:clamp(23px,2.7vw,30px); line-height:1.45; margin:0 0 var(--s3); font-weight:700; letter-spacing:.01em; text-wrap:balance}
   h3{font-size:17px; margin:0 0 var(--s1); font-weight:650; text-wrap:balance}
   .body{color:var(--text-2); margin:0; max-width:38em; text-wrap:pretty}
-  /* 横並びの節は 1 つの列比を共有する。分割線が節ごとにずれると
-     「揃っていない」ように見えるため、テキスト幅・画像の左端・画像幅を
-     全節で同じにする (1280px 実測: テキスト 436 / 画像 左端 616・幅 532)。
-     リズムは縦積み (.feat-stack) との対比で出す。 */
+  /* 機能 5 節は全部同じ構図にする。1 つのブロックとして読ませるため、
+     節ごとの強弱 (縦積み・列比の変更) は付けない。
+     1280px 実測: テキスト 436 / 画像 左端 616・幅 532 が 5 節で一致。 */
   .feat{display:grid; grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr); gap:var(--s5); align-items:center}
-  /* 中核動作とレポート: 縦積みで画像を大きく見せる */
-  .feat-stack{display:grid; grid-template-columns:1fr; gap:var(--s3)}
-  .feat-stack .feat-txt{max-width:38em}
   .facts{list-style:none; padding:0; margin:var(--s3) 0 0; color:var(--text-2); font-size:15px}
   .facts li{padding-left:1.15em; position:relative; margin:6px 0}
   .facts li::before{content:"—"; position:absolute; left:0; color:var(--text-3)}
@@ -263,7 +259,7 @@
 
 <!-- ============ 機能 ============ -->
 <section>
-  <div class="wrap feat-stack">
+  <div class="wrap feat">
     <div class="feat-txt">
       <h2>コピーしたものを、<br>あとから探してすぐ貼れる</h2>
       <p class="body">運んだものが残る。行を選んで <kbd>Enter</kbd> かダブルクリックすると、その内容をコピーして、直前まで使っていたアプリに戻ります。あとは <kbd>⌘</kbd><kbd>V</kbd> を押すだけです。</p>
@@ -336,7 +332,7 @@
 </section>
 
 <section>
-  <div class="wrap feat-stack">
+  <div class="wrap feat">
     <div class="feat-txt">
       <h2>コピーの傾向を、<br>期間ごとに確認できる</h2>
       <p class="body">何をどれだけ運んだかが見える。タイムトラッキングはアプリ単位で測りますが、ClipDex は<strong>クリップボード単位</strong>で測ります。開いていた時間ではなく、実際に手を動かして運んだものの記録です。</p>
