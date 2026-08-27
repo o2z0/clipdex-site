@@ -202,6 +202,10 @@
   footer a{color:var(--text-2); text-decoration:none; transition:color 120ms ease}
   footer a:hover{color:var(--text)}
   .copy{margin-left:auto; color:var(--text-3)}
+  /* フッター先頭の「トップ」はロゴマーク。原本は白ベタ塗りなので濃さは opacity で作る。 */
+  .foot-mark{display:block; line-height:0}
+  .foot-mark img{display:block; height:18px; width:auto; opacity:.55; transition:opacity 120ms ease}
+  .foot-mark:hover img{opacity:1}
   .en-links{color:var(--text-3)}
   @media (max-width:640px){ .copy{margin-left:0; width:100%} }
   a:focus-visible,
@@ -521,7 +525,7 @@
 
 <footer>
   <div class="wrap footrow">
-    <a href="/">トップ</a>
+    <a class="foot-mark" href="/" aria-label="ClipDex トップ"><img src="/assets/logo-mark.svg" alt="" width="18" height="18"></a>
     <a href="/privacy">プライバシーポリシー</a>
     <a href="/terms">利用規約</a>
     <a href="/support">サポート</a>

@@ -85,6 +85,11 @@ footer{border-top:1px solid var(--line); padding:var(--s4) 0; color:var(--text-3
 footer a{color:var(--text-2); text-decoration:none; transition:color 120ms ease}
 footer a:hover{color:var(--text)}
 .copy{margin-left:auto; color:var(--text-3)}
+/* フッター先頭の「トップ」はロゴマークにしている。原本は白ベタ塗りなので、
+   平常時の濃さは opacity で作る (0.55 の合成が --text-2 とほぼ同じ明るさ)。 */
+.foot-mark{display:block; line-height:0}
+.foot-mark img{display:block; height:18px; width:auto; opacity:.55; transition:opacity 120ms ease}
+.foot-mark:hover img{opacity:1}
 .alt-lang{color:var(--text-3)}
 @media (max-width:640px){ .copy{margin-left:0; width:100%} }
 
