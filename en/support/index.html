@@ -17,37 +17,59 @@
 <div class="wrap">
 <h1>ClipDex Support</h1>
 <p class="meta">If something isn't working, please get in touch.</p>
-<h2>Contact</h2>
+
+<h2 id="contact">Contact</h2>
 <p><a href="mailto:support@o2z0.com">support@o2z0.com</a></p>
 <p>When reporting a problem, it helps to include your macOS version and what you did just before it happened.</p>
 
-<h2>Frequently asked questions</h2>
+<h2 id="troubleshooting">Troubleshooting</h2>
 
-<h3>Does ClipDex need the Accessibility permission (or any other)?</h3>
+<h3 id="hotkey">Nothing happens when I press the shortcut</h3>
+<p>Another app may already be using the same combination. If Settings shows "This key combination can't be used" when you try to change the shortcut, something else has claimed it (ClipDex reverts to the previous shortcut in that case).</p>
+<p>If the shortcut was accepted but still does nothing, an app launched later may have taken the same combination — try a different one. Note that a shortcut has to include ⌘, ⌃, or ⌥ (⇧ alone, or a key with no modifier, cannot be assigned).</p>
+
+<h3 id="missing-clips">My history has shrunk, or items are gone</h3>
+<p>Check whether any of these applies:</p>
+<ul>
+<li><strong>The limit was reached</strong> — once the item limit is exceeded, the oldest items are removed automatically (30 on the free version; 50–1000, 200 by default, on Pro). <strong>Upgrading to Pro later does not bring back items that were already pushed out.</strong></li>
+<li><strong>Pro is no longer active</strong> — after a refund, the limit drops back to the free version's 30 items, and the excess is pushed out the next time you copy something</li>
+<li><strong>Recording was paused</strong> — nothing is recorded while ClipDex is paused from the menu bar</li>
+<li><strong>You copied in an excluded app</strong> — anything copied in an app on the exclusion list (password managers and the like) is not stored</li>
+<li><strong>Clipboard history was off</strong> — it is off by default</li>
+</ul>
+
+<h3 id="delete">How do I delete stored data?</h3>
+<p>"All Data" in Settings deletes usage statistics and clipboard history (including image clips) together (<strong>Saved Items are not covered</strong>). Individual clips can also be removed by selecting them in the list and pressing ⌫. To remove Saved Items, select them individually or in bulk from the list and delete them there.</p>
+
+<h2 id="privacy-and-permissions">Privacy and permissions</h2>
+
+<h3 id="permissions">Does ClipDex need the Accessibility permission (or any other)?</h3>
 <p>No. ClipDex <strong>does not request any special macOS permissions (such as Accessibility)</strong>, and it never monitors keyboard input. Pasting works by copying the selected item and bringing the previous app to the front — you press ⌘V yourself.</p>
 
-<h3>Is what I copy stored?</h3>
+<h3 id="saving">Is what I copy stored?</h3>
 <p>Not initially. Clipboard history and image clips are both opt-in, and storing begins only once you turn them on in Settings. See the <a href="/en/privacy">Privacy Policy</a> for details.</p>
 
-<h3>Can I keep passwords out of my history?</h3>
+<h3 id="passwords">Can I keep passwords out of my history?</h3>
 <p>ClipDex has eight built-in exclusions, mostly password managers (1Password 7, 1Password 8 and later, Bitwarden, KeePassXC, LastPass for Safari, Dashlane, Keychain Access, and System Settings). Anything copied in those apps is not stored. You can add more apps to the exclusion list from Settings.</p>
 <p>The app also holds back when the source app attaches the industry-standard "this is confidential" marker — but <strong>that only works when the source app supports it</strong>, so it cannot fully prevent confidential data from every app. You can also pause recording entirely from the menu bar for 15 minutes, 30 minutes, or 1 hour.</p>
 
-<h3>How do I delete stored data?</h3>
-<p>"All Data" in Settings deletes usage statistics and clipboard history (including image clips) together (<strong>Saved Items are not covered</strong>). Individual clips can also be removed by selecting them in the list and pressing ⌫. To remove Saved Items, select them individually or in bulk from the list and delete them there.</p>
-
-<h3>I bought Pro but it isn't showing / I changed machines</h3>
-<p>Press "Restore Purchase" under "ClipDex Pro" in Settings. Make sure the account signed in to the App Store is the same one used for the purchase.</p>
-
-<h3>Why do clips copied on my iPhone appear in the history?</h3>
+<h3 id="universal-clipboard">Why do clips copied on my iPhone appear in the history?</h3>
 <p>That's Apple's Universal Clipboard (part of Handoff) at work. When Handoff is enabled with the same Apple Account, content you copy on your iPhone, iPad, or another Mac also arrives on this Mac's clipboard, and ClipDex records it like any other copy. Since the source app isn't known for these items, they are shown as <strong>"Other Device"</strong> (since version 1.1). If you'd rather not record them, disable Handoff in macOS, or use ClipDex's Pause or turn history off. Like every other clip, they are stored only on this Mac.</p>
 
-<h3>Can I change the shortcut?</h3>
+<h2 id="purchase">Purchase and restore</h2>
+
+<h3 id="restore">I bought Pro but it isn't showing / I changed machines</h3>
+<p>Press "Restore Purchase" under "ClipDex Pro" in Settings. Make sure the account signed in to the App Store is the same one used for the purchase.</p>
+
+<h2 id="usage">Using ClipDex</h2>
+
+<h3 id="change-hotkey">Can I change the shortcut?</h3>
 <p>Yes — the shortcut that summons your history (⇧⌘V by default) can be changed from Settings.</p>
 
-<h2>Requirements</h2>
+<h2 id="requirements">Requirements</h2>
 <p>macOS 14.0 or later</p>
 <p>No special permissions are required. Pasting from history and Saved Items works by copying the selected item and bringing the target app to the front — you press ⌘V yourself.</p>
+
 </div>
 </main>
 

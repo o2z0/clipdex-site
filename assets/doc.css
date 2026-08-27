@@ -44,6 +44,9 @@ h2{
   padding-top:var(--s3); border-top:1px solid var(--line); text-wrap:balance;
 }
 h3{font-size:17px; font-weight:650; margin:var(--s4) 0 var(--s1); text-wrap:balance}
+/* 見出しに id を振って外から直リンクするので、sticky ヘッダー (56px) の下に
+   隠れないよう着地位置をずらす。 */
+h2[id], h3[id]{scroll-margin-top:calc(56px + var(--s3))}
 p,li{margin:var(--s1) 0; color:var(--text-2); text-wrap:pretty}
 h1+.meta{color:var(--text-3); font-size:14px; margin:0 0 var(--s4)}
 strong{color:var(--text); font-weight:650}
