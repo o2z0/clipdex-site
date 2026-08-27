@@ -8,7 +8,7 @@
   --bg:#0e0e0e; --surface:#161616; --surface-2:#1c1c1c;
   --text:#f2f2f2; --text-2:#9a9a9a; --text-3:#6e6e6e;
   --line:#262626; --line-2:#333;
-  --maxw:720px;
+  --maxw:1080px;   /* index.html と同じ。ヘッダー / フッター / 表がこの幅で揃う */
   --radius:12px; --radius-sm:6px;
   --s1:8px; --s2:16px; --s3:24px; --s4:40px; --s5:64px; --s6:96px;
 }
@@ -55,10 +55,10 @@ a{color:var(--text); text-underline-offset:.22em; text-decoration-color:var(--li
   transition:text-decoration-color 120ms ease}
 a:hover{text-decoration-color:var(--text-2)}
 
-/* 器は広く、本文は狭く。表だけが器の幅を使う。
+/* 器は LP と同じ 1080 で、ヘッダー / フッター / 表の左右端が全ページで揃う。
+   本文だけ 672 の測り幅に絞って中央に置く (長文を 1080 で流すと読めない)。
    個別要素の margin 指定 (h2 の上下、.meta の下) を確実に上書きするため、
    要素側の規則より後ろに置く。 */
-main .wrap{max-width:1040px}
 main :is(h1, h2, h3, p, ul, .meta){max-width:672px; margin-left:auto; margin-right:auto}
 
 /* 5 列の表は本文の測り幅 (672px) では 1 列が数文字まで潰れる。
