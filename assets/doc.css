@@ -84,7 +84,8 @@ footer{border-top:1px solid var(--line); padding:var(--s4) 0; color:var(--text-3
 .footrow{display:flex; gap:var(--s3); flex-wrap:wrap; align-items:center}
 footer a{color:var(--text-2); text-decoration:none; transition:color 120ms ease}
 footer a:hover{color:var(--text)}
-.copy{margin-left:auto; color:var(--text-3)}
+/* 著作権表示だけフッターの 14px から一段落とす (読ませる情報ではないため)。 */
+.copy{margin-left:auto; color:var(--text-3); font-size:12px}
 /* フッター先頭の「トップ」はロゴマークにしている。原本は白ベタ塗りなので、
    平常時の濃さは opacity で作る (0.55 の合成が --text-2 とほぼ同じ明るさ)。 */
 .foot-mark{display:block; line-height:0}
