@@ -155,6 +155,33 @@
      320px でも 222px あり、いずれも収まる (2026-08-26 実測)。 */
   .nb{white-space:nowrap}
 
+  /* ---- faq ---- */
+  /* details/summary の素の開閉を使う (JS なし)。マーカーは自前の + / − で、
+     ::-webkit-details-marker と list-style の両方を消してから足す。 */
+  .faq{border-top:1px solid var(--line); margin-top:var(--s4)}
+  .faq details{border-bottom:1px solid var(--line)}
+  .faq summary{
+    display:flex; align-items:flex-start; gap:var(--s2);
+    padding:var(--s3) 0; cursor:pointer; font-weight:650; font-size:16px;
+    list-style:none; transition:color 120ms ease;
+  }
+  .faq summary::-webkit-details-marker{display:none}
+  .faq summary::after{
+    content:"+"; margin-left:auto; color:var(--text-3); font-weight:400;
+    font-size:20px; line-height:1.2; transition:color 120ms ease;
+  }
+  .faq details[open] summary::after{content:"−"}
+  .faq summary:hover{color:var(--text)}
+  .faq summary:hover::after{color:var(--text-2)}
+  .faq summary:focus-visible{outline:2px solid var(--text-2); outline-offset:4px; border-radius:var(--radius-sm)}
+  .faq .ans{color:var(--text-2); font-size:15px; padding:0 0 var(--s3); max-width:44em}
+  .faq .ans p{margin:0 0 var(--s2)}
+  .faq .ans p:last-child{margin:0}
+  .faq .ans ul{list-style:none; padding:0; margin:0 0 var(--s2)}
+  .faq .ans li{padding-left:1.15em; position:relative; margin:6px 0}
+  .faq .ans li::before{content:"—"; position:absolute; left:0; color:var(--text-3)}
+  .faq .ans code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.92em; color:var(--text)}
+
   /* ---- bento ---- */
   .bento{display:grid; grid-template-columns:repeat(3,1fr); gap:var(--s2); margin-top:var(--s4)}
   .bento .cell{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:var(--s3)}
@@ -245,6 +272,7 @@
         <li>複数選択すると、新しい順に連結して 1 回で貼れる</li>
         <li>他のアプリへドラッグしてそのまま渡せる</li>
         <li>無料で 30 件、Pro で 50〜1000 件（既定 200 件）</li>
+        <li>本文を残すかどうかは最初に一度だけ確認する（既定はオフ）</li>
       </ul>
     </div>
     <div class="shot">
@@ -372,7 +400,7 @@
       <div><h3>外部送信ゼロ</h3><p>ネットワークへ送るものがありません。アカウントも不要です。</p></div>
       <div><h3>本文の保存は任意</h3><p>コピーした内容そのものを残すかどうかは、あなたが選びます。既定はオフです。</p></div>
       <div><h3><span class="nb">パスワード管理アプリは</span>既定で除外</h3><p>1Password・Bitwarden・キーチェーンなど 8 つを最初から記録対象外にしています。追加もできます。</p></div>
-      <div><h3>いつでも一時停止</h3><p>メニューバーから 15 分・30 分・1 時間の停止。すべての記録の削除も 1 操作です。</p></div>
+      <div><h3>いつでも一時停止</h3><p>メニューバーから 15 分・30 分・1 時間の停止。集計とクリップボード履歴の削除も 1 操作です。</p></div>
     </div>
     <p class="note">詳しくは <a href="/privacy">プライバシーポリシー</a> をご覧ください。</p>
   </div>
@@ -384,12 +412,12 @@
     <p class="eyebrow">MORE</p>
     <h2>そのほかにできること</h2>
     <div class="bento">
-      <div class="cell w2"><h3>画像もそのまま履歴に</h3><p>スクリーンショットや Finder の画像ファイルをコピーすると、サムネイル付きで履歴に残ります。貼り付け先に応じて、画像としてもファイル名としても渡せます。</p></div>
+      <div class="cell w2"><h3>画像もそのまま履歴に</h3><p>スクリーンショットや Finder の画像ファイルをコピーすると、サムネイル付きで履歴に残ります。貼り付け先に応じて、画像としてもファイル名としても渡せます。保存は既定でオフ、件数は文章のクリップとは別枠です。</p></div>
       <div class="cell"><h3>ドラッグで渡す</h3><p>行をつかんで、他のアプリへ直接。</p></div>
       <div class="cell w2"><h3><kbd>⌘</kbd><kbd>Z</kbd> で取り消せる</h3><p>削除も並べ替えもグループの移動も、多段で戻せます。<kbd>⇧</kbd><kbd>⌘</kbd><kbd>Z</kbd> でやり直しも。</p></div>
       <div class="cell"><h3>キーは変えられる</h3><p>呼び出しのショートカットは自由に。</p></div>
       <div class="cell full"><h3>書式を保ったまま</h3><p>太字や色のついた文章も、書式ごと履歴に残ります。プレーンで貼りたいときは <kbd>⌥</kbd> を押しながら。</p></div>
-      <div class="cell full"><h3>書き出しとバックアップ</h3><p>レポートは PNG で画像として書き出せます。PDF 書き出しと、集計の CSV・JSON 書き出し、バックアップからの復元は Pro。</p></div>
+      <div class="cell full"><h3>書き出しとバックアップ</h3><p>レポートは PNG で画像として書き出せます。PDF 書き出しと、集計の CSV・JSON 書き出し、バックアップからの復元は Pro。バックアップに入るのは設定と集計で、クリップの中身は入りません。</p></div>
     </div>
   </div>
 </section>
@@ -403,6 +431,82 @@
       <div><h3>断片を並行で抱える人</h3><p>コードやログ、URL を行き来しながら書く。履歴が深いほど効きます。</p></div>
       <div><h3>素材を横断で運ぶ人</h3><p>画像や動画をアプリ間で持ち回る。登録しておけばドラッグで渡せます。</p></div>
       <div><h3>同じ文を何度も打つ人</h3><p>定型文を登録しておけば、呼び出して <kbd>⌘</kbd><kbd>V</kbd> で済みます。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow">FAQ</p>
+    <h2>細かいところ</h2>
+    <div class="faq">
+
+      <details>
+        <summary>書式はどこまで残りますか</summary>
+        <div class="ans">
+          <p>太字や色のついた文章は、書式ごと履歴に残ります。渡すときの既定は書式つきで、<kbd>⌥</kbd> を押しながら選ぶとその回だけプレーンになります（既定は設定で入れ替えられます）。</p>
+          <p>ただし <kbd>⌘</kbd><kbd>C</kbd> でのコピーは、設定に関係なく常に書式つきです。複数選択をまとめて渡すときと、登録したものの本文を編集したあとは、プレーンになります。</p>
+          <p>書式のデータが大きすぎるとき（履歴は 1 形式 2MB、登録したものは 512KB）は、その形式だけ落として文字は残します。</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>画像はどう保存されますか</summary>
+        <div class="ans">
+          <p>JPEG でも PNG に変換して保存します。他のアプリへファイルとして渡すときの名前は、元の名前のまま拡張子だけ変わります（<code>photo.jpg</code> → <code>photo.png</code>）。</p>
+          <p>画像の保存は既定でオフで、設定から有効にします。件数は文章のクリップとは別枠です。</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>保存できる数はどれくらいですか</summary>
+        <div class="ans">
+          <ul>
+            <li>クリップボード履歴（文章）: 無料 30 件 / Pro 50〜1000 件（既定 200 件）</li>
+            <li>クリップボード履歴（画像）: 無料 15 枚・合計 50MB・1 枚 10MB / Pro 50〜500 枚・合計 1GB・1 枚 100MB</li>
+            <li>登録したもの（文章）: 無料 10 件 / Pro 300 件</li>
+            <li>登録したもの（画像・動画）: 無料 5 件 / Pro 300 件。1 件あたり画像 100MB・動画 500MB</li>
+          </ul>
+          <p>上限を超えると古いものから消えます。Pro にすると上限は上がりますが、それより前に消えたものは戻りません。</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>バックアップには何が入りますか</summary>
+        <div class="ans">
+          <p>設定と集計（レポートのもとになる数値）です。クリップボードの履歴、登録したもの、画像や動画の実体は入りません。</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>データを消すと何が消えますか</summary>
+        <div class="ans">
+          <p>設定の「すべてのデータ」で消えるのは、集計とクリップボード履歴です。<strong>登録したものは残ります</strong>ので、消したいときは項目を選んで削除してください。</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>取り消しはどこまで戻せますか</summary>
+        <div class="ans">
+          <p>20 段まで戻せます。テキストを入力している最中は、そのテキスト欄の取り消しが優先されます。</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>呼び出しのキーは何でも設定できますか</summary>
+        <div class="ans">
+          <p><kbd>⌘</kbd> <kbd>⌃</kbd> <kbd>⌥</kbd> のいずれかを含む組み合わせにできます。<kbd>⇧</kbd> だけ、または修飾キーなしのキーは設定できません。</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>ドラッグすると何が渡りますか</summary>
+        <div class="ans">
+          <p>画像や動画を 1 件だけ選んでドラッグすると、ファイルとして渡ります。それ以外（文章、または複数選択）は文字として渡ります。</p>
+        </div>
+      </details>
+
     </div>
   </div>
 </section>
