@@ -70,8 +70,22 @@
   .btn-sm{padding:8px 18px; font-size:14px; border-radius:var(--radius-sm)}
 
   /* ---- hero ---- */
-  .hero{padding:var(--s7) 0 var(--s6); border-bottom:1px solid var(--line)}
-  .hero-grid{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.15fr); gap:var(--s5); align-items:center}
+  .hero{padding:var(--s7) 0 var(--s6); border-bottom:1px solid var(--line); text-align:center}
+  .hero-txt{max-width:44rem; margin:0 auto}
+  .hero .lede{margin-left:auto; margin-right:auto}
+  /* ヒーローの画像は本文コンテナ (1080) より広く取る。ここだけ幅の規則から
+     外すのは、直後の節の画像より小さいと「ヒーローに見えない」ため
+     (1280px で 1232 vs 節の 1032)。参照した pasteapp.io も本文 840 に対し
+     画像 1200 と、同じ広げ方をしている (2026-08-27 実測)。 */
+  /* 100vw はスクロールバー幅を含むので、余白が左右非対称になる。
+     100% (= body 幅) から本文と同じ 24px の溝を 2 つ引く。 */
+  .hero-shot{width:min(1240px, calc(100% - var(--s3) * 2)); margin:var(--s5) auto 0}
+  /* 仮置き: 現行 01-hero.png は 1600x1185 (縦長) で、そのまま 1232 幅に
+     広げると縦 913px になり最初の画面を占領する。枠を 16:9 に固定して
+     上端を見せる。**差し替え時は 16:9 で書き出すこと** — そうすれば
+     この cover は効かなくなり、画の意図どおりに収まる。 */
+  .hero-shot .shot{aspect-ratio:16/9}
+  .hero-shot .shot img{width:100%; height:100%; object-fit:cover; object-position:top center}
   h1{font-size:clamp(32px,5vw,52px); line-height:1.28; letter-spacing:.01em; margin:0 0 var(--s3); font-weight:700; text-wrap:balance}
   .lede{color:var(--text-2); font-size:17px; margin:0 0 var(--s4); max-width:34em; text-wrap:pretty}
   .req{color:var(--text-3); font-size:13px; margin:var(--s2) 0 0}
@@ -83,7 +97,11 @@
   .shot img{width:100%; height:auto}
   @media (max-width:860px){
     .hero{padding:var(--s5) 0}
-    .hero-grid{grid-template-columns:1fr; gap:var(--s4)}
+    .hero-shot{margin-top:var(--s4)}
+    /* 狭幅では 16:9 に切ると窓の中身が読めないので、画像をそのまま出す。
+       差し替え後の原本が 16:9 なら、この解除は見た目に影響しない。 */
+    .hero-shot .shot{aspect-ratio:auto}
+    .hero-shot .shot img{height:auto; object-fit:fill}
   }
 
   /* ---- generic section ---- */
@@ -191,9 +209,9 @@
 
 <!-- ============ ヒーロー ============ -->
 <div class="hero">
-  <div class="wrap hero-grid">
-    <div>
-      <h1>ちょうどいい<br>クリップボード</h1>
+  <div class="wrap">
+    <div class="hero-txt">
+      <h1>ちょうどいいクリップボード</h1>
       <p class="lede">
         コピーしたものは自動で貯まり、よく使う文章や画像は登録しておけます。
         <kbd>⇧</kbd><kbd>⌘</kbd><kbd>V</kbd> で呼び出して選ぶと元のアプリに戻るので、そのまま <kbd>⌘</kbd><kbd>V</kbd>。
@@ -201,8 +219,10 @@
       <a class="btn" href="https://apps.apple.com/jp/app/id6801129211">App Store からダウンロード</a>
       <p class="req">macOS 14.0 以降 / Apple Silicon・Intel 両対応</p>
     </div>
+  </div>
+  <div class="hero-shot">
     <div class="shot">
-      <img src="/assets/01-hero.png" width="1600" height="1185"
+      <img src="/assets/01-hero.png" width="1600" height="900"
            alt="ClipDex の統合ウインドウ。コピーの履歴が新しい順に並び、各行にコピー元アプリのアイコンが付いている。">
     </div>
   </div>
@@ -215,8 +235,6 @@
 </div>
 
 <!-- ============ 機能 ============ -->
-<div id="features"></div>
-
 <section>
   <div class="wrap feat-stack">
     <div class="feat-txt">
