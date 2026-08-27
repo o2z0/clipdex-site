@@ -1,0 +1,81 @@
+/* プライバシーポリシー / サポートの共通スタイル。
+   トークンの値は index.html の :root と同じものを写している。
+   index.html 側が正本なので、色や間隔を変えるときは両方直すこと
+   (LP はインライン、こちらは 4 ページ共有の外部ファイル)。 */
+
+:root{
+  color-scheme: dark;
+  --bg:#0e0e0e; --surface:#161616; --surface-2:#1c1c1c;
+  --text:#f2f2f2; --text-2:#9a9a9a; --text-3:#6e6e6e;
+  --line:#262626; --line-2:#333;
+  --maxw:720px;
+  --radius:12px; --radius-sm:6px;
+  --s1:8px; --s2:16px; --s3:24px; --s4:40px; --s5:64px; --s6:96px;
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;
+  font-size:16px; line-height:1.85;
+  -webkit-font-smoothing:antialiased;
+  /* 既定の line-break:auto は小書きカナの行頭を許す (「キーチ / ェーン」)。 */
+  line-break:strict;
+}
+.wrap{max-width:var(--maxw); margin:0 auto; padding:0 var(--s3)}
+
+/* ---- header ---- */
+/* この 2 ページに CTA は置かない。ロゴだけなので左右中央に据える。 */
+header{
+  position:sticky; top:0; z-index:50;
+  background:rgba(14,14,14,.82); backdrop-filter:saturate(180%) blur(14px);
+  border-bottom:1px solid var(--line);
+}
+.navrow{display:flex; align-items:center; justify-content:center; height:56px}
+.brand{display:block; line-height:0}
+.brand img{display:block; height:22px; width:auto}
+
+/* ---- document ---- */
+main{padding:var(--s5) 0 var(--s6)}
+h1{font-size:28px; line-height:1.45; margin:0 0 var(--s1); font-weight:700; letter-spacing:.01em; text-wrap:balance}
+h2{
+  font-size:19px; font-weight:650; margin:var(--s5) 0 var(--s2);
+  padding-top:var(--s3); border-top:1px solid var(--line); text-wrap:balance;
+}
+h3{font-size:17px; font-weight:650; margin:var(--s4) 0 var(--s1); text-wrap:balance}
+p,li{margin:var(--s1) 0; color:var(--text-2); text-wrap:pretty}
+h1+.meta{color:var(--text-3); font-size:14px; margin:0 0 var(--s4)}
+strong{color:var(--text); font-weight:650}
+ul{padding-left:1.3em; margin:var(--s2) 0}
+/* 保存先のパスのように途中で切れない長い 1 語が入るので、狭幅では
+   どこでも折り返させる (放置すると狭幅でページごと横に伸びる)。 */
+code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.9em; color:var(--text); overflow-wrap:anywhere}
+a{color:var(--text); text-underline-offset:.22em; text-decoration-color:var(--line-2);
+  transition:text-decoration-color 120ms ease}
+a:hover{text-decoration-color:var(--text-2)}
+
+/* 器は広く、本文は狭く。表だけが器の幅を使う。
+   個別要素の margin 指定 (h2 の上下、.meta の下) を確実に上書きするため、
+   要素側の規則より後ろに置く。 */
+main .wrap{max-width:1040px}
+main :is(h1, h2, h3, p, ul, .meta){max-width:672px; margin-left:auto; margin-right:auto}
+
+/* 5 列の表は本文の測り幅 (672px) では 1 列が数文字まで潰れる。
+   本文だけを 672 に保ったまま、外側の器を広げて表にその幅を使わせる。
+   100vw を使う全幅トリックは縦スクロールバーの分だけ横あふれを生むので使わない。 */
+.table-scroll{overflow-x:auto; margin:var(--s3) auto}
+table{border-collapse:collapse; width:100%; min-width:660px; font-size:14px}
+th,td{border:1px solid var(--line); padding:10px 12px; text-align:left; vertical-align:top; color:var(--text-2)}
+th{background:var(--surface); color:var(--text); font-weight:650; white-space:nowrap}
+
+/* ---- footer ---- */
+footer{border-top:1px solid var(--line); padding:var(--s4) 0; color:var(--text-3); font-size:14px}
+.footrow{display:flex; gap:var(--s3); flex-wrap:wrap; align-items:center}
+footer a{color:var(--text-2); text-decoration:none; transition:color 120ms ease}
+footer a:hover{color:var(--text)}
+.copy{margin-left:auto; color:var(--text-3)}
+.alt-lang{color:var(--text-3)}
+@media (max-width:640px){ .copy{margin-left:0; width:100%} }
+
+a:focus-visible{outline:2px solid var(--text); outline-offset:3px; border-radius:var(--radius-sm)}
