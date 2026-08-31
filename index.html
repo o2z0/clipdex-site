@@ -15,7 +15,7 @@
 <style>
   :root{
     color-scheme: dark;
-    --bg:#0e0e0e; --surface:#161616; --surface-2:#1c1c1c;
+    --bg:#000; --surface:#161616; --surface-2:#1c1c1c;
     --text:#f2f2f2; --text-2:#9a9a9a; --text-3:#6e6e6e;
     --line:#262626; --line-2:#333;
     --maxw:1080px;
@@ -45,7 +45,7 @@
   /* ---- header ---- */
   header{
     position:sticky; top:0; z-index:50;
-    background:rgba(14,14,14,.82); backdrop-filter:saturate(180%) blur(14px);
+    background:rgba(0,0,0,.82); backdrop-filter:saturate(180%) blur(14px);
     border-bottom:1px solid var(--line);
   }
   .navrow{display:flex; align-items:center; gap:var(--s4); height:56px}
@@ -70,7 +70,8 @@
   .btn-sm{padding:8px 18px; font-size:14px; border-radius:var(--radius-sm)}
 
   /* ---- hero ---- */
-  .hero{padding:var(--s7) 0 var(--s6); border-bottom:1px solid var(--line); text-align:center}
+  /* 下 padding 0 = ヒーロー動画の見切れ下端を節のディバイダーに密着させる (2026-08-31) */
+  .hero{padding:var(--s7) 0 0; border-bottom:1px solid var(--line); text-align:center}
   .hero-txt{max-width:44rem; margin:0 auto}
   .hero .lede{margin-left:auto; margin-right:auto}
   /* ヒーローの画像は本文コンテナ (1080) より広く取る。ここだけ幅の規則から
@@ -84,19 +85,24 @@
      広げると縦 913px になり最初の画面を占領する。枠を 16:9 に固定して
      上端を見せる。**差し替え時は 16:9 で書き出すこと** — そうすれば
      この cover は効かなくなり、画の意図どおりに収まる。 */
-  .hero-shot .shot{aspect-ratio:16/9}
+  /* ヒーローは枠なし (2026-08-31 Masa 決定): 動画は crop も合成もしない撮って出し
+     (トリム 1 秒のみ)。ページ背景を録画の余白と同じ純黒 #000 にしたので継ぎ目は
+     存在しない。窓の角丸と影は録画のまま。試して不採用の案 2 つ = crop + CSS 角丸
+     (雑に見える) / colorkey で余白色を差し替え (背景を黒にした時点で不要)。 */
+  .hero-shot .shot{aspect-ratio:16/9; border:none; border-radius:0; background:none}
   .hero-shot .shot img{width:100%; height:100%; object-fit:cover; object-position:top center}
   h1{font-size:clamp(32px,5vw,52px); line-height:1.28; letter-spacing:.01em; margin:0 0 var(--s3); font-weight:700; text-wrap:balance}
   .lede{color:var(--text-2); font-size:17px; margin:0 0 var(--s4); max-width:34em; text-wrap:pretty}
   .req{color:var(--text-3); font-size:13px; margin:var(--s2) 0 0}
-  /* 画像は tools/lp/crop.py が提出パック (2880x1800) から切り出したもの。
-     窓の外形を実測して「窓が枠を占める割合」を全カットで 94.3% に揃えてあるので、
-     CSS 側で位置や倍率を触る必要はない (触ると揃いが壊れる)。
-     縦横比は各カットの成り行き = width/height 属性が真。 */
-  .shot{border:1px solid var(--line-2); border-radius:var(--radius); overflow:hidden; background:var(--surface)}
+  /* 枠 (border + 面 + 角丸) は全廃した (2026-08-31 Masa 決定、チープに見える)。
+     以降の画像は「素のウィンドウ」= screencapture -o -l <windowID> の窓単体 PNG
+     (影なし・角丸はアルファで抜けている) を撮って差し替える。旧 crop.py 経路
+     (提出パックのグラデ背景ごと切り出し) は廃止 — 差し替えまでの間、既存画像は
+     グラデ背景の長方形がそのまま見える暫定状態。 */
+  .shot{border:none; border-radius:0; background:none}
   .shot img{width:100%; height:auto}
   @media (max-width:860px){
-    .hero{padding:var(--s5) 0}
+    .hero{padding:var(--s5) 0 0}
     .hero-shot{margin-top:var(--s4)}
     /* 狭幅では 16:9 に切ると窓の中身が読めないので、画像をそのまま出す。
        差し替え後の原本が 16:9 なら、この解除は見た目に影響しない。 */
@@ -123,12 +129,6 @@
   }
   @media (max-width:860px){ .feat{grid-template-columns:1fr; gap:var(--s3)} }
 
-  /* ---- bridge ---- */
-  .bridge{text-align:center; padding:var(--s6) 0}
-  .bridge p{margin:0 auto; max-width:30em}
-  .bridge .q{color:var(--text-2); font-size:17px}
-  .bridge .a{font-size:clamp(21px,2.6vw,27px); line-height:1.6; font-weight:650; margin-top:var(--s3); color:var(--text)}
-
   /* ---- privacy ---- */
   /* 模式図は本文列いっぱいに広げず 760px で中央に置く。全幅に組み直した案も作ったが、
      箱が横に伸びるぶん中の流れが間延びして見えたため (docs/lp/privacy-combined.html 組み合わせ①)。 */
@@ -139,8 +139,8 @@
   .a-grid{display:grid; grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);
     gap:var(--s3); align-items:stretch; margin-top:var(--s4)}
   .a-grid .diagram{margin:0; max-width:none}
-  .a-grid .shot-real{border:1px solid var(--line-2); border-radius:var(--radius); background:var(--surface);
-    overflow:hidden; display:flex; align-items:center; justify-content:center}
+  .a-grid .shot-real{border:none; border-radius:0; background:none;
+    display:flex; align-items:center; justify-content:center}
   .a-grid .shot-real img{display:block; width:100%; height:auto}
   @media (max-width:860px){ .a-grid{grid-template-columns:1fr} }
   .priv{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; margin-top:var(--s3)}
@@ -264,16 +264,16 @@
   </div>
   <div class="hero-shot">
     <div class="shot">
-      <img src="/assets/01-hero.png" width="1600" height="900"
-           alt="ClipDex の統合ウインドウ。コピーの履歴が新しい順に並び、各行にコピー元アプリのアイコンが付いている。">
+      <!-- ヒーローは動画 (2026-08-31 Masa 決定)。新しいクリップが上から貯まっていく 6 秒ループ。
+           1.39:1 の縦長ソースを 16:9 枠 + 上端寄せ cover で下を見切らせている (ScreenTune 型)。
+           og:image は動画にできないので 01-hero.png のまま。 -->
+      <video muted autoplay loop playsinline preload="metadata" poster="/assets/hero-poster.jpg"
+             style="width:100%;height:100%;object-fit:cover;object-position:top center;display:block"
+             aria-label="ClipDex の統合ウインドウ。コピーするたびに新しいクリップが履歴の先頭に追加されていく。">
+        <source src="/assets/hero.mp4" type="video/mp4">
+      </video>
     </div>
   </div>
-</div>
-
-<!-- ============ ブリッジ ============ -->
-<div class="bridge wrap">
-  <p class="q">コピーしたはずのものを、もう一度探しに戻る。<br>さっきの URL、さっきのコード、さっきの一文。</p>
-  <p class="a">一日のあいだに、あなたが何を運んだか。<br>その記録は、この Mac の中だけに残ります。</p>
 </div>
 
 <!-- ============ 機能 ============ -->
@@ -281,17 +281,17 @@
   <div class="wrap feat">
     <div class="feat-txt">
       <h2>コピーしたものを、<br>あとから探してすぐ貼れる</h2>
-      <p class="body">運んだものが残る。行を選んで <kbd>Enter</kbd> かダブルクリックすると、その内容をコピーして、直前まで使っていたアプリに戻ります。あとは <kbd>⌘</kbd><kbd>V</kbd> を押すだけです。</p>
+      <p class="body">コピーしたものが、履歴として残ります。<br>行を選んで <kbd>Enter</kbd> かダブルクリックでその内容をコピーして、直前まで使っていたアプリに戻ります。<br>あとは <kbd>⌘</kbd><kbd>V</kbd> を押すだけです。</p>
       <ul class="facts">
-        <li>行にコピー元アプリのアイコンが出るので、どこから持ってきたか一目でわかる</li>
+        <li>行にコピー元アプリのアイコンが出るので、どこからコピーしたか一目でわかる</li>
         <li>複数選択すると、新しい順に連結して 1 回で貼れる</li>
         <li>他のアプリへドラッグしてそのまま渡せる</li>
         <li>無料で 30 件、Pro で 50〜1000 件（既定 200 件）</li>
-        <li>本文を残すかどうかは最初に一度だけ確認する（既定はオフ）</li>
+        <li>コピーした内容を残すかどうかは、初回起動時に確認します。同意するまで何も保存されません</li>
       </ul>
     </div>
     <div class="shot">
-      <img loading="lazy" src="/assets/02-history.png" width="1600" height="958"
+      <img loading="lazy" src="/assets/02-history.png" width="1440" height="1100"
            alt="クリップボード履歴の一覧。画像・コード・URL・チャットの文章・メモが、それぞれのコピー元アプリのアイコンと時刻つきで並んでいる。">
     </div>
   </div>
@@ -301,15 +301,15 @@
   <div class="wrap feat">
     <div class="feat-txt">
       <h2>よく使う文章や画像・動画を、<br>グループごとに整理</h2>
-      <p class="body">よく運ぶものは、置いておく。定型文・コード片・住所や連絡先を自分のグループに分けて、必要なときに呼び出せます。履歴の行を右クリックすれば、そのまま登録に回せます。</p>
+      <p class="body">よく使うものは、登録しておけます。<br>定型文・コード片・住所や連絡先を自分のグループに分けて、必要なときに呼び出せます。</p>
       <ul class="facts">
         <li>テキストは無料で 10 件、Pro で 300 件</li>
         <li>画像・動画は別枠で、無料 5 件 / Pro 300 件</li>
-        <li>並べ替え・グループ移動・削除は <kbd>⌘</kbd><kbd>Z</kbd> で多段に取り消せる</li>
+        <li>並べ替え・グループ移動・削除は <kbd>⌘</kbd><kbd>Z</kbd> で多段に取り消せます</li>
       </ul>
     </div>
     <div class="shot">
-      <img loading="lazy" src="/assets/03-registered.png" width="1600" height="774"
+      <img loading="lazy" src="/assets/03-registered.png" width="1440" height="1100"
            alt="登録したものの一覧。画像素材と定型文が「定型文」「コード」「住所・連絡先」のグループに分かれて並んでいる。">
     </div>
   </div>
@@ -319,14 +319,14 @@
   <div class="wrap feat">
     <div class="feat-txt">
       <h2>履歴も登録も、<br>横断して検索</h2>
-      <p class="body">過去に運んだものを引く。履歴と登録を分けずに一度に検索して、ヒットした箇所をハイライトします。アプリ・グループ・日付での絞り込みも、検索欄にそのまま足せます。</p>
+      <p class="body">履歴と登録を一度に検索して、ヒットした箇所をハイライトします。<br>アプリ・グループ・日付での絞り込みも、検索欄から絞り込めます。</p>
       <ul class="facts">
-        <li>日本語・英語・コードが混ざっていても引ける</li>
-        <li>「Slack から」「今日」のような条件を重ねて絞れる</li>
+        <li>日本語・英語・コードが混ざっていても</li>
+        <li>「今日」「Slack」で、のような条件を重ねて絞り込める</li>
       </ul>
     </div>
     <div class="shot">
-      <img loading="lazy" src="/assets/04-search.png" width="1600" height="871"
+      <img loading="lazy" src="/assets/04-search.png" width="1440" height="1100"
            alt="横断検索の画面。「ありがとう」で検索した結果がクリップボード履歴と登録したものに分かれて表示され、アプリ・グループ・日付の絞り込みパネルが開いている。">
     </div>
   </div>
@@ -336,15 +336,15 @@
   <div class="wrap feat">
     <div class="feat-txt">
       <h2>ショートカットキーで<br>呼び出して、すぐに貼れる</h2>
-      <p class="body">作業中のアプリから手を離さずに <kbd>⇧</kbd><kbd>⌘</kbd><kbd>V</kbd>。カーソルの近くに軽いパネルが出て、選んで <kbd>Enter</kbd> を押すと元のアプリに戻ります。キーは好きな組み合わせに変えられます。</p>
+      <p class="body">作業中のアプリから手を離さずに <kbd>⇧</kbd><kbd>⌘</kbd><kbd>V</kbd>。<br>カーソルの近くにパネルが出ます。<br>ショートカットキーは好きな組み合わせに変えられます。</p>
       <ul class="facts">
         <li>履歴・登録・グループをタブで切り替えられる</li>
         <li>画像はその場で大きく確認できる（寸法とファイル容量も）</li>
-        <li><kbd>esc</kbd> で閉じる。<kbd>⌘</kbd> を押しながら選べば窓に留まり、続けてコピーできる</li>
+        <li><kbd>esc</kbd>または<kbd>⌘</kbd><kbd>W</kbd>で閉じる。<kbd>⌘</kbd> を押しながら選べば窓に留まり、続けてコピーできる</li>
       </ul>
     </div>
     <div class="shot">
-      <img loading="lazy" src="/assets/05-picker.png" width="1600" height="867"
+      <img loading="lazy" src="/assets/05-picker.png" width="1440" height="1100"
            alt="ショートカットキーで呼び出したクイックパネル。画像とテキストが並び、選択中の画像がプレビュー表示されている。">
     </div>
   </div>
@@ -354,16 +354,16 @@
   <div class="wrap feat">
     <div class="feat-txt">
       <h2>コピーの傾向を、<br>期間ごとに確認できる</h2>
-      <p class="body">何をどれだけ運んだかが見える。タイムトラッキングはアプリ単位で測りますが、ClipDex は<strong>クリップボード単位</strong>で測ります。開いていた時間ではなく、実際に手を動かして運んだものの記録です。</p>
+      <p class="body">何をどれだけコピーしたか確認できます。<br>アプリを開いていた時間ではなく、実際に手を動かした記録です。</p>
       <ul class="facts">
-        <li>どのアプリから運んだかの内訳</li>
-        <li>コピー数と、運んだ文字数の合計</li>
+        <li>どのアプリからコピーしたかの内訳</li>
+        <li>コピーの回数と、文字数の合計</li>
         <li>曜日 × 時間のヒートマップ</li>
-        <li>今日・週次・直近 4 週間・今月・今年の 5 期間（無料版の集計は直近 7 日ぶん）</li>
+        <li>今日・週次・直近 4 週間・今月・今年の 5 期間（無料版の集計は直近 7 日）</li>
       </ul>
     </div>
     <div class="shot">
-      <img loading="lazy" src="/assets/06-report.png" width="1600" height="958"
+      <img loading="lazy" src="/assets/06-report.png" width="1440" height="1100"
            alt="週次レポート。コピー 342 件・17,274 文字の集計と、アプリ別の内訳バー、曜日と時間のヒートマップが表示されている。">
     </div>
   </div>
@@ -373,8 +373,8 @@
 <section id="privacy">
   <div class="wrap">
     <p class="eyebrow">PRIVACY</p>
-    <h2>運んだ記録は、手元から出ない</h2>
-    <p class="body">ClipDex はデータを外部に送信しません。分析サーバも、アカウント登録もありません。集計も検索も、すべてあなたの Mac の中で完結します。</p>
+    <h2>コピペの記録は、外部に出ない</h2>
+    <p class="body">ClipDex はデータを外部に送信しません。<br>分析サーバも、アカウント登録もありません。<br>集計も検索も、すべてあなたの Mac の中で完結します。</p>
 
     <div class="a-grid">
     <div class="diagram">
@@ -406,7 +406,7 @@
       </svg>
     </div>
       <div class="shot-real">
-        <img loading="lazy" src="/assets/07-pause.png" width="662" height="518"
+        <img loading="lazy" src="/assets/07-pause.png" width="658" height="514"
              alt="メニューバーの ClipDex メニュー。「一時停止」から 15 分・30 分・1 時間が選べる状態。">
       </div>
     </div>
@@ -414,7 +414,7 @@
     <div class="priv">
       <div><h3>外部送信ゼロ</h3><p>ネットワークへ送るものがありません。アカウントも不要です。</p></div>
       <div><h3>本文の保存は任意</h3><p>コピーした内容そのものを残すかどうかは、あなたが選びます。既定はオフです。</p></div>
-      <div><h3><span class="nb">パスワード管理アプリは</span>既定で除外</h3><p>1Password・Bitwarden・キーチェーンなど 8 つを最初から記録対象外にしています。追加もできます。</p></div>
+      <div><h3><span class="nb">パスワード管理アプリは</span>既定で除外</h3><p>1Password・Bitwarden・キーチェーンなど 8 つを最初から記録対象外にしています。除外するアプリの追加もできます。</p></div>
       <div><h3>いつでも一時停止</h3><p>メニューバーから 15 分・30 分・1 時間の停止。集計とクリップボード履歴の削除も 1 操作です。</p></div>
     </div>
     <p class="note">詳しくは <a href="/privacy">プライバシーポリシー</a> をご覧ください。</p>
@@ -427,11 +427,11 @@
     <p class="eyebrow">MORE</p>
     <h2>そのほかにできること</h2>
     <div class="bento">
-      <div class="cell w2"><h3>画像もそのまま履歴に</h3><p>スクリーンショットや Finder の画像ファイルをコピーすると、サムネイル付きで履歴に残ります。貼り付け先に応じて、画像としてもファイル名としても渡せます。保存は既定でオフ、件数は文章のクリップとは別枠です。</p></div>
-      <div class="cell"><h3>ドラッグで渡す</h3><p>行をつかんで、他のアプリへ直接。</p></div>
-      <div class="cell w2"><h3><kbd>⌘</kbd><kbd>Z</kbd> で取り消せる</h3><p>削除も並べ替えもグループの移動も、多段で戻せます。<kbd>⇧</kbd><kbd>⌘</kbd><kbd>Z</kbd> でやり直しも。</p></div>
+      <div class="cell w2"><h3>画像もそのまま履歴に</h3><p>スクリーンショットや Finder の画像ファイルをコピーすると、サムネイル付きで履歴に残ります。<br>貼り付け先に応じて、画像としてもファイル名としても渡せます。<br>保存は既定でオフ、件数は文章のクリップとは別枠です。</p></div>
+      <div class="cell"><h3>ドラッグで貼り付け</h3><p>行をつかんで、他のアプリへ直接。</p></div>
+      <div class="cell w2"><h3><kbd>⌘</kbd><kbd>Z</kbd> で取り消せる</h3><p>削除も並べ替えもグループの移動も戻せます。<kbd>⇧</kbd><kbd>⌘</kbd><kbd>Z</kbd> でやり直しも。</p></div>
       <div class="cell"><h3>キーは変えられる</h3><p>呼び出しのショートカットは自由に。</p></div>
-      <div class="cell full"><h3>書式を保ったまま</h3><p>太字や色のついた文章も、書式ごと履歴に残ります。プレーンで貼りたいときは <kbd>⌥</kbd> を押しながら。</p></div>
+      <div class="cell full"><h3>テキストは書式を保ったまま</h3><p>太字や色のついた文章も、書式ごと履歴に残ります。プレーンで貼りたいときは <kbd>⌥</kbd> を押しながら。</p></div>
       <div class="cell full"><h3>書き出しとバックアップ</h3><p>レポートは PNG で画像として書き出せます。PDF 書き出しと、集計の CSV・JSON 書き出し、バックアップからの復元は Pro。バックアップに入るのは設定と集計で、クリップの中身は入りません。</p></div>
     </div>
   </div>
@@ -444,7 +444,7 @@
     <h2>こんな人に</h2>
     <div class="who">
       <div><h3>断片を並行で抱える人</h3><p>コードやログ、URL を行き来しながら書く。履歴が深いほど効きます。</p></div>
-      <div><h3>素材を横断で運ぶ人</h3><p>画像や動画をアプリ間で持ち回る。登録しておけばドラッグで渡せます。</p></div>
+      <div><h3>素材をアプリ間で持ち回る人</h3><p>画像や動画をアプリ間で持ち回る。登録しておけばドラッグで渡せます。</p></div>
       <div><h3>同じ文を何度も打つ人</h3><p>定型文を登録しておけば、呼び出して <kbd>⌘</kbd><kbd>V</kbd> で済みます。</p></div>
     </div>
   </div>
@@ -455,7 +455,7 @@
   <div class="wrap">
     <p class="eyebrow">COMPARE</p>
     <h2>ほかのアプリと比べると</h2>
-    <p class="body">同じ macOS のクリップボード管理から 2 つ。サブスク中心の高機能なものを A、無料で使える定番を B としています。</p>
+    <p class="body">同じ macOS のクリップボード管理から 2 つ。<br>サブスク中心の高機能なものを A、無料で使える定番アプリを B としています。</p>
 
     <div class="cmp-scroll">
       <table class="cmp">
@@ -473,14 +473,14 @@
             <th scope="row">料金</th>
             <td class="mine">¥0</td>
             <td class="mine"><strong>¥1,500 買い切り</strong></td>
-            <td>永年無料なし（7 日体験）。サブスク、または買い切り ¥15,000</td>
+            <td>永年無料なし（無料体験期間あり）。<br>サブスク、または買い切り ¥15,000</td>
             <td>配布元から入手すれば ¥0 / App Store 版 ¥1,500</td>
           </tr>
           <tr>
             <th scope="row">選んだ項目の貼り付け</th>
             <td class="mine" colspan="2"><strong>コピーして元のアプリに戻る。⌘V は自分で押す</strong></td>
             <td>既定で自動（権限が要る）</td>
-            <td>既定はコピーのみ。設定で自動にもできる（権限が要る）</td>
+            <td>既定はコピーのみ。<br>設定で自動にもできる（権限が要る）</td>
           </tr>
           <tr>
             <th scope="row">必要な権限</th>
@@ -538,9 +538,17 @@
     <div class="faq">
 
       <details>
+        <summary>選んだあと、貼り付けまで自動でしてくれないのですか？</summary>
+        <div class="ans">
+          <p>対応していません。他のアプリへ自動で貼り付けるには、macOS のアクセシビリティ権限（画面全体のキー入力を操作できる、とても強い権限）が必要になるためです。ClipDex は、権限を一切求めないことを優先しました。</p>
+          <p>かわりに、行を選ぶと内容をコピーして直前のアプリまで自動で直線に使っていたアプリに戻ります。押すのは <kbd>⌘</kbd><kbd>V</kbd> だけです。</p>
+        </div>
+      </details>
+
+      <details>
         <summary>書式はどこまで残りますか？</summary>
         <div class="ans">
-          <p>太字や色のついた文章は、書式ごと履歴に残ります。渡すときの既定は書式つきで、<kbd>⌥</kbd> を押しながら選ぶとその回だけプレーンになります（既定は設定で入れ替えられます）。</p>
+          <p>太字や色のついた文章は、書式ごと履歴に残ります。貼り付けるときの既定は書式つきで、<kbd>⌥</kbd> を押しながら選ぶとその回だけプレーンになります（既定は設定で入れ替えられます）。</p>
           <p>ただし <kbd>⌘</kbd><kbd>C</kbd> でのコピーは、設定に関係なく常に書式つきです。複数選択をまとめて渡すときと、登録したものの本文を編集したあとは、プレーンになります。</p>
           <p>書式のデータが大きすぎるとき（履歴は 1 形式 2MB、登録したものは 512KB）は、その形式だけ落として文字は残します。</p>
         </div>
@@ -563,7 +571,7 @@
             <li>登録したもの（文章）: 無料 10 件 / Pro 300 件</li>
             <li>登録したもの（画像・動画）: 無料 5 件 / Pro 300 件。1 件あたり画像 100MB・動画 500MB</li>
           </ul>
-          <p>上限を超えると古いものから消えます。Pro にすると上限は上がりますが、それより前に消えたものは戻りません。</p>
+          <p>クリップボード履歴は、上限を超えると古いものから消えます。登録したものは消えず、上限に達すると新しく追加できなくなります。Pro にすると上限は上がりますが、履歴で先に消えたものは戻りません。</p>
         </div>
       </details>
 
@@ -609,7 +617,7 @@
 <!-- ============ CTA ============ -->
 <section class="cta" id="download">
   <div class="wrap">
-    <h2>今日から、運んだものを残す</h2>
+    <h2>今日から、コピーしたものが残る</h2>
     <a class="btn" href="https://apps.apple.com/jp/app/id6801129211">App Store からダウンロード</a>
     <p class="req">macOS 14.0 以降 / Apple Silicon・Intel 両対応</p>
   </div>
