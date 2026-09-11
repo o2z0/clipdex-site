@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>更新ライセンスを購入 — ClipDex</title>
+<link rel="stylesheet" href="/assets/doc.css">
+</head>
+<body>
+<header>
+  <div class="wrap navrow">
+    <a class="brand" href="/" aria-label="ClipDex"><img src="/assets/logo.svg" alt="ClipDex" width="116" height="22"></a>
+    <nav class="langswitch" aria-label="言語"><span aria-current="page">JA</span><span class="sep">/</span><a href="/en/renew" hreflang="en">EN</a></nav>
+  </div>
+</header>
+
+<main>
+<div class="wrap">
+<h1>更新ライセンスを購入</h1>
+<p class="meta">お持ちの鍵の更新期限を 1 年 (365 日) 延長します。期限が過ぎていても、購入日は元のまま、期限だけが「今日または現在の期限のどちらか遅い方 + 365 日」になります。</p>
+<form method="post" action="https://clipdex-license.REPLACE_ME.workers.dev/renew">
+<label for="key">現在のライセンス鍵</label>
+<textarea id="key" name="key" class="field" rows="3" placeholder="CLIPDEX-…" required></textarea>
+<div class="cf-turnstile" data-sitekey="REPLACE_ME_TURNSTILE_SITE_KEY"></div>
+<p><button class="cta" type="submit">決済ページへ進む</button></p>
+</form>
+<p class="small">鍵を確認したあと Stripe の決済ページへ移動します。決済後、新しい鍵が画面とメールで届きます。古い鍵もそれまでの期限内のバージョンでは引き続き使えます。</p>
+<p class="small">鍵が手元にない場合は<a href="/support#resend">再送フォーム</a>から取り寄せてください。</p>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+</div>
+</main>
+
+<footer>
+  <div class="wrap footrow">
+    <a class="foot-mark" href="/" aria-label="ClipDex トップ"><img src="/assets/logo-mark.svg" alt="" width="18" height="18"></a>
+    <a href="/privacy">プライバシーポリシー</a>
+    <a href="/terms">利用規約</a>
+    <a href="/legal">特定商取引法に基づく表記</a>
+    <a href="/support">サポート</a>
+    <span class="copy">© 2026 Masafumi Koyama</span>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Buy an Update License — ClipDex</title>
+<link rel="stylesheet" href="/assets/doc.css">
+</head>
+<body>
+<header>
+  <div class="wrap navrow">
+    <a class="brand" href="/" aria-label="ClipDex"><img src="/assets/logo.svg" alt="ClipDex" width="116" height="22"></a>
+    <nav class="langswitch" aria-label="Language"><a href="/renew" hreflang="ja">JA</a><span class="sep">/</span><span aria-current="page">EN</span></nav>
+  </div>
+</header>
+
+<main>
+<div class="wrap">
+<h1>Buy an update license</h1>
+<p class="meta">Extends your key’s update period by one year (365 days). Your purchase date stays the same; the new period ends 365 days after today or after your current end date, whichever is later.</p>
+<form method="post" action="https://clipdex-license.REPLACE_ME.workers.dev/renew">
+<label for="key">Your current license key</label>
+<textarea id="key" name="key" class="field" rows="3" placeholder="CLIPDEX-…" required></textarea>
+<div class="cf-turnstile" data-sitekey="REPLACE_ME_TURNSTILE_SITE_KEY"></div>
+<p><button class="cta" type="submit">Continue to checkout</button></p>
+</form>
+<p class="small">We check the key, then send you to Stripe’s checkout. After payment your new key is shown on screen and emailed. The old key keeps working for the versions it already covered.</p>
+<p class="small">Lost your key? Use the <a href="/en/support#resend">resend form</a>.</p>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+</div>
+</main>
+
+<footer>
+  <div class="wrap footrow">
+    <a class="foot-mark" href="/" aria-label="ClipDex home"><img src="/assets/logo-mark.svg" alt="" width="18" height="18"></a>
+    <a href="/en/privacy">Privacy Policy</a>
+    <a href="/en/terms">Terms</a>
+    <a href="/en/legal">Legal Notice</a>
+    <a href="/en/support">Support</a>
+    <span class="copy">© 2026 Masafumi Koyama</span>
+  </div>
+</footer>
+</body>
+</html>

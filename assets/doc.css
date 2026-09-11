@@ -95,3 +95,11 @@ footer a:hover{color:var(--text)}
 @media (max-width:640px){ .copy{margin-left:0; width:100%} }
 
 a:focus-visible{outline:2px solid var(--text); outline-offset:3px; border-radius:var(--radius-sm)}
+
+/* 直販 (sub3): 購入ボタン / 鍵フォーム */
+.cta{display:inline-block; padding:12px 20px; border-radius:8px; background:var(--fg,#111); color:var(--bg,#fff); text-decoration:none; font-weight:600}
+.cta:hover{opacity:.9}
+.field{display:block; width:100%; box-sizing:border-box; padding:10px 12px; margin:var(--s2,8px) 0; border:1px solid var(--line,#ccc); border-radius:6px; font:inherit; font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.field-text{font-family:inherit}
+.compare th,.compare td{text-align:left; padding:8px 10px; border-bottom:1px solid var(--line,#ddd); vertical-align:top}
+.small{font-size:13px; opacity:.8}
