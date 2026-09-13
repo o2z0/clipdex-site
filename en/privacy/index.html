@@ -17,12 +17,17 @@
 <main>
 <div class="wrap">
 <h1>ClipDex Privacy Policy</h1>
-<p class="meta">Last updated: August 31, 2026</p>
+<p class="meta">Last updated: September 14, 2026</p>
 <p>ClipDex ("the app") manages clipboard history and saved snippets on macOS. By its very nature, the app touches highly sensitive information. That is why it was built from the start around a single principle: <strong>none of the data it collects is ever sent anywhere</strong>.</p>
 
 <h2>1. Nothing is transmitted</h2>
-<p>The only network activity related to the app is <strong>purchasing and restoring a purchase</strong> through Apple's App Store, and that communication is handled by Apple's own mechanism (StoreKit) at the system level, not by the app. The developer operates no servers of any kind. The app itself is built without the entitlement to make outgoing network connections, so such connections are not permitted at the operating-system level.</p>
-<p>Consequently, <strong>none of the data the app collects is sent to the developer or to any third party</strong>. There is no analytics, no advertising, and no external crash reporting.</p>
+<p>For the <strong>App Store edition</strong>, the only network activity is <strong>purchasing and restoring a purchase</strong> through Apple's App Store, and that communication is handled by Apple's own mechanism (StoreKit) at the system level, not by the app. The App Store edition is built without the entitlement to make outgoing network connections, so such connections are not permitted at the operating-system level.</p>
+<p>The <strong>direct edition</strong> (downloaded from the developer's site) additionally performs <strong>update checks</strong> and nothing else (section 1-1). License keys are verified on your Mac without any network access.</p>
+<p>In both editions, <strong>none of the data the app collects is sent to the developer or to any third party</strong>. There is no analytics, no advertising, and no external crash reporting. The only server the developer operates issues license keys for the direct edition and is involved only at the time of purchase.</p>
+
+<h3 id="updates">1-1. Update checks in the direct edition</h3>
+<p>To find out whether a newer version exists, the direct edition <strong>contacts <code>clipdex.o2z0.com</code> over HTTP at launch and once every 24 hours</strong> (updates are delivered with the Sparkle framework). The request carries only the app version and the macOS version. Clipboard contents, history, saved items, your license key, and any other data are never sent. Updates are downloaded from the same site by a helper process (an XPC service) separate from the app itself, so the app itself still has no entitlement for outgoing connections.</p>
+<p>You can turn automatic checks off in Settings → General → “Check for updates automatically”. With it off, the app only connects when you choose “Check for Updates…” from the menu bar.</p>
 
 <h2>2. Where data is stored</h2>
 <p>Everything the app stores stays inside your Mac, in a location isolated for this app alone by the App Sandbox:</p>
