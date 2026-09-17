@@ -4,14 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ClipDex — ちょうどいいクリップボード</title>
-<meta name="description" content="macOS のメニューバーに常駐するクリップボードマネージャ。コピーしたものが残り、よく使うものを置いておけて、あとから探せる。記録はすべて手元に残り、外へは出ません。">
+<meta name="description" content="macOS のメニューバーに常駐するクリップボードマネージャ。コピーしたものが貯まり、選べば直前のアプリにそのまま貼り付けます。記録はすべて手元に残ります。ダウンロードは無料、Pro は買い切り。">
 <meta property="og:title" content="ClipDex — ちょうどいいクリップボード">
-<meta property="og:description" content="コピーしたものが残る。よく使うものを置いておける。あとから探せる。記録は手元から出ない。">
+<meta property="og:description" content="コピーしたものが貯まる。選べばそのまま貼り付く。順番にも貼れる。記録は手元から出ない。">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://clipdex.o2z0.com/">
+<meta property="og:url" content="https://clipdex.o2z0.com/full/">
 <meta property="og:image" content="https://clipdex.o2z0.com/assets/01-hero.png">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://clipdex.o2z0.com/">
+<link rel="canonical" href="https://clipdex.o2z0.com/full/">
+<link rel="alternate" hreflang="ja" href="https://clipdex.o2z0.com/full/">
+<link rel="alternate" hreflang="en" href="https://clipdex.o2z0.com/en/full/">
 <style>
   :root{
     color-scheme: dark;
@@ -193,8 +195,6 @@
   .faq .ans ul{list-style:none; padding:0; margin:0 0 var(--s2)}
   .faq .ans li{padding-left:1.15em; position:relative; margin:6px 0}
   .faq .ans li::before{content:"—"; position:absolute; left:0; color:var(--text-3)}
-  .fnref{font-size:.72em; margin-left:1px}
-  .faq .ans .fn{color:var(--text-3); font-size:13px; line-height:1.75; border-top:1px solid var(--line); padding-top:var(--s2)}
   .faq .ans code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.92em; color:var(--text)}
 
   /* ---- bento ---- */
@@ -234,21 +234,52 @@
     outline-offset:3px;
     border-radius:var(--radius-sm);
   }
+
+  /* ---- full LP ---- */
+  /* 未撮影の枠 (Task 11 で 0 件を確認する)。16:10 = 提出パックの比。 */
+  .shot-placeholder{aspect-ratio:16/10; display:flex; align-items:center; justify-content:center;
+    border:1px dashed var(--line-2); border-radius:var(--radius); color:var(--text-3); font-size:13px; letter-spacing:.08em}
+  .hero-shot .shot-placeholder{aspect-ratio:16/9}
+  .hero-cta{display:flex; gap:var(--s2); justify-content:center; flex-wrap:wrap}
+  .btn-ghost{background:transparent; color:var(--text); border-color:var(--line-2)}
+  .btn-ghost:hover{background:var(--surface-2)}
+  /* margin の一括指定だと .wrap の左右 auto を潰して中央寄せが外れる (2026-09-16 実測)。上だけ足す */
+  .subhead{margin-top:var(--s6)}
+  /* リード文が 1 行 37 字あり、既定の 34em だと「貼り付け / ます。」で割れる */
+  .hero .lede{max-width:40em}
+  /* 375px でロゴ + FULL + 3 リンクが 3px あふれる (実測)。狭幅はテキストリンクを畳み、ボタンだけ残す */
+  @media (max-width:480px){ .navlinks .navlink{display:none} }
+  /* 高さを整数 px に固定する。padding で作ると 17.x px になり、sticky ヘッダーの backdrop-filter の上で
+     上下の枠線が半端な位置に落ちて切れて見える (ホバーで再描画されると直る、2026-09-16 Masa 報告) */
+  .edition-badge{display:inline-flex; align-items:center; box-sizing:border-box; height:18px; padding:0 6px;
+    font-size:10px; font-weight:700; letter-spacing:.14em; line-height:1;
+    border:1px solid var(--text-2); border-radius:4px; color:var(--text)}
+  .price{display:flex; align-items:baseline; gap:var(--s2); flex-wrap:wrap; margin:var(--s3) 0 0}
+  .price strong{font-size:clamp(32px,4vw,44px); font-weight:700; letter-spacing:.01em}
+  .price span{color:var(--text-2); font-size:15px}
+  .cmp.two{min-width:600px}
+  .cmp.two tbody th{width:22%}
+  .fnref{font-size:.72em; margin-left:1px}
+  .faq .ans .fn{color:var(--text-3); font-size:13px; line-height:1.75; border-top:1px solid var(--line); padding-top:var(--s2)}
 </style>
 </head>
+
 <body>
 
 <header>
   <div class="wrap navrow">
     <!-- ロゴはアプリ本体と同じ原本 (ClipDex/Assets.xcassets の LogoMark / LogoType)。
          currentColor で塗るためインライン展開している。原本を直したらここも直す。 -->
-    <a class="brand" href="/" aria-label="ClipDex">
+    <a class="brand" href="/full/" aria-label="ClipDex フル版">
       <svg class="logo-mark" viewBox="0 0 1024 1024" aria-hidden="true"><path d="M587.58,344.76c141.4-106.33,366.06,49.26,422.04,194.95,85.82,206.54-233.42,463.51-403.2,359.68-62.75-37.83-90.19-119.32-65.47-188.84,17.39-53.95,56.54-103.98,56.45-156.75,2.85-66.64-67.47-144.89-12.72-205.98l2.9-3.06ZM438.74,353.96c10.01-47.44,56.25-89.99,62.02-141.09,5.35-85.58-89.92-117.48-170.51-111.34C189.31,114.47,18.23,213.86.82,366.94c-16.03,175.25,207.05,400.24,366.61,330.71,68.36-27.97,109.1-104.27,95.91-177.48-8.35-56.45-36.43-112-25.56-161.68l.97-4.52Z"/></svg>
       <svg class="logo-type" viewBox="0 0 1024 194" aria-hidden="true"><path d="M1022.25,4.67l-44.26,89.82,46.02,94.02h-51.54l-22.72-57.52-23.58,57.52h-50.09l46.02-93.5-44.26-90.35h51.82l20.69,53.85,21.82-53.85h50.09Z"/><path d="M130.09,52.45c-3.99-4.84-8.88-8.57-14.67-11.17-5.81-2.59-12.51-3.89-20.14-3.89s-14.67,1.47-21.15,4.42c-6.49,2.94-12.13,7.05-16.88,12.33-4.75,5.28-8.47,11.56-11.16,18.83-2.68,7.27-4.04,15.15-4.04,23.63s1.35,16.58,4.04,23.76c2.68,7.18,6.36,13.42,11.03,18.69,4.67,5.28,10.16,9.39,16.48,12.34,6.32,2.94,13.12,4.41,20.39,4.41,8.3,0,15.66-1.72,22.06-5.19s11.69-8.32,15.85-14.54l33.75,25.19c-7.78,10.9-17.65,18.96-29.61,24.14-11.94,5.2-24.24,7.79-36.85,7.79-14.39,0-27.62-2.25-39.75-6.75-12.11-4.49-22.59-10.95-31.4-19.35-8.83-8.39-15.72-18.56-20.65-30.5C2.45,124.64,0,111.31,0,96.59s2.45-28.04,7.4-39.99c4.92-11.94,11.81-22.1,20.65-30.5,8.81-8.4,19.29-14.85,31.4-19.35C71.57,2.25,84.8,0,99.19,0c5.18,0,10.59.48,16.23,1.43,5.62.95,11.16,2.46,16.61,4.54,5.45,2.08,10.69,4.85,15.7,8.32,5.03,3.46,9.53,7.7,13.5,12.72l-31.15,25.44Z"/><path d="M185.33,4.67h40.51v146.45h75.04v37.39h-115.55V4.67Z"/><path d="M319.49,4.67h40.51v183.85h-40.51V4.67Z"/><path d="M400.51,4.67h68.3c9.53,0,18.53.87,27.01,2.6,8.47,1.73,15.89,4.72,22.21,8.96,6.32,4.24,11.33,9.95,15.07,17.14,3.72,7.18,5.58,16.23,5.58,27.13s-1.73,19.74-5.2,27.01c-3.47,7.27-8.22,13.07-14.29,17.4-6.06,4.32-13.25,7.4-21.55,9.21-8.3,1.82-17.31,2.73-27.01,2.73h-29.61v71.67h-40.51V4.67ZM441.02,82.57h27.01c3.63,0,7.14-.35,10.52-1.04,3.38-.7,6.4-1.86,9.09-3.51s4.84-3.9,6.49-6.75,2.47-6.45,2.47-10.78c0-4.67-1.08-8.44-3.25-11.29-2.16-2.85-4.92-5.06-8.3-6.62-3.38-1.55-7.14-2.55-11.28-2.98-4.16-.43-8.14-.66-11.96-.66h-20.77v43.63Z"/><path d="M727.89,4.67h124.89v37.39h-84.38v34.28h79.71v37.39h-79.71v37.39h89.05v37.39h-129.56V4.67Z"/><path d="M545.54,27.01c3.97-5.02,8.47-9.27,13.5-12.72,5.01-3.47,10.25-6.23,15.7-8.32,5.45-2.08,10.99-3.59,16.61-4.54C596.99.48,602.4,0,607.58,0c14.39,0,27.62,2.25,39.75,6.75,12.11,4.5,22.59,10.95,31.4,19.35,8.83,8.4,15.72,18.56,20.65,30.5,4.94,11.95,7.4,25.28,7.4,39.99,0,14.72-2.45,28.04-7.4,39.99-4.92,11.94-11.81,22.11-20.65,30.5-8.81,8.4-19.29,14.86-31.4,19.35-12.13,4.5-25.36,6.75-39.75,6.75-12.62,0-24.91-2.59-36.85-7.79-11.96-5.19-21.83-13.24-29.61-24.14l33.75-25.19c4.16,6.22,9.45,11.07,15.85,14.54s13.76,5.19,22.06,5.19c7.27,0,14.07-1.47,20.39-4.41,6.32-2.95,11.81-7.06,16.48-12.34,4.67-5.27,8.35-11.51,11.03-18.69,2.68-7.18,4.04-15.1,4.04-23.76s-1.35-16.36-4.04-23.63c-2.68-7.27-6.4-13.55-11.16-18.83-4.75-5.28-10.4-9.39-16.88-12.33-6.49-2.95-13.55-4.42-21.15-4.42-7.63,0-14.33,1.3-20.14,3.89-5.79,2.6-10.67,6.33-14.67,11.17l-31.15-25.44Z"/></svg>
+    <span class="edition-badge" aria-hidden="true">FULL</span>
     </a>
     <nav class="navlinks">
-      <a class="navlink" href="/full/">フル版</a>
-      <a class="btn btn-sm" href="https://apps.apple.com/jp/app/id6801129211">App Store からダウンロード</a>
+      <a class="navlink" href="#license">価格</a>
+      <a class="navlink" href="/buy/">購入</a>
+      <a class="navlink" href="/en/full/" hreflang="en" lang="en">EN</a>
+      <a class="btn btn-sm" href="/downloads/">無料でダウンロード</a>
     </nav>
   </div>
 </header>
@@ -261,44 +292,37 @@
     <div class="hero-txt">
       <h1>ちょうどいいクリップボード</h1>
       <p class="lede">
-        コピーしたものは自動で貯まり、よく使う文章や画像は登録しておけます。
+        コピーしたものは自動で貯まり、選べば直前のアプリにそのまま貼り付けます。<br>よく使う文章や画像は、登録しておけます。
       </p>
-      <a class="btn" href="https://apps.apple.com/jp/app/id6801129211">App Store からダウンロード</a>
-      <p class="req">macOS 14.0 以降 / Apple Silicon・Intel 両対応</p>
+      <div class="hero-cta">
+        <a class="btn" href="/downloads/">無料でダウンロード</a>
+        <a class="btn btn-ghost" href="/buy/">購入</a>
+      </div>
+      <p class="req">macOS 14.0 以降 / ダウンロードは無料、Pro は買い切り</p>
     </div>
   </div>
   <div class="hero-shot">
-    <div class="shot">
-      <!-- ヒーローは動画 (2026-08-31 Masa 決定)。新しいクリップが上から貯まっていく 6 秒ループ。
-           1.39:1 の縦長ソースを 16:9 枠 + 上端寄せ cover で下を見切らせている (ScreenTune 型)。
-           og:image は動画にできないので 01-hero.png のまま。 -->
-      <video muted autoplay loop playsinline preload="metadata" poster="/assets/hero-poster.jpg"
-             style="width:100%;height:100%;object-fit:cover;object-position:top center;display:block"
-             aria-label="ClipDex の統合ウインドウ。コピーするたびに新しいクリップが履歴の先頭に追加されていく。">
-        <source src="/assets/hero.mp4" type="video/mp4">
-      </video>
-    </div>
+    <div class="shot-placeholder" data-shot="1">撮影 #1</div>
   </div>
 </div>
 
 <!-- ============ 機能 ============ -->
+<!-- 共通の機能は App Store 版 LP (/) と同じ assets を参照。文言の共通部分を変えるときは両方直す (README)。 -->
 <section>
   <div class="wrap feat">
     <div class="feat-txt">
-      <h2>コピーしたものを、<br>あとから探してすぐ貼れる</h2>
-      <p class="body">コピーしたものが、履歴として残ります。<br>行を選んで <kbd>Enter</kbd> かダブルクリックでその内容をコピーして、直前まで使っていたアプリに戻ります。<br>あとは <kbd>⌘</kbd><kbd>V</kbd> を押すだけです。</p>
+      <h2>コピーしたものを、<br>選ぶだけで貼り付ける</h2>
+      <p class="body">コピーしたものが、履歴として残ります。<br>行を選んで <kbd>Enter</kbd> かダブルクリックすると、直前まで使っていたアプリに戻って、そのまま貼り付けます。</p>
       <ul class="facts">
         <li>行にコピー元アプリのアイコンが出るので、どこからコピーしたか一目でわかる</li>
-        <li>複数選択すると、新しい順に改行でつないで 1 回で貼れる</li>
+        <li>複数選択すると、新しい順に改行でつないで 1 回で貼り付け</li>
+        <li><kbd>⌘</kbd> を押しながら選ぶと、貼り付けずにコピーだけ</li>
         <li>他のアプリへドラッグしてそのまま渡せる</li>
         <li>無料で 30 件、Pro で 50〜1000 件（既定 200 件）</li>
         <li>コピーした内容を残すかどうかは、初回起動時に確認します。同意するまで何も保存されません</li>
       </ul>
     </div>
-    <div class="shot">
-      <img loading="lazy" src="/assets/02-history.png" width="1440" height="1100"
-           alt="クリップボード履歴の一覧。画像・コード・URL・チャットの文章・メモが、それぞれのコピー元アプリのアイコンと時刻つきで並んでいる。">
-    </div>
+    <div class="shot-placeholder" data-shot="2">撮影 #2</div>
   </div>
 </section>
 
@@ -358,71 +382,75 @@
 <section>
   <div class="wrap feat">
     <div class="feat-txt">
-      <h2>コピーの傾向を、<br>期間ごとに確認できる</h2>
-      <p class="body">何をどれだけコピーしたか確認できます。<br>アプリを開いていた時間ではなく、実際に手を動かした記録です。</p>
+      <h2>選んだ順に、<br>1 件ずつ貼り付ける</h2>
+      <p class="body">複数選んで <kbd>⇧</kbd><kbd>Enter</kbd>。<br>貼り付け先で <kbd>⌘</kbd><kbd>V</kbd> を押すたびに、次の 1 件が出てきます。<br>フォームの項目を上から埋めていくときに。</p>
       <ul class="facts">
+        <li>残りは小さなパネルに表示。順番の反転と中止もパネルから</li>
+        <li>画像や動画も積める</li>
+      </ul>
+    </div>
+    <div class="shot-placeholder" data-shot="3">撮影 #3</div>
+  </div>
+  <div class="wrap feat subhead">
+    <div class="feat-txt">
+      <h2>コピーしながら積んで、<br>あとで順に貼る</h2>
+      <p class="body"><kbd>⌥</kbd><kbd>⇧</kbd><kbd>⌘</kbd><kbd>C</kbd> で積みはじめると、そのあとコピーしたものが順に積まれていきます。<br>貼り付け先で <kbd>⌘</kbd><kbd>V</kbd> を押すたびに 1 件ずつ出てきます。</p>
+      <ul class="facts">
+        <li>メニューバーの「スタックを開始」からも。もう一度同じキーで中止</li>
+        <li>キーは設定で変えられる</li>
+      </ul>
+    </div>
+    <div class="shot-placeholder" data-shot="4">撮影 #4</div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap feat">
+    <div class="feat-txt">
+      <h2>コピーとペーストの傾向を、<br>期間ごとに確認できる</h2>
+      <p class="body">何をどれだけコピーして、どれだけ貼り付けたか確認できます。<br>アプリを開いていた時間ではなく、実際に手を動かした記録です。</p>
+      <ul class="facts">
+        <li>コピーとペーストの回数、文字数の合計</li>
         <li>どのアプリからコピーしたかの内訳</li>
-        <li>コピーの回数と、文字数の合計</li>
+        <li>貼り付けた内容の内訳（コード・URL・数字・文章）</li>
         <li>曜日 × 時間のヒートマップ</li>
         <li>今日・週次・直近 4 週間・今月・今年の 5 期間（無料版の集計は直近 7 日）</li>
       </ul>
     </div>
-    <div class="shot">
-      <img loading="lazy" src="/assets/06-report.png" width="1440" height="1100"
-           alt="週次レポート。コピー 342 件・17,274 文字の集計と、アプリ別の内訳バー、曜日と時間のヒートマップが表示されている。">
-    </div>
+    <div class="shot-placeholder" data-shot="5">撮影 #5</div>
   </div>
 </section>
 
-<!-- ============ プライバシー ============ -->
+<section>
+  <div class="wrap feat">
+    <div class="feat-txt">
+      <h2>何を貼ったか、<br>あとから探せる</h2>
+      <p class="body">貼り付けた内容を残しておけば、ペースト記録から検索できます。</p>
+      <ul class="facts">
+        <li>「ペースト内容を保存する」をオンにしたときだけ残ります（既定はオフ・Pro）</li>
+        <li>日本語・英語・コードが混ざっていても</li>
+        <li>除外したアプリと一時停止中は保存しません</li>
+      </ul>
+    </div>
+    <div class="shot-placeholder" data-shot="6">撮影 #6</div>
+  </div>
+</section>
+
+<!-- ============ プライバシーと権限 ============ -->
 <section id="privacy">
   <div class="wrap">
     <p class="eyebrow">PRIVACY</p>
     <h2>コピペの記録は、外部に出ない</h2>
-    <p class="body">ClipDex はデータを外部に送信しません。<br>分析サーバも、アカウント登録もありません。<br>集計も検索も、すべてあなたの Mac の中で完結します。</p>
-
-    <div class="a-grid">
-    <div class="diagram">
-      <svg viewBox="0 0 520 250" role="img" aria-label="コピーから保存までがあなたの Mac の中で完結し、外へ出ようとする経路が断たれていることを示す図。サーバーへの送信もアカウントもありません。">
-        <defs>
-          <marker id="privArrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
-            <path d="M0 0 L8 4 L0 8 z" fill="#9a9a9a"/>
-          </marker>
-        </defs>
-        <rect x="8" y="8" width="504" height="150" rx="12" fill="#1c1c1c" stroke="#3a3a3a"/>
-        <text x="26" y="34" fill="#6e6e6e" font-size="12" letter-spacing="1.6" font-family="-apple-system,sans-serif">あなたの Mac</text>
-        <g font-family="-apple-system,sans-serif" font-size="13" fill="#f2f2f2" text-anchor="middle">
-          <rect x="34" y="62" width="118" height="56" rx="9" fill="#242424" stroke="#3a3a3a"/>
-          <text x="93" y="95">コピー</text>
-          <rect x="201" y="62" width="118" height="56" rx="9" fill="#2e2e2e" stroke="#565656"/>
-          <text x="260" y="88">ClipDex</text>
-          <text x="260" y="106" font-size="11" fill="#9a9a9a">集計・検索</text>
-          <rect x="368" y="62" width="118" height="56" rx="9" fill="#242424" stroke="#3a3a3a"/>
-          <text x="427" y="88">手元のファイル</text>
-          <text x="427" y="106" font-size="11" fill="#9a9a9a">Mac の中だけ</text>
-        </g>
-        <line x1="156" y1="90" x2="196" y2="90" stroke="#9a9a9a" stroke-width="1.4" marker-end="url(#privArrow)"/>
-        <line x1="323" y1="90" x2="363" y2="90" stroke="#9a9a9a" stroke-width="1.4" marker-end="url(#privArrow)"/>
-        <line x1="260" y1="158" x2="260" y2="196" stroke="#4a4a4a" stroke-width="1.4" stroke-dasharray="4 5"/>
-        <g stroke="#6e6e6e" stroke-width="1.6">
-          <line x1="252" y1="188" x2="268" y2="204"/><line x1="268" y1="188" x2="252" y2="204"/>
-        </g>
-        <text x="260" y="234" fill="#6e6e6e" font-size="12.5" text-anchor="middle" font-family="-apple-system,sans-serif">サーバーへの送信も、アカウントも、ありません</text>
-      </svg>
-    </div>
-      <div class="shot-real">
-        <img loading="lazy" src="/assets/07-pause.png" width="658" height="514"
-             alt="メニューバーの ClipDex メニュー。「一時停止」から 15 分・30 分・1 時間が選べる状態。">
-      </div>
-    </div>
-
+    <p class="body">履歴も登録も集計も、すべてあなたの Mac の中に残ります。<br>分析サーバも、アカウント登録もありません。</p>
     <div class="priv">
-      <div><h3>外部送信ゼロ</h3><p>ネットワークへ送るものがありません。アカウントも不要です。</p></div>
-      <div><h3>本文の保存は任意</h3><p>コピーした内容そのものを残すかどうかは、あなたが選べます。既定はオフです。</p></div>
+      <div><h3>アプリの通信はアップデートの確認だけ</h3><p>1 日 1 回、新しいバージョンがあるか確認します（設定でオフにできます）。インストールは、確認したうえで行います。履歴や登録したものが送られることはありません。</p></div>
+      <div><h3>アクセシビリティの用途</h3><p>自動で貼り付けるときの <kbd>⌘</kbd><kbd>V</kbd> の送信、Paste Stack での <kbd>⌘</kbd><kbd>V</kbd> の検知、ペーストの回数を数えること、の 3 つだけ。⌘V 以外のキー入力は扱いません。</p></div>
+      <div><h3>許可しなくても使える</h3><p>選ぶとコピーして直前のアプリに戻るので、<kbd>⌘</kbd><kbd>V</kbd> だけ自分で押せば貼れます。Paste Stack とペーストの計測は止まります。</p></div>
+      <div><h3>本文の保存は任意</h3><p>コピーや貼り付けの内容そのものを残すかどうかは、あなたが選べます。</p></div>
       <div><h3><span class="nb">パスワード管理アプリは</span>既定で除外</h3><p>1Password・Bitwarden・キーチェーンなど 8 つを最初から記録対象外にしています。除外するアプリの追加もできます。</p></div>
-      <div><h3>いつでも一時停止</h3><p>メニューバーから 15 分・30 分・1 時間の停止。集計とクリップボード履歴の削除も 1 操作です。</p></div>
+      <div><h3>いつでも一時停止</h3><p>メニューバーから 15 分・30 分・1 時間の停止。集計・クリップボード履歴・ペースト記録の削除も 1 操作です。</p></div>
     </div>
-    <p class="note">詳しくは <a href="/privacy">プライバシーポリシー</a> をご覧ください。</p>
+    <p class="note">詳しくは <a href="/full/privacy/">プライバシーポリシー</a> をご覧ください。</p>
   </div>
 </section>
 
@@ -437,7 +465,7 @@
       <div class="cell w2"><h3><kbd>⌘</kbd><kbd>Z</kbd> で取り消せる</h3><p>削除も並べ替えもグループの移動も戻せます。<kbd>⇧</kbd><kbd>⌘</kbd><kbd>Z</kbd> でやり直しも。</p></div>
       <div class="cell"><h3>キーは変えられる</h3><p>呼び出しのショートカットは自由に。</p></div>
       <div class="cell full"><h3>テキストは書式を保ったまま</h3><p>太字や色のついた文章も、書式ごと履歴に残ります。プレーンで貼りたいときは <kbd>⌥</kbd> を押しながら。</p></div>
-      <div class="cell full"><h3>書き出しとバックアップ</h3><p>レポートは PNG で画像として書き出せます。PDF 書き出しと、集計の CSV・JSON 書き出し、バックアップからの復元は Pro。バックアップに入るのは設定と集計で、クリップの中身は入りません。</p></div>
+      <div class="cell full"><h3>書き出しとバックアップ</h3><p>レポートは PNG で画像として書き出せます。PDF 書き出しと集計の CSV 書き出し、バックアップと復元は Pro。バックアップには設定・集計・登録したもの（画像と動画を含む）が入り、クリップボード履歴とペースト記録は入りません。</p></div>
     </div>
   </div>
 </section>
@@ -449,89 +477,25 @@
     <h2>こんな人に</h2>
     <div class="who">
       <div><h3>断片を並行で抱える人</h3><p>コードやログ、URL を行き来しながら書く。履歴が深いほど効きます。</p></div>
-      <div><h3>素材をアプリ間で持ち回る人</h3><p>画像や動画をアプリ間で持ち回る。登録しておけばドラッグで渡せます。</p></div>
-      <div><h3>同じ文を何度も打つ人</h3><p>定型文を登録しておけば、呼び出して <kbd>⌘</kbd><kbd>V</kbd> で済みます。</p></div>
+      <div><h3>フォームを何度も埋める人</h3><p>項目を順に選んで積んでおけば、<kbd>⌘</kbd><kbd>V</kbd> を押すたびに次が出てきます。</p></div>
+      <div><h3>同じ文を何度も打つ人</h3><p>定型文を登録しておけば、選ぶだけで貼り付きます。</p></div>
     </div>
   </div>
 </section>
 
-<!-- ============ 比較 ============ -->
-<section>
+<!-- ============ ライセンスと価格 ============ -->
+<section id="license">
   <div class="wrap">
-    <p class="eyebrow">COMPARE</p>
-    <h2>ほかのアプリと比べると</h2>
-    <p class="body">同じ macOS のクリップボード管理から 2 つ。<br>サブスク中心の高機能なものを A、無料で使える定番アプリを B としています。</p>
-
-    <div class="cmp-scroll">
-      <table class="cmp">
-        <thead>
-          <tr>
-            <td></td>
-            <th scope="col" class="mine">ClipDex 無料</th>
-            <th scope="col" class="mine">ClipDex Pro</th>
-            <th scope="col">A アプリ</th>
-            <th scope="col">B アプリ</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row">料金</th>
-            <td class="mine">¥0</td>
-            <td class="mine"><strong>¥1,500 買い切り</strong></td>
-            <td>永年無料なし（無料体験期間あり）。<br>サブスク、または買い切り ¥15,000</td>
-            <td>配布元から入手すれば ¥0 / App Store 版 ¥1,500</td>
-          </tr>
-          <tr>
-            <th scope="row">選んだ項目の貼り付け</th>
-            <td class="mine" colspan="2"><strong>コピーして元のアプリに戻る。⌘V は自分で押す</strong></td>
-            <td>既定で自動（権限が要る）</td>
-            <td>既定はコピーのみ。<br>設定で自動にもできる（権限が要る）</td>
-          </tr>
-          <tr>
-            <th scope="row">必要な権限</th>
-            <td class="mine" colspan="2"><strong>なし</strong></td>
-            <td>アクセシビリティ</td>
-            <td>自動で貼り付けるならアクセシビリティ</td>
-          </tr>
-          <tr>
-            <th scope="row">データの置き場所</th>
-            <td class="mine" colspan="2"><strong>この Mac の中だけ</strong></td>
-            <td>ほかのデバイスと同期</td>
-            <td>この Mac の中だけ</td>
-          </tr>
-          <tr>
-            <th scope="row">クリップボード履歴</th>
-            <td class="mine">30 件</td>
-            <td class="mine"><strong>50〜1000 件</strong></td>
-            <td>期間で保持（既定 30 日、無期限も選べる）</td>
-            <td>既定 200 件（1〜999 件）</td>
-          </tr>
-          <tr>
-            <th scope="row">定型文の登録</th>
-            <td class="mine">10 件・<strong>グループ分け可</strong></td>
-            <td class="mine"><strong>300 件</strong>・グループ分け可</td>
-            <td>置き場あり・グループ分け可</td>
-            <td>ピン留めのみ・<strong>グループ分けなし</strong></td>
-          </tr>
-          <tr>
-            <th scope="row">画像・動画のストック</th>
-            <td class="mine">5 件</td>
-            <td class="mine"><strong>300 件</strong></td>
-            <td>画像は置ける（動画は確認できず）</td>
-            <td><strong>なし</strong></td>
-          </tr>
-          <tr>
-            <th scope="row">コピーの傾向レポート</th>
-            <td class="mine"><strong>直近 7 日</strong></td>
-            <td class="mine"><strong>全期間</strong></td>
-            <td>確認した範囲では見当たらない</td>
-            <td>確認した範囲では見当たらない</td>
-          </tr>
-        </tbody>
-      </table>
+    <p class="eyebrow">PRICE</p>
+    <h2>無料で使えて、Pro 版は買い切り</h2>
+    <p class="price"><strong>¥3,000</strong><span>税込 / 更新ライセンス ¥1,500</span></p>
+    <div class="priv">
+      <div><h3>ダウンロードは無料</h3><p>ライセンスキーを入れなくても、無料版の上限で使えます。ライセンスキーを入れると Pro になります。</p></div>
+      <div><h3>1 年分のアップデート込み</h3><p>購入日から 365 日の間に公開されたバージョンが使えます。期限を過ぎても、それまでのバージョンはずっと使えます。</p></div>
+      <div><h3>更新は必要になったときだけ</h3><p>新しいバージョンを使いたくなったら ¥1,500 で 1 年延長。期限日から 30 日後（UTC）まで購入できます。</p></div>
+      <div><h3>自分の Mac なら何台でも</h3><p>ご本人がお使いの Mac すべてで使えます。台数の登録や解除はありません。</p></div>
     </div>
-
-    <p class="cmp-note">A・B の内容は 2026 年 8 月時点で公開されている情報を確認したものです。各アプリの仕様や価格は変わることがあります。</p>
+    <p><a class="btn" href="/buy/">購入</a></p>
   </div>
 </section>
 
@@ -541,82 +505,101 @@
     <p class="eyebrow">FAQ</p>
     <h2>よくある質問</h2>
     <div class="faq">
+
       <details>
         <summary>フル版と App Store 版の違いは？</summary>
         <div class="ans">
           <p>いちばん大きな違いは、<strong>選んだものを自動で貼り付けられるか</strong>です。</p>
           <ul>
-            <li>App Store 版（このページ）: 選ぶとコピーして直前のアプリに戻り、<kbd>⌘</kbd><kbd>V</kbd> は自分で押します。権限を一切求めません</li>
-            <li><a href="/full/">フル版</a>（このサイトで配布）: 選ぶと直前のアプリに戻って、そのまま貼り付けます。Paste Stack（順番に貼り付け）と、ペーストの計測・記録も使えます。macOS のアクセシビリティの許可を使います</li>
+            <li>フル版（このページ）: 選ぶと直前のアプリに戻って、そのまま貼り付けます。Paste Stack（順番に貼り付け）と、ペーストの計測・記録も使えます。macOS のアクセシビリティの許可を使います</li>
+            <li><a href="https://apps.apple.com/jp/app/id6801129211">App Store 版</a>: 選ぶとコピーして直前のアプリに戻り、<kbd>⌘</kbd><kbd>V</kbd> は自分で押します。Paste Stack とペーストの計測・記録はありません。そのかわり、権限を一切求めません</li>
           </ul>
-          <p>履歴・登録したもの・検索・レポートなど、それ以外の機能は同じです。</p>
+          <p>履歴・登録したもの・検索・レポートなど、それ以外の機能は同じです。App Store 版に自動の貼り付けが無いのは、App Store の審査の都合<sup class="fnref">※1</sup>によるものです。</p>
+          <p class="fn">※1 2026 年 8 月の App Store の審査で、「アクセシビリティの機能を、アクセシビリティ以外の目的に使っている」（App Store Review Guideline 2.4.5）として差し戻されました。対象になったのは、選んだものを自動で貼り付ける動作と、<kbd>⌘</kbd><kbd>V</kbd> を数える機能です。Apple からは「選んだものはクリップボードに置き、<kbd>⌘</kbd><kbd>V</kbd> はユーザー自身が押すのがクリップボードアプリの標準的なやり方」と案内されました。App Store には自動で貼り付けられるクリップボードアプリもありますが、ClipDex は審査の指摘に合わせて App Store 版からこれらの機能を外し、すべての機能が入った版をこのサイトで配布しています。</p>
         </div>
       </details>
 
       <details>
-        <summary>選んだあと、貼り付けまで自動でしてくれないのですか？</summary>
-        <div class="ans">
-          <p>対応していません。他のアプリへ自動で貼り付けるには、macOS のアクセシビリティ権限（画面全体のキー入力を操作できる、とても強い権限）が必要になるためです。ClipDex は、権限を一切求めないことを優先しました。</p>
-          <p>かわりに、行を選ぶと内容をコピーして、直前に使っていたアプリに自動で戻ります。押すのは <kbd>⌘</kbd><kbd>V</kbd> だけです。</p>
-          <p>自動で貼り付けたい場合は、このサイトで配布している<a href="/full/">フル版</a>をお使いください。</p>
-        </div>
-      </details>
-      <details>
-        <summary>ドラッグすると何が渡りますか？</summary>
-        <div class="ans">
-          <p>画像や動画を 1 件だけ選んでドラッグすると、ファイルとして渡ります。それ以外（文章、または複数選択）は文字として渡ります。</p>
-        </div>
-      </details>
-      <details>
         <summary>コピーしたテキストの書式（リッチテキスト）はどこまで残りますか？</summary>
         <div class="ans">
-          <p>太字や色のついた文章は、書式ごと履歴に残ります。貼り付けるときの既定は書式つきで、<kbd>⌥</kbd> を押しながら選ぶとその回だけプレーンになります（既定は設定で入れ替えられます）。</p>
-          <p>ただし <kbd>⌘</kbd><kbd>C</kbd> でのコピーは、設定に関係なく常に書式つきです。複数選択をまとめて渡すときと、登録したものの本文を編集したあとは、プレーンになります。</p>
-          <p>書式のデータが大きすぎるとき（履歴は 1 形式 2MB、登録したものは 512KB）は、その形式だけ落として文字は残します。</p>
+          <p>太字や色、リンクのついた文章は、書式ごと履歴に残ります。貼り付けるときの既定は書式つきで、<kbd>⌥</kbd> を押しながら選ぶとその回だけ書式なしのテキストになります（既定は設定で入れ替えられます）。</p>
+          <p>ただし <kbd>⌘</kbd><kbd>C</kbd> でのコピーは、設定に関係なく常に書式つきです。複数選択をまとめて渡すときと、登録したものの本文を編集したあとは、書式なしになります。</p>
         </div>
       </details>
+
       <details>
         <summary>画像はどう保存されますか？</summary>
         <div class="ans">
-          <p>JPEG でも PNG<sup class="fnref">※1</sup> に変換して保存します。他のアプリへファイルとして渡すときの名前は、元の名前のまま拡張子だけ変わります（<code>photo.jpg</code> → <code>photo.png</code>）。</p>
+          <p>JPEG などの画像も PNG<sup class="fnref">※2</sup> に変換して保存します。他のアプリへファイルとして渡すときの名前は、元の名前のまま拡張子だけ変わります（<code>photo.jpg</code> → <code>photo.png</code>）。</p>
           <p>画像の保存は既定でオフで、設定から有効にします。件数は文章のクリップとは別枠です。</p>
-          <p class="fn">※1 PNG は画質が落ちない形式です。コピーされた画像はアプリによって JPEG・TIFF などさまざまな形で届くため、画質を落とさずに 1 つの形式にそろえて保存しています。そのため、写真などは元の JPEG よりファイルが大きくなることがあります。</p>
+          <p class="fn">※2 PNG は画質が落ちない形式です。コピーされた画像はアプリによって JPEG・TIFF などさまざまな形で届くため、画質を落とさずに 1 つの形式にそろえて保存しています。そのため、写真などは元の JPEG よりファイルが大きくなることがあります。</p>
         </div>
       </details>
+
       <details>
-        <summary>呼び出しのキーは何でも設定できますか？</summary>
+        <summary>App Store 版から移行できますか？</summary>
         <div class="ans">
-          <p><kbd>⌘</kbd> <kbd>⌃</kbd> <kbd>⌥</kbd> のいずれかを含む組み合わせにできます。<kbd>⇧</kbd> だけ、または修飾キーなしのキーは設定できません。</p>
+          <p>できます。App Store 版を終了してから、設定 → データ → 「App Store 版から移行…」を押してください。同じ Mac にある App Store 版の履歴・登録したもの・設定・レポートの集計をこちらにコピーします。</p>
+          <p>移行は Mac の中だけで行い、通信はしません。App Store 版のデータはそのまま残ります。コピーしたファイル（Finder のファイルなど）の履歴は、元のファイルへの参照を引き継げないため、テキストとして扱われます。</p>
+          <p>App Store 版で購入した Pro は引き継がれません。App Store 版の Pro をお持ちの方は、<a href="/buy/#crossgrade">半額</a>でライセンスをお求めいただけます。</p>
         </div>
       </details>
+
       <details>
-        <summary>取り消しはどこまで戻せますか？</summary>
+        <summary>無料版と Pro の違いは？</summary>
         <div class="ans">
-          <p>20 段まで戻せます。テキストを入力している最中は、そのテキスト欄の取り消しが優先されます。</p>
-        </div>
-      </details>
-      <details>
-        <summary>保存できる数はどれくらいですか？</summary>
-        <div class="ans">
+          <p>保存できる数と期間、いくつかの機能が違います。</p>
           <ul>
             <li>クリップボード履歴（文章）: 無料 30 件 / Pro 50〜1000 件（既定 200 件）</li>
             <li>クリップボード履歴（画像）: 無料 15 枚・合計 50MB・1 枚 10MB / Pro 50〜500 枚・合計 1GB・1 枚 100MB</li>
             <li>登録したもの（文章）: 無料 10 件 / Pro 300 件</li>
             <li>登録したもの（画像・動画）: 無料 5 件 / Pro 300 件。1 件あたり画像 100MB・動画 500MB</li>
+            <li>レポートの集計: 無料は直近 7 日 / Pro は全期間</li>
+            <li>ペースト記録の保存、PDF・CSV 書き出し、バックアップと復元: Pro</li>
           </ul>
-          <p>クリップボード履歴は、上限を超えると古いものから消えます。登録したものは消えず、上限に達すると新しく追加できなくなります。Pro にすると上限は上がりますが、履歴で先に消えたものは戻りません。</p>
+          <p>クリップボード履歴は、上限を超えると古いものから消えます。登録したものは消えず、上限に達すると新しく追加できなくなります。</p>
         </div>
       </details>
+
       <details>
-        <summary>バックアップには何が入りますか？</summary>
+        <summary>ライセンスの期間は？</summary>
         <div class="ans">
-          <p>設定と集計（レポートのもとになる数値）です。クリップボードの履歴、登録したもの、画像や動画の実体は入りません。</p>
+          <p>Pro のライセンスは買い切りで、<strong>購入日から 365 日の間に公開されたバージョン</strong>を使えます。</p>
+          <p>期限を過ぎても、それまでのバージョンはずっと Pro のまま使えます。その後に公開された新しいバージョンを使いたいときだけ、更新ライセンス（¥1,500、1 年延長）を購入してください。更新ライセンスは期限日から 30 日後（UTC）まで購入できます。</p>
         </div>
       </details>
+
       <details>
-        <summary>データを消すと何が消えますか？</summary>
+        <summary>1 年を過ぎたらどうなりますか？（ライセンスの期限切れについて）</summary>
         <div class="ans">
-          <p>設定の「すべてのデータ」で消えるのは、集計とクリップボード履歴です。<strong>登録したものは残ります</strong>ので、消したいときは項目を選んで削除してください。</p>
+          <p><strong>お使いのバージョンは、期限を過ぎてもそのまま Pro で使い続けられます。</strong>止まるものも、消えるデータもありません。</p>
+          <p>期限の後に変わるのは、新しいバージョンの扱いだけです。</p>
+          <ul>
+            <li>アプリ内のアップデートの通知は、期限までに公開されたバージョンまでしか出ません</li>
+            <li>期限より後に公開されたバージョンを自分でダウンロードして入れると、書き出し・バックアップと復元・ペースト記録の新しい保存など、Pro の一部の操作が止まります（保存できる件数は Pro のままで、データは消えません）</li>
+          </ul>
+          <p>新しいバージョンも Pro で使いたくなったら、更新ライセンス（¥1,500）を購入してください。期限日から 30 日後（UTC）まで購入でき、期限は「元の期限日」か「購入した日」の遅い方から 1 年延びます。それより後は、新規のライセンスの購入になります。</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>別の Mac でも使えますか？</summary>
+        <div class="ans">
+          <p>ご本人がお使いの Mac であれば、何台でも同じライセンスで使えます。台数の登録や解除はありません。</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>ライセンスキーをなくしました。</summary>
+        <div class="ans">
+          <p><a href="/support#resend">サポートの再送フォーム</a>から、購入時のメールアドレスに送り直せます。</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>返金はできますか？</summary>
+        <div class="ans">
+          <p><a href="/terms#direct">利用規約 9 節</a>をご覧ください。</p>
         </div>
       </details>
 
@@ -628,8 +611,11 @@
 <section class="cta" id="download">
   <div class="wrap">
     <h2>今日から、コピーしたものが残る</h2>
-    <a class="btn" href="https://apps.apple.com/jp/app/id6801129211">App Store からダウンロード</a>
-    <p class="req">macOS 14.0 以降 / Apple Silicon・Intel 両対応</p>
+    <div class="hero-cta">
+      <a class="btn" href="/downloads/">無料でダウンロード</a>
+      <a class="btn btn-ghost" href="/buy/">購入</a>
+    </div>
+    <p class="req">macOS 14.0 以降</p>
   </div>
 </section>
 
@@ -637,12 +623,12 @@
 
 <footer>
   <div class="wrap footrow">
-    <a class="foot-mark" href="/" aria-label="ClipDex トップ"><img src="/assets/logo-mark.svg" alt="" width="18" height="18"></a>
-    <a href="/privacy">プライバシーポリシー</a>
+    <a class="foot-mark" href="/full/" aria-label="ClipDex トップ"><img src="/assets/logo-mark.svg" alt="" width="18" height="18"></a>
+    <a href="/full/privacy/">プライバシーポリシー</a>
     <a href="/terms">利用規約</a>
     <a href="/legal">特定商取引法に基づく表記</a>
     <a href="/support">サポート</a>
-    <a href="/full/">フル版</a>
+    <a href="/">App Store 版</a>
     <span class="copy">© 2026 Masafumi Koyama</span>
   </div>
 </footer>

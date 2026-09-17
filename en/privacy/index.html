@@ -16,27 +16,15 @@
 
 <main>
 <div class="wrap">
+<nav class="edition-switch" aria-label="Edition"><span aria-current="page">App Store version</span><a href="/en/full/privacy/">Full version</a></nav>
 <h1>ClipDex Privacy Policy</h1>
 <p class="meta">Last updated: September 16, 2026</p>
-<p>ClipDex ("the app") manages clipboard history and saved snippets on macOS. By its very nature, the app touches highly sensitive information. That is why it was built from the start around a single principle: <strong>none of the data it collects is ever sent anywhere</strong>.</p>
+<p class="meta">This is the privacy policy for the <strong>App Store version</strong>. For the version downloaded from this site, see <a href="/en/full/privacy/">this page</a>.</p>
+<p>ClipDex ("the app"), distributed on the Mac App Store, manages clipboard history and Saved Items (snippets, images and videos) on macOS. By its very nature, the app touches highly sensitive information. That is why it was built from the start around a single principle: <strong>none of the data it collects is ever sent anywhere</strong>.</p>
 
 <h2>1. Nothing is transmitted</h2>
-<p>For the <strong>App Store version</strong>, the only network activity is <strong>purchasing and restoring a purchase</strong> through Apple's App Store, and that communication is handled by Apple's own mechanism (StoreKit) at the system level, not by the app. The App Store version is built without the entitlement to make outgoing network connections, so such connections are not permitted at the operating-system level.</p>
-<p>The <strong>Full version</strong> (downloaded from the developer's site) additionally performs <strong>update checks</strong> and nothing else (section 1-1). License keys are verified on your Mac without any network access.</p>
-<p>In both versions, <strong>none of the data the app collects is sent to the developer or to any third party</strong>. There is no analytics, no advertising, and no external crash reporting. The only server the developer operates issues and resends license keys for the Full version, and it is involved only when you buy a license, buy a renewal, or ask for your key to be resent.</p>
-
-<h3 id="updates">1-1. Update checks in the Full version</h3>
-<p>To find out whether a newer version exists, the Full version <strong>contacts <code>clipdex.o2z0.com</code> over HTTP at launch and once every 24 hours</strong> (updates are delivered with the Sparkle framework). The request carries only the app version and the macOS version. Clipboard contents, history, saved items, your license key, and any other data are never sent. Updates are downloaded from the same site by a helper process (an XPC service) separate from the app itself, so the app itself still has no entitlement for outgoing connections.</p>
-<p>You can turn automatic checks off in Settings → General → “Check for updates automatically”. With it off, the app only connects when you choose “Check for Updates…” from the menu bar.</p>
-
-<h3 id="crossgrade">1-2. Crossgrade requests from the App Store version</h3>
-<p>If you request the Full version discount as an App Store Pro owner, we keep the following. This happens by email; the app is not involved.</p>
-<ul>
-<li><strong>Information we keep</strong>: the email you send and the details shown in the attached receipt image (Apple purchase date, item, and name)</li>
-<li><strong>Purpose</strong>: confirming the App Store Pro purchase and issuing a discount code</li>
-<li><strong>Retention</strong>: the email and image are deleted 30 days after the discount code is issued</li>
-<li><strong>Deletion requests and questions</strong>: <a href="mailto:support@o2z0.com">support@o2z0.com</a></li>
-</ul>
+<p>The only network activity related to the app is <strong>purchasing and restoring a purchase</strong> through Apple's App Store, and that communication is handled by Apple's own mechanism (StoreKit) at the system level, not by the app. No server operated by the developer is involved in using the app. The app itself is built without the entitlement to make outgoing network connections, so such connections are not permitted at the operating-system level.</p>
+<p>Consequently, <strong>none of the data the app collects is sent to the developer or to any third party</strong>. There is no analytics, no advertising, and no external crash reporting.</p>
 
 <h2>2. Where data is stored</h2>
 <p>Everything the app stores stays inside your Mac, in a location isolated for this app alone by the App Sandbox:</p>
@@ -117,7 +105,7 @@
 <p>ClipDex <strong>does not request any special macOS permissions (such as Accessibility)</strong>, and it never monitors keyboard input. Pasting an item you selected from history or Saved Items works by copying the item and bringing the previous app to the front; you press ⌘V yourself (an on-screen confirmation explains this each time).</p>
 
 <h2>7. Deleting your data</h2>
-<p>From "All Data" in Settings you can delete usage statistics and clipboard history (including image clips) together. <strong>Saved Items are not covered by that action</strong>; delete them individually from the list instead. Uninstalling the app removes the storage location described above along with it. Nothing remains with the developer — because nothing was ever sent.</p>
+<p>From "All Data" in Settings you can delete usage statistics and clipboard history (including image clips) together. <strong>Saved Items are not covered by that action</strong>; delete them individually from the list instead. <strong>Moving the app to the Trash does not remove the data in the storage location above</strong>; macOS keeps it. To remove everything, delete “All Data” and your Saved Items before uninstalling, or delete the <code>~/Library/Containers/com.o2z0.ClipDex</code> folder in Finder. Nothing remains with the developer — because nothing was ever sent.</p>
 
 <h2>8. In-app purchase</h2>
 <p>ClipDex Pro is a one-time in-app purchase. <strong>Payment is handled by Apple's App Store, and the developer never receives your payment details such as a credit card number.</strong> All the developer can learn is the result Apple returns: whether the purchase exists.</p>

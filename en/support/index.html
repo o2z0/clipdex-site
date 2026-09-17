@@ -45,7 +45,8 @@
 <h2 id="privacy-and-permissions">Privacy and permissions</h2>
 
 <h3 id="permissions">Does ClipDex need the Accessibility permission (or any other)?</h3>
-<p>No. ClipDex <strong>does not request any special macOS permissions (such as Accessibility)</strong>, and it never monitors keyboard input. Pasting works by copying the selected item and bringing the previous app to the front — you press ⌘V yourself.</p>
+<p><strong>The App Store version does not request any special macOS permissions (such as Accessibility)</strong>, and it never monitors keyboard input. Pasting works by copying the selected item and bringing the previous app to the front — you press ⌘V yourself.</p>
+<p>The Full version asks for the Accessibility permission to paste automatically (by sending ⌘V), to detect ⌘V for Paste Stack, and to count ⌘V presses. ⌘V is the only keystroke it handles. Without the permission, it works the same way as the App Store version.</p>
 
 <h3 id="saving">Is what I copy stored?</h3>
 <p>Not initially. Clipboard history and image clips are both opt-in, and storing begins only once you turn them on in Settings. See the <a href="/en/privacy">Privacy Policy</a> for details.</p>
@@ -65,7 +66,7 @@
 <h2 id="direct">Full version license</h2>
 
 <h3 id="crossgrade">Switching from App Store Pro</h3>
-<p>Email a screenshot of your Apple purchase receipt to <a href="mailto:support@o2z0.com">support@o2z0.com</a>. We’ll reply with a one-time discount code for 50% off the Full version (valid for 30 days from the date of issue). Enter it under “Add promotion code” at checkout. Your data carries over via Settings → General → “Migrate from App Store Version…”.</p>
+<p>Email a screenshot of your Apple purchase receipt to <a href="mailto:support@o2z0.com">support@o2z0.com</a>. We’ll reply with a one-time discount code for 50% off the Full version (valid for 30 days from the date of issue). Enter it under “Add promotion code” at checkout. Your data carries over via Full version → Settings → Data → “Migrate from App Store Version…”.</p>
 
 <h3 id="resend">The key didn’t arrive / I lost my key</h3>
 <p>Enter the email address you used at checkout. If we have an order for it, we resend the key to that address (this page never reveals whether an order exists).</p>
@@ -85,7 +86,7 @@
 <p>Your key covers versions released within one year (365 days) of your purchase. On a newer version some Pro actions pause (export, backup, new paste records, Pro settings), but <strong>nothing is deleted</strong> — your limits stay at Pro. Either <a href="/en/renew">buy a renewal</a> or go back to the <a href="/en/downloads">last eligible version</a>.</p>
 
 <h3 id="updates">How do updates arrive?</h3>
-<p>Choose “Check for Updates…” from the menu bar icon to check manually. By default the app also checks at launch and once every 24 hours and lets you know when a newer version exists. Toggle automatic checks in Settings → General → “Check for updates automatically” (the request carries only the app and macOS versions — see <a href="/en/privacy#updates">Privacy Policy 1-1</a>).</p>
+<p>Choose “Check for Updates…” from the menu bar icon to check manually. By default the app also checks once every 24 hours (including at launch if 24 hours have passed since the last check) and lets you know when a newer version exists. Toggle automatic checks in Settings → General → “Check for updates automatically” (the request carries only the app and macOS versions — see <a href="/en/full/privacy/#updates">Full version Privacy Policy 1-1</a>).</p>
 <p>If your license’s update period has passed, versions released after that date show up as “up to date” and are not delivered. Buy a renewal, or pick an eligible version from <a href="/en/downloads">Downloads</a>. If you installed a newer version by hand, the same page lets you go back to the last eligible version (nothing is deleted).</p>
 
 <h3 id="direct-restore">Using it on another Mac</h3>
@@ -98,7 +99,7 @@
 
 <h2 id="requirements">Requirements</h2>
 <p>macOS 14.0 or later</p>
-<p>No special permissions are required. Pasting from history and Saved Items works by copying the selected item and bringing the target app to the front — you press ⌘V yourself.</p>
+<p>The App Store version needs no special permissions. Pasting from history and Saved Items works by copying the selected item and bringing the target app to the front — you press ⌘V yourself. The Full version uses the Accessibility permission for automatic pasting, Paste Stack and ⌘V counting (it also works without it).</p>
 
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </div>

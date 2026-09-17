@@ -69,7 +69,10 @@ a:hover{text-decoration-color:var(--text-2)}
    本文だけ 672 の測り幅に絞って中央に置く (長文を 1080 で流すと読めない)。
    個別要素の margin 指定 (h2 の上下、.meta の下) を確実に上書きするため、
    要素側の規則より後ろに置く。 */
-main :is(h1, h2, h3, p, ul, .meta){max-width:672px; margin-left:auto; margin-right:auto}
+main :is(h1, h2, h3, p, ul, .meta, form){max-width:672px; margin-left:auto; margin-right:auto}
+form{margin-top:var(--s3); margin-bottom:var(--s2)}
+form label{display:block; color:var(--text); font-size:14px; font-weight:650}
+form .cf-turnstile{margin:var(--s2) 0}
 
 /* 5 列の表は本文の測り幅 (672px) では 1 列が数文字まで潰れる。
    本文だけを 672 に保ったまま、外側の器を広げて表にその幅を使わせる。
@@ -97,9 +100,36 @@ footer a:hover{color:var(--text)}
 a:focus-visible{outline:2px solid var(--text); outline-offset:3px; border-radius:var(--radius-sm)}
 
 /* 直販 (sub3): 購入ボタン / 鍵フォーム */
-.cta{display:inline-block; padding:12px 20px; border-radius:8px; background:var(--fg,#111); color:var(--bg,#fff); text-decoration:none; font-weight:600}
-.cta:hover{opacity:.9}
-.field{display:block; width:100%; box-sizing:border-box; padding:10px 12px; margin:var(--s2,8px) 0; border:1px solid var(--line,#ccc); border-radius:6px; font:inherit; font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+/* --fg は未定義で #111 に落ち、color は --bg (#000) を引くので、暗い地に黒文字で読めなかった。
+   LP の .btn と同じ「白地に黒文字」に合わせる。<button> でも <a> でも同じ見た目にする。 */
+.cta{display:inline-block; padding:12px 26px; border-radius:var(--radius-sm); background:var(--text); color:#0b0b0b;
+  border:1px solid var(--text); font:inherit; font-weight:650; font-size:15px; line-height:1.4; text-decoration:none; cursor:pointer;
+  transition:background-color 120ms ease}
+.cta:hover{background:#fff}
+.cta:focus-visible{outline:2px solid var(--text); outline-offset:3px}
+.field{display:block; width:100%; box-sizing:border-box; padding:10px 12px; margin:var(--s1) 0 var(--s2); border:1px solid var(--line-2); border-radius:var(--radius-sm); background:var(--surface); color:var(--text); font:inherit; font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.field::placeholder{color:var(--text-3)}
+.field:focus-visible{outline:2px solid var(--text); outline-offset:1px}
 .field-text{font-family:inherit}
 .compare th,.compare td{text-align:left; padding:8px 10px; border-bottom:1px solid var(--line,#ddd); vertical-align:top}
 .small{font-size:13px; opacity:.8}
+
+/* ---- 版の切り替え (プライバシーポリシー) ----
+   App Store 版とフル版で別ページ。言語切替と同じく「いまどちらを見ているか」を
+   本文の最初に置く。塗りは現在ページだけ (LP のチップと同じ規則)。 */
+.edition-switch{display:flex; justify-content:center; gap:0; margin:0 auto var(--s4); max-width:672px}
+.edition-switch a, .edition-switch span{
+  padding:6px 16px; font-size:14px; border:1px solid var(--line-2); color:var(--text-3);
+  text-decoration:none; line-height:1.4; transition:color 120ms ease, background-color 120ms ease}
+.edition-switch :first-child{border-radius:var(--radius-sm) 0 0 var(--radius-sm)}
+.edition-switch :last-child{border-radius:0 var(--radius-sm) var(--radius-sm) 0; border-left:none}
+.edition-switch a:hover{color:var(--text)}
+.edition-switch [aria-current="page"]{background:var(--surface-2); color:var(--text); font-weight:650}
+
+/* ---- フル版の印 (ロゴ横の FULL) ---- */
+.brand-full{display:flex; align-items:center; gap:8px}
+/* 高さを整数 px に固定する。padding で作ると 17.x px になり、sticky ヘッダーの backdrop-filter の上で
+   上下の枠線が半端な位置に落ちて切れて見える (ホバーで再描画されると直る、2026-09-16 Masa 報告) */
+.edition-badge{display:inline-flex; align-items:center; box-sizing:border-box; height:18px; padding:0 6px;
+  font-size:10px; font-weight:700; letter-spacing:.14em; line-height:1;
+  border:1px solid var(--text-2); border-radius:4px; color:var(--text)}

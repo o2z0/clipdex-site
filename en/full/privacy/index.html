@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy Policy (Full version) — ClipDex</title>
+<link rel="stylesheet" href="/assets/doc.css">
+</head>
+<body>
+<header>
+  <div class="wrap navrow">
+    <a class="brand brand-full" href="/en/full/" aria-label="ClipDex"><img src="/assets/logo.svg" alt="ClipDex" width="116" height="22"><span class="edition-badge" aria-hidden="true">FULL</span></a>
+    <nav class="langswitch" aria-label="Language"><a href="/full/privacy/" hreflang="ja">JA</a><span class="sep">/</span><span aria-current="page">EN</span></nav>
+  </div>
+</header>
+
+<main>
+<div class="wrap">
+<nav class="edition-switch" aria-label="Edition"><a href="/en/privacy">App Store version</a><span aria-current="page">Full version</span></nav>
+<h1>ClipDex Privacy Policy (Full version)</h1>
+<p class="meta">Last updated: September 16, 2026</p>
+<p class="meta">This is the privacy policy for <strong>ClipDex downloaded from this site (the Full version)</strong>. For the version distributed on the Mac App Store, see the <a href="/en/privacy">App Store version privacy policy</a>.</p>
+<p>ClipDex ("the app") manages clipboard history and Saved Items (snippets, images and videos) on macOS. By its very nature, the app touches highly sensitive information, so it is designed <strong>never to send the data it collects from copying and pasting anywhere</strong>.</p>
+
+<h2 id="network">1. Network communication</h2>
+<p>The only network communication the app performs is <strong>checking for and downloading updates</strong> (section 1-1). License keys are verified on your Mac without any network access. There are no analytics, no advertising, and no external crash reporting.</p>
+<p>Of the data the app handles (clipboard contents, history, Saved Items, usage statistics, paste records, license key), <strong>none is sent to the developer or to any third party</strong>.</p>
+<p>Buying a license, buying a renewal, and resending a license key are done in your web browser on this site, not in the app. The information handled then is described in section 1-2.</p>
+
+<h3 id="updates">1-1. Update checks</h3>
+<p>To find out whether a newer version exists, the app <strong>contacts <code>clipdex.o2z0.com</code> once every 24 hours (including at launch if 24 hours have passed since the last check)</strong> using the Sparkle framework. If a newer version exists, it is downloaded from <code>github.com</code> (the developer's release repository) after you confirm. <code>clipdex.o2z0.com</code> is served by GitHub Pages, so both destinations are services operated by GitHub.</p>
+<ul>
+<li><strong>What is sent</strong>: the app name, app version and Sparkle version (in the HTTP User-Agent). Sparkle's option to send information about your Mac's configuration is turned off. Clipboard contents, history, Saved Items, your license key and any other data are never sent</li>
+<li><strong>What reaches the destination</strong>: as with any web request, GitHub receives your IP address. GitHub handles it under GitHub's privacy policy</li>
+<li><strong>Separation</strong>: the update check and download are performed by a helper (an XPC service) separate from the app. The app itself is built without the entitlement for outgoing connections</li>
+</ul>
+<p>You can turn automatic checks off in Settings → General → "Check for updates automatically". With it off, the app only connects when you choose "Check for Updates…" from the menu bar.</p>
+
+<h3 id="purchase">1-2. Buying, renewing and resending a license</h3>
+<p>Licenses are sold using the following services.</p>
+<ul>
+<li><strong>Payment (Stripe / Link)</strong> — payment takes place on a checkout page provided by Stripe. <strong>The developer never receives card numbers or other payment details.</strong> What you enter on the checkout page (such as your email address) is collected and recorded by Stripe as an order and handled under Stripe's privacy policy. The developer can view orders and buyer information (including the email address used for purchase) in the Stripe dashboard. The license server receives order details from Stripe (order ID, amount, currency, whether a discount was applied, the purchase email address, etc.) to confirm the order and send the license key, but <strong>does not store the email address itself</strong> (see the table below)</li>
+<li><strong>License server (Cloudflare)</strong> — the only server the developer operates, running on Cloudflare Workers. It is used only when you buy or renew a license, or ask for a license key to be resent</li>
+<li><strong>Email delivery (Resend)</strong> — emails containing your license key are sent through Resend. Resend receives the recipient address and the email body, which includes the license key</li>
+<li><strong>Abuse prevention (Cloudflare Turnstile)</strong> — the resend form uses Cloudflare Turnstile to block automated submissions. For this check, your IP address is passed to Cloudflare</li>
+</ul>
+<p>The license server stores the following.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr><th>Data</th><th>Purpose</th><th>Retention</th></tr>
+</thead>
+<tbody>
+<tr>
+<td>Order records (Stripe order ID, the issued license key, whether it is a purchase or renewal, issue time, display language, refund status, email delivery status)</td>
+<td>Preventing duplicate keys for one order, resending keys and renewals, confirming refunds, accounting and tax records</td>
+<td>Kept with no fixed end date (see section 9 to request deletion)</td>
+</tr>
+<tr>
+<td>A hash computed from your email address (the address itself is not stored)</td>
+<td>Matching an address entered in the resend form to its orders</td>
+<td>Same as order records</td>
+</tr>
+<tr>
+<td>Temporary records during renewal (the contents of the license key you entered)</td>
+<td>Linking the renewal payment to the original license</td>
+<td>Deleted after 1 hour</td>
+</tr>
+<tr>
+<td>Resend form usage counts (per email hash or IP address)</td>
+<td>Limiting repeated submissions in a short time</td>
+<td>Email hashes after 10 minutes, IP addresses after 1 hour</td>
+</tr>
+</tbody>
+</table></div>
+<p>A license key contains only the purchase date, the update expiry date, a value identifying the order, and a signature. It contains neither your name nor your email address.</p>
+
+<h3 id="crossgrade">1-3. Crossgrade requests from the App Store version</h3>
+<p>Only if you own App Store Pro and request the Full version discount, we keep the following. This happens by email; the app is not involved.</p>
+<ul>
+<li><strong>What we keep</strong>: the email you send and the details shown in the attached receipt image (Apple purchase date, item and name)</li>
+<li><strong>Purpose</strong>: confirming the App Store Pro purchase and issuing a discount code</li>
+<li><strong>Retention</strong>: the email and image are deleted 30 days after the discount code is issued</li>
+</ul>
+
+<h3 id="overseas">1-4. Use of overseas providers</h3>
+<p>The services in sections 1-1 and 1-2 are all provided by companies in <strong>the United States</strong>.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr><th>Provider</th><th>Country</th><th>Data handled</th><th>Role</th></tr>
+</thead>
+<tbody>
+<tr><td>Stripe (Link)</td><td>United States</td><td>Information entered on the checkout page, order details</td><td>As merchant of record, collects information directly from you</td></tr>
+<tr><td>Resend</td><td>United States</td><td>Recipient and body of the license key email</td><td>Email delivery on the developer's behalf. Resend's Data Processing Agreement prohibits use beyond the service, requires encryption in transit and at rest, governs subprocessors, and requires deletion after termination</td></tr>
+<tr><td>Cloudflare</td><td>United States</td><td>License server records (table in section 1-2), IP addresses from the resend form</td><td>Infrastructure for the license server, and abuse prevention (Turnstile)</td></tr>
+<tr><td>GitHub</td><td>United States</td><td>IP addresses during update checks and downloads</td><td>Distribution service. The developer does not receive this information</td></tr>
+</tbody>
+</table></div>
+<p>The United States has no comprehensive federal law equivalent to Japan's Act on the Protection of Personal Information; personal information is protected by state laws and sector-specific laws. For details, see the <a href="https://www.ppc.go.jp/personalinfo/legal/kaiseihogohou/#gaikoku">survey of foreign systems by Japan's Personal Information Protection Commission</a> (in Japanese). The developer uses these providers after reviewing their terms, data processing agreements and security measures.</p>
+<p>Emails for crossgrade requests (section 1-3) are received and stored on a mail server operated by a provider in Japan.</p>
+
+<h2 id="location">2. Where data is stored</h2>
+<p>All data the app stores is kept on your Mac, in the following location isolated for the app by the App Sandbox.</p>
+<p><code>~/Library/Containers/com.o2z0.ClipDex.direct/Data/Library/Application Support/com.o2z0.ClipDex.direct/</code></p>
+<p>No sync mechanism, including iCloud, is used. Exported files and backup files are saved wherever you choose.</p>
+
+<h2 id="contents">3. What is stored</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr><th>Data</th><th>When it is stored</th><th>Default</th><th>Retention</th><th>How to delete it</th></tr>
+</thead>
+<tbody>
+<tr>
+<td>Usage statistics (copy and paste counts, character counts, time of day, the identifiers of the apps you copied from and pasted into, and the kind of content pasted [code, URL, number, text]. <strong>The content itself is not included</strong>)</td>
+<td>When a copy is detected, or when ⌘V is detected (⌘V is detected only while the Accessibility permission is granted)</td>
+<td>Enabled</td>
+<td>The data itself accumulates indefinitely. What is shown on screen is the last 7 days on the free plan; on Pro it is unrestricted by default and can be set to 7–365 days</td>
+<td>Settings → Data → "All Data" → "Delete All"</td>
+</tr>
+<tr>
+<td>Clipboard history (the text you copied, together with its formatting data [RTF / HTML])</td>
+<td>When a copy is detected (only while this feature is enabled)</td>
+<td>Off (opt-in)</td>
+<td>Once the item limit is exceeded, the oldest entries are removed automatically. The free plan is fixed at 30 items; Pro is 50–1,000 (200 by default). Formatting data is treated as part of the text and is deleted along with it</td>
+<td>Settings → Data → "Clipboard History" → "Delete", or "All Data"</td>
+</tr>
+<tr>
+<td>Image clips (images you copied, and their thumbnails)</td>
+<td>When an image copy is detected (only while this feature is enabled)</td>
+<td>Off (opt-in)</td>
+<td>Once the limit on item count, total size, or per-image size is exceeded, the oldest entries are removed automatically. Free: 15 items, 50 MB total, 10 MB per image. Pro: 50–500 items (50 by default), 1 GB total, 100 MB per image</td>
+<td>Deleted together with text history via Settings → Data → "Clipboard History" → "Delete", or "All Data"</td>
+</tr>
+<tr>
+<td>Paste records (the text you pasted, the identifier of the app you pasted into, date and time, content kind, and character count)</td>
+<td>When ⌘V is detected (only on Pro with "Save paste content" turned on)</td>
+<td>Off (opt-in)</td>
+<td>Kept indefinitely on Pro by default; can be set to 7–365 days. If Pro is no longer active, entries older than the last 7 days are removed, and the rest cannot be viewed until Pro is active again. Text larger than 1 MB per entry is not stored</td>
+<td>Settings → Data → "Paste Records" → "Delete", or "All Data"</td>
+</tr>
+<tr>
+<td>Saved Items (text, images, and videos you saved yourself)</td>
+<td>When you create one, drag one in from the Finder, or save one from history (saving from history brings any formatting data along with it. Note that on the very first launch only, the app itself writes a short set of how-to cards — that content does not come from you)</td>
+<td>The feature is always available, but nothing is stored unless you act</td>
+<td>Nothing is removed automatically; items are kept up to the limits. Text: 10 on the free plan, 300 on Pro. Images and videos are counted separately: 5 on the free plan, 300 on Pro. Per item, 100 MB for an image and 500 MB for a video. Formatting data is discarded the moment you edit the text</td>
+<td>Delete them individually or by multiple selection from the list. <strong>They are not included in "Delete All"</strong></td>
+</tr>
+<tr>
+<td>License key</td>
+<td>When you enter and activate a license key</td>
+<td>None</td>
+<td>Kept until you remove it. Not included in export or backup files</td>
+<td>Settings → General → "ClipDex Pro" → "Remove Key". <strong>Not included in "Delete All"</strong></td>
+</tr>
+</tbody>
+</table></div>
+
+<h2 id="opt-in">4. What is not stored by default (opt-in)</h2>
+<p>The following three are <strong>all off initially</strong> and only begin storing content once you explicitly turn them on in Settings.</p>
+<ul>
+  <li><strong>Clipboard history</strong> — the text you copied, together with its formatting data (RTF / HTML)</li>
+  <li><strong>Image clips</strong> — images you copied</li>
+  <li><strong>Paste records</strong> — the text you pasted (Pro only)</li>
+</ul>
+<p>Unless you turn these on, all the app stores from copying and pasting are numbers — counts, character counts, times of day, content kinds — and app identifiers. The content itself is not stored. The text is read briefly to count characters and determine its kind, then discarded immediately.</p>
+
+<p><strong>About formatting data</strong>: While clipboard history is enabled, the app stores not only the text you copied but also the formatting data (RTF / HTML) that the source app placed on the clipboard. Formatting data is <strong>stored exactly as the source app produced it; the app neither parses nor modifies it</strong>.</p>
+<p>As a result, that data may contain <strong>information embedded by the source app</strong>. None of it is added by ClipDex.</p>
+<ul>
+<li>The URLs of any links inside the range you copied</li>
+<li>The path of a local temporary file, which includes your macOS user name (Word and Excel in the developer's own measurements)</li>
+<li>The name and version of the app used to copy</li>
+</ul>
+<p>Stored formatting data is never transmitted, just like every other kind of data (see section 1). There is no separate switch for formatting data; it follows the clipboard history switch. The size limit is 2 MB per format in history and 512 KB per format when an item is moved into Saved Items. Beyond that, only the formatting for that format is dropped and the plain text is stored as usual.</p>
+
+<h2 id="exclusions">5. How sensitive content is kept out</h2>
+<p>Even with the opt-in features above turned on, the app excludes sensitive information from its records in the following ways.</p>
+<ul>
+  <li><strong>Built-in app exclusions</strong> — anything copied in one of eight apps, mostly password managers (1Password 7, 1Password 8 and later, Bitwarden, KeePassXC, LastPass for Safari, Dashlane, Keychain Access, and System Settings), is not stored, and neither is anything pasted into them</li>
+  <li><strong>Respecting markers set by the source app</strong> — when the app you copied from attaches the industry-standard "this is confidential" marker, the content is not stored in clipboard history. However, <strong>this only works when the source app supports it</strong>, so it cannot detect confidential data in every app</li>
+  <li><strong>Exclusions you add yourself</strong> — from Settings you can pick a running app and add it to the exclusion list (in addition to the eight built-in ones)</li>
+  <li><strong>Pause</strong> — from the menu bar you can pause recording for 15 minutes, 30 minutes, or 1 hour (there is no indefinite pause)</li>
+</ul>
+
+<h2 id="permissions">6. About permissions</h2>
+<p>The app asks for the macOS <strong>Accessibility</strong> permission, for these three purposes only.</p>
+<ul>
+<li><strong>Automatic pasting</strong> — sends the ⌘V keystroke to paste the item you picked into the previous app</li>
+<li><strong>Paste Stack</strong> — detects ⌘V pressed in the target app to paste stacked items in order</li>
+<li><strong>Paste tracking</strong> — counts how many times, at what time, and into which app ⌘V is pressed</li>
+</ul>
+<p><strong>⌘V is the only keystroke handled.</strong> Any other keystroke macOS reports is ignored without being processed, recorded or sent. The app works without the permission: picking an item then copies it and brings the previous app to the front, and you press ⌘V yourself (Paste Stack and paste tracking are unavailable). You can revoke the permission at any time in System Settings → Privacy &amp; Security → Accessibility.</p>
+
+<h2 id="deletion">7. Deleting your data</h2>
+<p>Settings → Data → "All Data" deletes usage statistics, clipboard history (including image clips) and paste records together. <strong>Saved Items and your license key are not included.</strong> Delete Saved Items from the list, and remove the license key in Settings → General → "ClipDex Pro".</p>
+<p><strong>Moving the app to the Trash does not remove the data in the storage location in section 2</strong>; macOS keeps it. To remove everything, delete "All Data" and your Saved Items before uninstalling, or delete the <code>~/Library/Containers/com.o2z0.ClipDex.direct</code> folder in Finder.</p>
+<p>To have order records on the license server (section 1-2) deleted, contact us as described in section 9. After deletion, license keys can no longer be resent and renewals can no longer be bought.</p>
+
+<h2 id="migration">8. Migrating from the App Store version</h2>
+<p>Settings → Data → "Migrate from App Store Version…" <strong>copies</strong> the App Store version's data on the same Mac (usage statistics, settings, clipboard history, image clips, Saved Items and paste records) into the app's storage location. This happens entirely on your Mac, without network access. The App Store version's data is not deleted. Data the app had before migration is kept for recovery next to the storage location in section 2 (in a folder whose name starts with <code>com.o2z0.ClipDex.direct.pre-migration-</code> inside the same <code>Application Support</code> folder). "All Data" does not delete this folder, so delete it in Finder when you no longer need it.</p>
+
+<h2 id="contact">9. Operator and contact</h2>
+<p>The app is operated by Masafumi Koyama, a sole proprietor. <strong>The postal address will be provided by email without delay on request</strong> (as also noted in the <a href="/en/legal">Legal Notice</a>).</p>
+<p>For requests about the information described in sections 1-2 and 1-3 — notification of the purpose of use, disclosure, correction, suspension of use or deletion — as well as questions about the security measures we take and complaints, contact <a href="mailto:support@o2z0.com">support@o2z0.com</a>. We will respond without delay after confirming your identity.</p>
+
+<h2 id="changes">10. Changes</h2>
+<p>If this policy changes, this page will be updated and the last-updated date revised.</p>
+</div>
+</main>
+
+<footer>
+  <div class="wrap footrow">
+    <a class="foot-mark" href="/en/full/" aria-label="ClipDex home"><img src="/assets/logo-mark.svg" alt="" width="18" height="18"></a>
+    <a href="/en/full/privacy/">Privacy Policy</a>
+    <a href="/en/terms">Terms</a>
+    <a href="/en/legal">Legal Notice</a>
+    <a href="/en/support">Support</a>
+    <a href="https://apps.apple.com/app/id6801129211">App Store version</a>
+    <span class="copy">© 2026 Masafumi Koyama</span>
+  </div>
+</footer>
+</body>
+</html>

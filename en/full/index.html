@@ -1,0 +1,637 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ClipDex — The Clipboard Manager That Pastes for You</title>
+<meta name="description" content="A menu bar clipboard manager for macOS. Everything you copy is kept, and picking an item pastes it straight into the app you were using. Your data stays on your Mac. Free to download; Pro is a one-time purchase.">
+<meta property="og:title" content="ClipDex — The Clipboard Manager That Pastes for You">
+<meta property="og:description" content="Everything you copy is kept. Pick it and it pastes. Paste in order, too. Your data never leaves your Mac.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://clipdex.o2z0.com/en/full/">
+<meta property="og:image" content="https://clipdex.o2z0.com/assets/01-hero.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://clipdex.o2z0.com/en/full/">
+<link rel="alternate" hreflang="ja" href="https://clipdex.o2z0.com/full/">
+<link rel="alternate" hreflang="en" href="https://clipdex.o2z0.com/en/full/">
+<style>
+  :root{
+    color-scheme: dark;
+    --bg:#000; --surface:#161616; --surface-2:#1c1c1c;
+    --text:#f2f2f2; --text-2:#9a9a9a; --text-3:#6e6e6e;
+    --line:#262626; --line-2:#333;
+    --maxw:1080px;
+    --radius:12px; --radius-sm:6px;
+    --s1:8px; --s2:16px; --s3:24px; --s4:40px; --s5:64px; --s6:96px; --s7:140px;
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%; scroll-behavior:smooth}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto}
+    *,*::before,*::after{transition-duration:0.01ms !important}
+  }
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;
+    font-size:16px; line-height:1.85;
+    /* 既定の line-break:auto は小書きカナの行頭を許す (「キーチ / ェーン」)。
+       strict にすると小書きカナ・長音も禁則対象になる。 */
+    line-break:strict;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 var(--s3)}
+  a{color:var(--text); text-underline-offset:.22em; text-decoration-color:var(--line-2); transition:text-decoration-color 120ms ease,color 120ms ease}
+  a:hover{text-decoration-color:var(--text-2)}
+  img{max-width:100%; display:block}
+
+  /* ---- header ---- */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(0,0,0,.82); backdrop-filter:saturate(180%) blur(14px);
+    border-bottom:1px solid var(--line);
+  }
+  .navrow{display:flex; align-items:center; gap:var(--s4); height:56px}
+  /* マーク 22 / タイポ 16 はアプリのロックアップ (24 / 20) と同じ 1.2 : 1。 */
+  .brand{display:flex; align-items:center; gap:10px; color:var(--text); text-decoration:none}
+  .brand svg{display:block; fill:currentColor}
+  .logo-mark{width:22px; height:22px}
+  .logo-type{width:auto; height:16px}
+  .navlinks{display:flex; gap:var(--s3); margin-left:auto; align-items:center}
+  .navlink{color:var(--text-2); text-decoration:none; font-size:14px}
+  .navlink:hover{color:var(--text)}
+
+  /* ---- buttons ---- */
+  .btn{
+    display:inline-block; padding:12px 26px; border-radius:var(--radius-sm);
+    background:var(--text); color:#0b0b0b; font-weight:650; font-size:15px;
+    text-decoration:none; border:1px solid var(--text); line-height:1.4;
+    transition:background-color 120ms ease,color 120ms ease,border-color 120ms ease;
+  }
+  .btn:hover{background:#fff}
+  .btn[aria-disabled="true"]{
+    background:transparent; color:var(--text-2); border-color:var(--line-2); cursor:default;
+  }
+  .btn-sm{padding:8px 18px; font-size:14px; border-radius:var(--radius-sm)}
+
+  /* ---- hero ---- */
+  /* 下 padding 0 = ヒーロー動画の見切れ下端を節のディバイダーに密着させる (2026-08-31) */
+  .hero{padding:var(--s7) 0 0; border-bottom:1px solid var(--line); text-align:center}
+  .hero-txt{max-width:44rem; margin:0 auto}
+  .hero .lede{margin-left:auto; margin-right:auto}
+  /* ヒーローの画像は本文コンテナ (1080) より広く取る。ここだけ幅の規則から
+     外すのは、直後の節の画像より小さいと「ヒーローに見えない」ため
+     (1280px で 1232 vs 節の 1032)。参照した pasteapp.io も本文 840 に対し
+     画像 1200 と、同じ広げ方をしている (2026-08-27 実測)。 */
+  /* 100vw はスクロールバー幅を含むので、余白が左右非対称になる。
+     100% (= body 幅) から本文と同じ 24px の溝を 2 つ引く。 */
+  .hero-shot{width:min(1240px, calc(100% - var(--s3) * 2)); margin:var(--s5) auto 0}
+  /* 仮置き: 現行 01-hero.png は 1600x1185 (縦長) で、そのまま 1232 幅に
+     広げると縦 913px になり最初の画面を占領する。枠を 16:9 に固定して
+     上端を見せる。**差し替え時は 16:9 で書き出すこと** — そうすれば
+     この cover は効かなくなり、画の意図どおりに収まる。 */
+  /* ヒーローは枠なし (2026-08-31 Masa 決定): 動画は crop も合成もしない撮って出し
+     (トリム 1 秒のみ)。ページ背景を録画の余白と同じ純黒 #000 にしたので継ぎ目は
+     存在しない。窓の角丸と影は録画のまま。試して不採用の案 2 つ = crop + CSS 角丸
+     (雑に見える) / colorkey で余白色を差し替え (背景を黒にした時点で不要)。 */
+  .hero-shot .shot{aspect-ratio:16/9; border:none; border-radius:0; background:none}
+  .hero-shot .shot img{width:100%; height:100%; object-fit:cover; object-position:top center}
+  h1{font-size:clamp(32px,5vw,52px); line-height:1.28; letter-spacing:.01em; margin:0 0 var(--s3); font-weight:700; text-wrap:balance}
+  .lede{color:var(--text-2); font-size:17px; margin:0 0 var(--s4); max-width:34em; text-wrap:pretty}
+  .req{color:var(--text-3); font-size:13px; margin:var(--s2) 0 0}
+  /* 枠 (border + 面 + 角丸) は全廃した (2026-08-31 Masa 決定、チープに見える)。
+     以降の画像は「素のウィンドウ」= screencapture -o -l <windowID> の窓単体 PNG
+     (影なし・角丸はアルファで抜けている) を撮って差し替える。旧 crop.py 経路
+     (提出パックのグラデ背景ごと切り出し) は廃止 — 差し替えまでの間、既存画像は
+     グラデ背景の長方形がそのまま見える暫定状態。 */
+  .shot{border:none; border-radius:0; background:none}
+  .shot img{width:100%; height:auto}
+  @media (max-width:860px){
+    .hero{padding:var(--s5) 0 0}
+    .hero-shot{margin-top:var(--s4)}
+    /* 狭幅では 16:9 に切ると窓の中身が読めないので、画像をそのまま出す。
+       差し替え後の原本が 16:9 なら、この解除は見た目に影響しない。 */
+    .hero-shot .shot{aspect-ratio:auto}
+    .hero-shot .shot img{height:auto; object-fit:fill}
+  }
+
+  /* ---- generic section ---- */
+  section{padding:var(--s6) 0; border-bottom:1px solid var(--line)}
+  .eyebrow{font-size:12px; letter-spacing:.18em; color:var(--text-3); margin:0 0 var(--s2); font-weight:650}
+  h2{font-size:clamp(23px,2.7vw,30px); line-height:1.45; margin:0 0 var(--s3); font-weight:700; letter-spacing:.01em; text-wrap:balance}
+  h3{font-size:17px; margin:0 0 var(--s1); font-weight:650; text-wrap:balance}
+  .body{color:var(--text-2); margin:0; max-width:38em; text-wrap:pretty}
+  /* 機能 5 節は全部同じ構図にする。1 つのブロックとして読ませるため、
+     節ごとの強弱 (縦積み・列比の変更) は付けない。
+     1280px 実測: テキスト 436 / 画像 左端 616・幅 532 が 5 節で一致。 */
+  .feat{display:grid; grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr); gap:var(--s5); align-items:center}
+  .facts{list-style:none; padding:0; margin:var(--s3) 0 0; color:var(--text-2); font-size:15px}
+  .facts li{padding-left:1.15em; position:relative; margin:6px 0}
+  .facts li::before{content:"—"; position:absolute; left:0; color:var(--text-3)}
+  kbd{
+    font:inherit; font-size:.86em; padding:2px 7px; border:1px solid var(--line-2);
+    border-radius:6px; background:var(--surface-2); color:var(--text);
+  }
+  @media (max-width:860px){ .feat{grid-template-columns:1fr; gap:var(--s3)} }
+
+  /* ---- privacy ---- */
+  /* 模式図は本文列いっぱいに広げず 760px で中央に置く。全幅に組み直した案も作ったが、
+     箱が横に伸びるぶん中の流れが間延びして見えたため (docs/lp/privacy-combined.html 組み合わせ①)。 */
+  .diagram{border:1px solid var(--line-2); border-radius:var(--radius); background:var(--surface);
+    padding:var(--s4) var(--s3); margin:var(--s4) auto 0; max-width:760px}
+  .diagram svg{display:block; width:100%; height:auto}
+  /* 案 A: 図 (主) + 実物 1 枚 (従) の 2 列。2 列に入れるときは図の中央寄せ制限を解く。 */
+  .a-grid{display:grid; grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);
+    gap:var(--s3); align-items:stretch; margin-top:var(--s4)}
+  .a-grid .diagram{margin:0; max-width:none}
+  .a-grid .shot-real{border:none; border-radius:0; background:none;
+    display:flex; align-items:center; justify-content:center}
+  .a-grid .shot-real img{display:block; width:100%; height:auto}
+  @media (max-width:860px){ .a-grid{grid-template-columns:1fr} }
+  .priv{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; margin-top:var(--s3)}
+  .priv > div{background:var(--surface); padding:var(--s3)}
+  .priv p{margin:0; color:var(--text-2); font-size:14px}
+  /* 語の途中で折り返させたくない塊 (例: 「パスワード管理アプリは」)。
+     この塊は 186px。.priv の見出し幅は 1280px で 209px / 900px で 230px /
+     320px でも 222px あり、いずれも収まる (2026-08-26 実測)。 */
+  .nb{white-space:nowrap}
+
+  /* ---- compare ---- */
+  /* 5 列あるので本文コンテナ (1032) をいっぱいに使う。狭幅では表だけを
+     横スクロールさせ、ページ本体は横に動かさない。 */
+  .cmp-scroll{overflow-x:auto; margin-top:var(--s4)}
+  .cmp{border-collapse:collapse; width:100%; min-width:760px; font-size:13px; line-height:1.7}
+  .cmp th, .cmp td{border:1px solid var(--line); padding:12px 14px; text-align:left; vertical-align:top}
+  .cmp thead th{color:var(--text); font-weight:650; font-size:14px; white-space:nowrap}
+  .cmp tbody th{color:var(--text); font-weight:650; width:19%}
+  .cmp td{color:var(--text-2)}
+  .cmp td strong{color:var(--text); font-weight:650}
+  /* 自分の列だけ地を一段起こす。塗りは 2 段までの原則に収める。 */
+  .cmp .mine{background:var(--surface)}
+  .cmp thead .mine{color:var(--text)}
+  .cmp-note{color:var(--text-3); font-size:13px; margin:var(--s3) 0 0}
+
+  /* ---- faq ---- */
+  /* details/summary の素の開閉を使う (JS なし)。マーカーは自前の + / − で、
+     ::-webkit-details-marker と list-style の両方を消してから足す。 */
+  .faq{border-top:1px solid var(--line); margin-top:var(--s4)}
+  .faq details{border-bottom:1px solid var(--line)}
+  .faq summary{
+    display:flex; align-items:flex-start; gap:var(--s2);
+    padding:var(--s3) 0; cursor:pointer; font-weight:650; font-size:16px;
+    list-style:none; transition:color 120ms ease;
+  }
+  .faq summary::-webkit-details-marker{display:none}
+  .faq summary::after{
+    content:"+"; margin-left:auto; color:var(--text-3); font-weight:400;
+    font-size:20px; line-height:1.2; transition:color 120ms ease;
+  }
+  .faq details[open] summary::after{content:"−"}
+  .faq summary:hover{color:var(--text)}
+  .faq summary:hover::after{color:var(--text-2)}
+  .faq summary:focus-visible{outline:2px solid var(--text-2); outline-offset:4px; border-radius:var(--radius-sm)}
+  .faq .ans{color:var(--text-2); font-size:15px; padding:0 0 var(--s3); max-width:44em}
+  .faq .ans p{margin:0 0 var(--s2)}
+  .faq .ans p:last-child{margin:0}
+  .faq .ans ul{list-style:none; padding:0; margin:0 0 var(--s2)}
+  .faq .ans li{padding-left:1.15em; position:relative; margin:6px 0}
+  .faq .ans li::before{content:"—"; position:absolute; left:0; color:var(--text-3)}
+  .faq .ans code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.92em; color:var(--text)}
+
+  /* ---- bento ---- */
+  .bento{display:grid; grid-template-columns:repeat(3,1fr); gap:var(--s2); margin-top:var(--s4)}
+  .bento .cell{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:var(--s3)}
+  .bento .w2{grid-column:span 2}
+  .bento .full{grid-column:1/-1}
+  .bento p{margin:0; color:var(--text-2); font-size:14px}
+  @media (max-width:720px){ .bento{grid-template-columns:1fr} .bento .w2,.bento .full{grid-column:auto} }
+
+  /* ---- who ---- */
+  .who{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:var(--s3); margin-top:var(--s4)}
+  .who div{border-top:1px solid var(--line-2); padding-top:var(--s2)}
+  .who p{margin:0; color:var(--text-2); font-size:14px}
+
+  /* ---- cta ---- */
+  .cta{text-align:center; padding:var(--s7) 0}
+  .cta h2{margin-bottom:var(--s4)}
+  .note{color:var(--text-3); font-size:13px; margin-top:var(--s3)}
+
+  /* ---- footer ---- */
+  footer{border-bottom:none; padding:var(--s5) 0; color:var(--text-3); font-size:14px}
+  .footrow{display:flex; gap:var(--s3); flex-wrap:wrap; align-items:center}
+  footer a{color:var(--text-2); text-decoration:none; transition:color 120ms ease}
+  footer a:hover{color:var(--text)}
+  /* 著作権表示だけフッターの 14px から一段落とす (読ませる情報ではないため)。 */
+  .copy{margin-left:auto; color:var(--text-3); font-size:12px}
+  /* フッター先頭の「トップ」はロゴマーク。原本は白ベタ塗りなので濃さは opacity で作る。 */
+  .foot-mark{display:block; line-height:0}
+  .foot-mark img{display:block; height:18px; width:auto; opacity:.55; transition:opacity 120ms ease}
+  .foot-mark:hover img{opacity:1}
+  .en-links{color:var(--text-3)}
+  @media (max-width:640px){ .copy{margin-left:0; width:100%} }
+  a:focus-visible,
+  .btn:focus-visible{
+    outline:2px solid var(--text);
+    outline-offset:3px;
+    border-radius:var(--radius-sm);
+  }
+
+  /* ---- full LP ---- */
+  /* 未撮影の枠 (Task 11 で 0 件を確認する)。16:10 = 提出パックの比。 */
+  .shot-placeholder{aspect-ratio:16/10; display:flex; align-items:center; justify-content:center;
+    border:1px dashed var(--line-2); border-radius:var(--radius); color:var(--text-3); font-size:13px; letter-spacing:.08em}
+  .hero-shot .shot-placeholder{aspect-ratio:16/9}
+  .hero-cta{display:flex; gap:var(--s2); justify-content:center; flex-wrap:wrap}
+  .btn-ghost{background:transparent; color:var(--text); border-color:var(--line-2)}
+  .btn-ghost:hover{background:var(--surface-2)}
+  /* margin の一括指定だと .wrap の左右 auto を潰して中央寄せが外れる (2026-09-16 実測)。上だけ足す */
+  .subhead{margin-top:var(--s6)}
+  /* リード文が 1 行 37 字あり、既定の 34em だと「貼り付け / ます。」で割れる */
+  .hero .lede{max-width:40em}
+  /* 375px でロゴ + FULL + 3 リンクが 3px あふれる (実測)。狭幅はテキストリンクを畳み、ボタンだけ残す */
+  @media (max-width:480px){ .navlinks .navlink{display:none} }
+  /* 高さを整数 px に固定する。padding で作ると 17.x px になり、sticky ヘッダーの backdrop-filter の上で
+     上下の枠線が半端な位置に落ちて切れて見える (ホバーで再描画されると直る、2026-09-16 Masa 報告) */
+  .edition-badge{display:inline-flex; align-items:center; box-sizing:border-box; height:18px; padding:0 6px;
+    font-size:10px; font-weight:700; letter-spacing:.14em; line-height:1;
+    border:1px solid var(--text-2); border-radius:4px; color:var(--text)}
+  .price{display:flex; align-items:baseline; gap:var(--s2); flex-wrap:wrap; margin:var(--s3) 0 0}
+  .price strong{font-size:clamp(32px,4vw,44px); font-weight:700; letter-spacing:.01em}
+  .price span{color:var(--text-2); font-size:15px}
+  .cmp.two{min-width:600px}
+  .cmp.two tbody th{width:22%}
+  .fnref{font-size:.72em; margin-left:1px}
+  .faq .ans .fn{color:var(--text-3); font-size:13px; line-height:1.75; border-top:1px solid var(--line); padding-top:var(--s2)}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="wrap navrow">
+    <!-- ロゴはアプリ本体と同じ原本 (ClipDex/Assets.xcassets の LogoMark / LogoType)。
+         currentColor で塗るためインライン展開している。原本を直したらここも直す。 -->
+    <a class="brand" href="/en/full/" aria-label="ClipDex Full version">
+      <svg class="logo-mark" viewBox="0 0 1024 1024" aria-hidden="true"><path d="M587.58,344.76c141.4-106.33,366.06,49.26,422.04,194.95,85.82,206.54-233.42,463.51-403.2,359.68-62.75-37.83-90.19-119.32-65.47-188.84,17.39-53.95,56.54-103.98,56.45-156.75,2.85-66.64-67.47-144.89-12.72-205.98l2.9-3.06ZM438.74,353.96c10.01-47.44,56.25-89.99,62.02-141.09,5.35-85.58-89.92-117.48-170.51-111.34C189.31,114.47,18.23,213.86.82,366.94c-16.03,175.25,207.05,400.24,366.61,330.71,68.36-27.97,109.1-104.27,95.91-177.48-8.35-56.45-36.43-112-25.56-161.68l.97-4.52Z"/></svg>
+      <svg class="logo-type" viewBox="0 0 1024 194" aria-hidden="true"><path d="M1022.25,4.67l-44.26,89.82,46.02,94.02h-51.54l-22.72-57.52-23.58,57.52h-50.09l46.02-93.5-44.26-90.35h51.82l20.69,53.85,21.82-53.85h50.09Z"/><path d="M130.09,52.45c-3.99-4.84-8.88-8.57-14.67-11.17-5.81-2.59-12.51-3.89-20.14-3.89s-14.67,1.47-21.15,4.42c-6.49,2.94-12.13,7.05-16.88,12.33-4.75,5.28-8.47,11.56-11.16,18.83-2.68,7.27-4.04,15.15-4.04,23.63s1.35,16.58,4.04,23.76c2.68,7.18,6.36,13.42,11.03,18.69,4.67,5.28,10.16,9.39,16.48,12.34,6.32,2.94,13.12,4.41,20.39,4.41,8.3,0,15.66-1.72,22.06-5.19s11.69-8.32,15.85-14.54l33.75,25.19c-7.78,10.9-17.65,18.96-29.61,24.14-11.94,5.2-24.24,7.79-36.85,7.79-14.39,0-27.62-2.25-39.75-6.75-12.11-4.49-22.59-10.95-31.4-19.35-8.83-8.39-15.72-18.56-20.65-30.5C2.45,124.64,0,111.31,0,96.59s2.45-28.04,7.4-39.99c4.92-11.94,11.81-22.1,20.65-30.5,8.81-8.4,19.29-14.85,31.4-19.35C71.57,2.25,84.8,0,99.19,0c5.18,0,10.59.48,16.23,1.43,5.62.95,11.16,2.46,16.61,4.54,5.45,2.08,10.69,4.85,15.7,8.32,5.03,3.46,9.53,7.7,13.5,12.72l-31.15,25.44Z"/><path d="M185.33,4.67h40.51v146.45h75.04v37.39h-115.55V4.67Z"/><path d="M319.49,4.67h40.51v183.85h-40.51V4.67Z"/><path d="M400.51,4.67h68.3c9.53,0,18.53.87,27.01,2.6,8.47,1.73,15.89,4.72,22.21,8.96,6.32,4.24,11.33,9.95,15.07,17.14,3.72,7.18,5.58,16.23,5.58,27.13s-1.73,19.74-5.2,27.01c-3.47,7.27-8.22,13.07-14.29,17.4-6.06,4.32-13.25,7.4-21.55,9.21-8.3,1.82-17.31,2.73-27.01,2.73h-29.61v71.67h-40.51V4.67ZM441.02,82.57h27.01c3.63,0,7.14-.35,10.52-1.04,3.38-.7,6.4-1.86,9.09-3.51s4.84-3.9,6.49-6.75,2.47-6.45,2.47-10.78c0-4.67-1.08-8.44-3.25-11.29-2.16-2.85-4.92-5.06-8.3-6.62-3.38-1.55-7.14-2.55-11.28-2.98-4.16-.43-8.14-.66-11.96-.66h-20.77v43.63Z"/><path d="M727.89,4.67h124.89v37.39h-84.38v34.28h79.71v37.39h-79.71v37.39h89.05v37.39h-129.56V4.67Z"/><path d="M545.54,27.01c3.97-5.02,8.47-9.27,13.5-12.72,5.01-3.47,10.25-6.23,15.7-8.32,5.45-2.08,10.99-3.59,16.61-4.54C596.99.48,602.4,0,607.58,0c14.39,0,27.62,2.25,39.75,6.75,12.11,4.5,22.59,10.95,31.4,19.35,8.83,8.4,15.72,18.56,20.65,30.5,4.94,11.95,7.4,25.28,7.4,39.99,0,14.72-2.45,28.04-7.4,39.99-4.92,11.94-11.81,22.11-20.65,30.5-8.81,8.4-19.29,14.86-31.4,19.35-12.13,4.5-25.36,6.75-39.75,6.75-12.62,0-24.91-2.59-36.85-7.79-11.96-5.19-21.83-13.24-29.61-24.14l33.75-25.19c4.16,6.22,9.45,11.07,15.85,14.54s13.76,5.19,22.06,5.19c7.27,0,14.07-1.47,20.39-4.41,6.32-2.95,11.81-7.06,16.48-12.34,4.67-5.27,8.35-11.51,11.03-18.69,2.68-7.18,4.04-15.1,4.04-23.76s-1.35-16.36-4.04-23.63c-2.68-7.27-6.4-13.55-11.16-18.83-4.75-5.28-10.4-9.39-16.88-12.33-6.49-2.95-13.55-4.42-21.15-4.42-7.63,0-14.33,1.3-20.14,3.89-5.79,2.6-10.67,6.33-14.67,11.17l-31.15-25.44Z"/></svg>
+    <span class="edition-badge" aria-hidden="true">FULL</span>
+    </a>
+    <nav class="navlinks">
+      <a class="navlink" href="#license">Pricing</a>
+      <a class="navlink" href="/en/buy/">Buy</a>
+      <a class="navlink" href="/full/" hreflang="ja" lang="ja">JA</a>
+      <a class="btn btn-sm" href="/en/downloads/">Download free</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<!-- ============ ヒーロー ============ -->
+<div class="hero">
+  <div class="wrap">
+    <div class="hero-txt">
+      <h1>The clipboard manager that pastes for you</h1>
+      <p class="lede">
+        Everything you copy is kept automatically. Pick an item and it pastes straight into the app you were using.<br>Save the text and images you use often.
+      </p>
+      <div class="hero-cta">
+        <a class="btn" href="/en/downloads/">Download free</a>
+        <a class="btn btn-ghost" href="/en/buy/">Buy</a>
+      </div>
+      <p class="req">macOS 14.0 or later / Free to download. Pro is a one-time purchase.</p>
+    </div>
+  </div>
+  <div class="hero-shot">
+    <div class="shot-placeholder" data-shot="1">Shot #1</div>
+  </div>
+</div>
+
+<!-- ============ 機能 ============ -->
+<!-- 共通の機能は App Store 版 LP (/) と同じ assets を参照。文言の共通部分を変えるときは両方直す (README)。 -->
+<section>
+  <div class="wrap feat">
+    <div class="feat-txt">
+      <h2>Pick what you copied,<br>and it pastes</h2>
+      <p class="body">Everything you copy is kept as history.<br>Select a row and press <kbd>Enter</kbd> or double-click: ClipDex switches back to the app you were using and pastes it.</p>
+      <ul class="facts">
+        <li>Each row shows the icon of the app you copied from</li>
+        <li>Select several items to paste them at once, newest first, one per line</li>
+        <li>Hold <kbd>⌘</kbd> while selecting an item to copy without pasting</li>
+        <li>Drag items straight into other apps</li>
+        <li>30 items free; 50–1,000 with Pro (200 by default)</li>
+        <li>ClipDex asks on first launch whether to keep what you copy. Nothing is saved until you agree</li>
+      </ul>
+    </div>
+    <div class="shot-placeholder" data-shot="2">Shot #2</div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap feat">
+    <div class="feat-txt">
+      <h2>Keep text, images and videos<br>you use often, in groups</h2>
+      <p class="body">Save the things you use often.<br>Sort snippets, code and addresses into your own groups and call them up when you need them.</p>
+      <ul class="facts">
+        <li>Text: 10 items free, 300 with Pro</li>
+        <li>Images and videos are counted separately: 5 free / 300 with Pro</li>
+        <li>Reordering, moving and deleting can be undone step by step with <kbd>⌘</kbd><kbd>Z</kbd></li>
+      </ul>
+    </div>
+    <div class="shot">
+      <img loading="lazy" src="/assets/03-registered.png" width="1440" height="1100"
+           alt="Saved items. Image assets and snippets sorted into groups for snippets, code, and addresses and contacts.">
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap feat">
+    <div class="feat-txt">
+      <h2>Search history and<br>Saved Items together</h2>
+      <p class="body">Search history and Saved Items at once, with matches highlighted.<br>Filter by app, group or date right from the search field.</p>
+      <ul class="facts">
+        <li>Works with mixed Japanese, English and code</li>
+        <li>Combine filters such as “Today” and “Slack”</li>
+      </ul>
+    </div>
+    <div class="shot">
+      <img loading="lazy" src="/assets/04-search.png" width="1440" height="1100"
+           alt="Search across everything. Results for a query are split into clipboard history and Saved Items, with the app, group and date filter panel open.">
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap feat">
+    <div class="feat-txt">
+      <h2>Open it with a shortcut<br>and paste right away</h2>
+      <p class="body">Press <kbd>⇧</kbd><kbd>⌘</kbd><kbd>V</kbd> without leaving the app you are in.<br>A panel appears near your cursor.<br>You can change the shortcut to any combination.</p>
+      <ul class="facts">
+        <li>Switch between history, Saved Items and groups with tabs</li>
+        <li>Preview images at a larger size, with dimensions and file size</li>
+        <li>Close with <kbd>Esc</kbd> or <kbd>⌘</kbd><kbd>W</kbd>. Hold <kbd>⌘</kbd> while selecting an item to stay in the panel and keep copying</li>
+      </ul>
+    </div>
+    <div class="shot">
+      <img loading="lazy" src="/assets/05-picker.png" width="1440" height="1100"
+           alt="The quick panel opened with a shortcut. Images and text are listed, with a preview of the selected image.">
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap feat">
+    <div class="feat-txt">
+      <h2>Paste items<br>one at a time, in order</h2>
+      <p class="body">Select several items and press <kbd>⇧</kbd><kbd>Enter</kbd>.<br>Each time you press <kbd>⌘</kbd><kbd>V</kbd> in the target app, the next item comes up.<br>Handy for filling in a form field by field.</p>
+      <ul class="facts">
+        <li>A small panel shows what is left; reverse the order or stop from there</li>
+        <li>Images and videos can be stacked too</li>
+      </ul>
+    </div>
+    <div class="shot-placeholder" data-shot="3">Shot #3</div>
+  </div>
+  <div class="wrap feat subhead">
+    <div class="feat-txt">
+      <h2>Stack as you copy,<br>paste in order later</h2>
+      <p class="body">Press <kbd>⌥</kbd><kbd>⇧</kbd><kbd>⌘</kbd><kbd>C</kbd> to start a stack, and everything you copy after that is added in order.<br>Each press of <kbd>⌘</kbd><kbd>V</kbd> in the target app pastes the next one.</p>
+      <ul class="facts">
+        <li>Also available from the menu bar. Press the shortcut again to stop</li>
+        <li>The shortcut can be changed in Settings</li>
+      </ul>
+    </div>
+    <div class="shot-placeholder" data-shot="4">Shot #4</div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap feat">
+    <div class="feat-txt">
+      <h2>See how you copy and paste<br>over time</h2>
+      <p class="body">See what and how much you copied and pasted.<br>Not how long an app was open, but the work you actually did.</p>
+      <ul class="facts">
+        <li>Copy and paste counts, and total characters</li>
+        <li>Breakdown by the app you copied from</li>
+        <li>Breakdown of what you pasted (code, URLs, numbers, text)</li>
+        <li>Day-of-week × hour heatmap</li>
+        <li>Five periods: today, this week, last 4 weeks, this month, this year (the free version covers the last 7 days)</li>
+      </ul>
+    </div>
+    <div class="shot-placeholder" data-shot="5">Shot #5</div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap feat">
+    <div class="feat-txt">
+      <h2>Find what you pasted,<br>later</h2>
+      <p class="body">Keep what you paste and search it later in Paste Records.</p>
+      <ul class="facts">
+        <li>Saved only when “Save paste content” is on (off by default; Pro)</li>
+        <li>Works with mixed Japanese, English and code</li>
+        <li>Nothing is saved for excluded apps or while paused</li>
+      </ul>
+    </div>
+    <div class="shot-placeholder" data-shot="6">Shot #6</div>
+  </div>
+</section>
+
+<!-- ============ プライバシーと権限 ============ -->
+<section id="privacy">
+  <div class="wrap">
+    <p class="eyebrow">PRIVACY</p>
+    <h2>Your clipboard data never leaves your Mac</h2>
+    <p class="body">History, Saved Items and statistics all stay on your Mac.<br>No analytics server, no account.</p>
+    <div class="priv">
+      <div><h3>The only network use is update checks</h3><p>Once a day the app checks for a new version (you can turn this off). Updates install only after you confirm. History and Saved Items are never sent.</p></div>
+      <div><h3>What Accessibility is used for</h3><p>Only three things: sending <kbd>⌘</kbd><kbd>V</kbd> to paste automatically, detecting <kbd>⌘</kbd><kbd>V</kbd> for Paste Stack, and counting pastes. No keystroke other than ⌘V is handled.</p></div>
+      <div><h3>Works without Accessibility permission</h3><p>Picking an item copies it and returns to the previous app, so you just press <kbd>⌘</kbd><kbd>V</kbd>. Paste Stack and paste tracking are unavailable.</p></div>
+      <div><h3>Saving content is your choice</h3><p>You decide whether the actual content you copy or paste is kept.</p></div>
+      <div><h3>Password managers are excluded</h3><p>Eight apps, including 1Password, Bitwarden and Keychain Access, are excluded by default. You can add more.</p></div>
+      <div><h3>Pause any time</h3><p>Pause for 15 minutes, 30 minutes or 1 hour from the menu bar. Statistics, clipboard history and paste records can each be deleted in one step.</p></div>
+    </div>
+    <p class="note">See the <a href="/en/full/privacy/">Privacy Policy</a> for details.</p>
+  </div>
+</section>
+
+<!-- ============ ベントー ============ -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow">MORE</p>
+    <h2>More you can do</h2>
+    <div class="bento">
+      <div class="cell w2"><h3>Images go into history too</h3><p>Copy a screenshot or an image file in Finder and it is kept with a thumbnail.<br>It pastes as an image or as a file name, depending on the target app.<br>Off by default, and counted separately from text clips.</p></div>
+      <div class="cell"><h3>Drag to paste</h3><p>Grab a row and drop it into another app.</p></div>
+      <div class="cell w2"><h3>Undo with <kbd>⌘</kbd><kbd>Z</kbd></h3><p>Undo deletes, reordering and group moves. Redo with <kbd>⇧</kbd><kbd>⌘</kbd><kbd>Z</kbd>.</p></div>
+      <div class="cell"><h3>Your shortcut</h3><p>Set the shortcut to whatever you like.</p></div>
+      <div class="cell full"><h3>Rich text keeps its formatting</h3><p>Bold and colored text is kept with its formatting. Hold <kbd>⌥</kbd> to paste plain text.</p></div>
+      <div class="cell full"><h3>Export and backup</h3><p>Export reports as PNG images. PDF export, CSV export of statistics, and backup and restore require Pro. A backup contains settings, statistics and Saved Items (including images and videos), but not clipboard history or paste records.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 対象者 ============ -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow">WHO</p>
+    <h2>Made for</h2>
+    <div class="who">
+      <div><h3>People juggling snippets</h3><p>Writing while moving between code, logs and URLs. The deeper the history, the more it helps.</p></div>
+      <div><h3>People filling in forms</h3><p>Stack the fields in order, and each press of <kbd>⌘</kbd><kbd>V</kbd> brings up the next one.</p></div>
+      <div><h3>People typing the same text</h3><p>Save it once, then just pick it to paste.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ライセンスと価格 ============ -->
+<section id="license">
+  <div class="wrap">
+    <p class="eyebrow">PRICE</p>
+    <h2>Free to use. Pro is a one-time purchase.</h2>
+    <p class="price"><strong>$19.99</strong><span> / ¥3,000, tax included / renewal $9.99 / ¥1,500</span></p>
+    <div class="priv">
+      <div><h3>Free to download</h3><p>Without a license key, ClipDex works within the free limits. Enter a license key to unlock Pro.</p></div>
+      <div><h3>One year of updates included</h3><p>Use every version released within 365 days of purchase. After that, the versions you have keep working forever.</p></div>
+      <div><h3>Renew only when you want to</h3><p>Want newer versions? Extend for another year for $9.99 / ¥1,500, up to 30 days after your expiry date (UTC).</p></div>
+      <div><h3>All your Macs</h3><p>Use it on every Mac you personally use. No device registration.</p></div>
+    </div>
+    <p><a class="btn" href="/en/buy/">Buy</a></p>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow">FAQ</p>
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+
+      <details>
+        <summary>How does the Full version differ from the App Store version?</summary>
+        <div class="ans">
+          <p>The biggest difference is <strong>whether picking an item pastes it for you</strong>.</p>
+          <ul>
+            <li>Full version (this page): picking an item switches back to the previous app and pastes it. Paste Stack (paste in order) and paste tracking and records are included. It uses the macOS Accessibility permission</li>
+            <li><a href="https://apps.apple.com/app/id6801129211">App Store version</a>: picking an item copies it and switches back to the previous app; you press <kbd>⌘</kbd><kbd>V</kbd> yourself. No Paste Stack or paste tracking. In exchange, it asks for no permissions at all</li>
+          </ul>
+          <p>Everything else, including history, Saved Items, search and reports, is the same. The App Store version lacks automatic pasting due to App Store review<sup class="fnref">*1</sup>.</p>
+          <p class="fn">*1 In the August 2026 App Store review, the app was rejected under App Store Review Guideline 2.4.5 for using Accessibility features for purposes other than accessibility. The review specifically cited automatic pasting and counting <kbd>⌘</kbd><kbd>V</kbd>. Apple advised that the standard approach for clipboard managers is to place the item on the pasteboard and let the user press <kbd>⌘</kbd><kbd>V</kbd>. Some clipboard managers on the App Store do paste automatically, but ClipDex removed these features from its App Store version to comply with the review, and distributes the full-featured version on this site.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>How much rich text formatting is kept when I copy text?</summary>
+        <div class="ans">
+          <p>Text with bold, colors or links is kept with its formatting. Pasting keeps formatting by default; hold <kbd>⌥</kbd> while choosing to paste plain text just that once (you can swap the default in Settings).</p>
+          <p>Copying with <kbd>⌘</kbd><kbd>C</kbd> always keeps formatting regardless of that setting. Pasting several items together, or a saved item whose text you have edited, gives plain text.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>How are images saved?</summary>
+        <div class="ans">
+          <p>Images, including JPEGs, are converted to PNG<sup class="fnref">*2</sup> when saved. When you pass an image to another app as a file, it keeps its original name with the extension changed (<code>photo.jpg</code> → <code>photo.png</code>).</p>
+          <p>Saving images is off by default; turn it on in Settings. Images are counted separately from text clips.</p>
+          <p class="fn">*2 PNG is a lossless format. Copied images arrive in many forms, such as JPEG or TIFF, depending on the app, so ClipDex stores them in one format without losing quality. As a result, photos can take more space than the original JPEG.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>Can I move my data from the App Store version?</summary>
+        <div class="ans">
+          <p>Yes. Quit the App Store version, then choose Settings → Data → “Migrate from App Store Version…”. The history, Saved Items, settings and report statistics of the App Store version on the same Mac are copied over.</p>
+          <p>Migration happens entirely on your Mac, without any network access, and the App Store version’s data stays as it is. History entries for copied files (such as files from Finder) cannot keep their link to the original file and are treated as text.</p>
+          <p>Pro bought in the App Store version does not carry over. If you own App Store Pro, you can buy a license at <a href="/en/buy/#crossgrade">50% off</a>.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>What’s the difference between Free and Pro?</summary>
+        <div class="ans">
+          <p>How much you can keep, for how long, and a few features.</p>
+          <ul>
+            <li>Clipboard history (text): 30 items free / 50–1,000 with Pro (200 by default)</li>
+            <li>Clipboard history (images): 15 images, 50 MB total, 10 MB each free / 50–500 images, 1 GB total, 100 MB each with Pro</li>
+            <li>Saved Items (text): 10 free / 300 with Pro</li>
+            <li>Saved Items (images and videos): 5 free / 300 with Pro; up to 100 MB per image and 500 MB per video</li>
+            <li>Report statistics: last 7 days free / all time with Pro</li>
+            <li>Saving paste records, PDF and CSV export, backup and restore: Pro</li>
+          </ul>
+          <p>Clipboard history drops the oldest items once it reaches the limit. Saved Items are never removed; you simply can’t add more once you reach the limit.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>How long does a license last?</summary>
+        <div class="ans">
+          <p>A Pro license is a one-time purchase that covers <strong>every version released within 365 days of the purchase date</strong>.</p>
+          <p>After that, the versions you have keep working as Pro forever. Buy a renewal ($9.99 / ¥1,500, one more year) only if you want versions released later. Renewals can be bought up to 30 days after your expiry date (UTC).</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>What happens after a year? (when a license expires)</summary>
+        <div class="ans">
+          <p><strong>The version you are using keeps working as Pro after the expiry date.</strong> Nothing stops and no data is lost.</p>
+          <p>The only thing that changes is how newer versions are handled.</p>
+          <ul>
+            <li>In-app update notices only offer versions released before your expiry date</li>
+            <li>If you download and install a version released after the expiry date yourself, some Pro features are disabled, such as export, backup and restore, and saving new paste records (your item limits stay at Pro, and no data is lost)</li>
+          </ul>
+          <p>To use newer versions as Pro, buy a renewal ($9.99 / ¥1,500). You can buy it up to 30 days after the expiry date (UTC), and it extends the license by one year from your original expiry date or the purchase date, whichever is later. After that, you need a new license.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>Can I use it on another Mac?</summary>
+        <div class="ans">
+          <p>Yes, on every Mac you personally use, with the same license. No device registration.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>I lost my license key.</summary>
+        <div class="ans">
+          <p>Use the <a href="/en/support#resend">resend form</a> to have it sent again to the email address you used to buy.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>Can I get a refund?</summary>
+        <div class="ans">
+          <p>See <a href="/en/terms#direct">section 9 of the Terms of Use</a>.</p>
+        </div>
+      </details>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section class="cta" id="download">
+  <div class="wrap">
+    <h2>Start keeping what you copy today</h2>
+    <div class="hero-cta">
+      <a class="btn" href="/en/downloads/">Download free</a>
+      <a class="btn btn-ghost" href="/en/buy/">Buy</a>
+    </div>
+    <p class="req">macOS 14.0 or later</p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap footrow">
+    <a class="foot-mark" href="/en/full/" aria-label="ClipDex home"><img src="/assets/logo-mark.svg" alt="" width="18" height="18"></a>
+    <a href="/en/full/privacy/">Privacy Policy</a>
+    <a href="/en/terms">Terms</a>
+    <a href="/en/legal">Legal Notice</a>
+    <a href="/en/support">Support</a>
+    <a href="https://apps.apple.com/app/id6801129211">App Store version</a>
+    <span class="copy">© 2026 Masafumi Koyama</span>
+  </div>
+</footer>
+
+</body>
+</html>
