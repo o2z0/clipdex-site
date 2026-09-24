@@ -21,10 +21,25 @@
 
 <h2 id="price">Price</h2>
 <p><strong>$19.99 / ¥3,000 (tax included)</strong> <span class="small">/ renewal $9.99 / ¥1,500 (one more year)</span></p>
-<p><a class="cta" href="https://clipdex-license.o2z0.workers.dev/buy?lang=en">Buy a license</a></p>
 <p class="small">Checkout shows US dollars or Japanese yen depending on where you are; other regions see a converted price.</p>
-<p class="small">Payments are processed by Stripe (Link). Cards, Apple Pay and Google Pay are accepted. The developer never sees your card details.</p>
-<p class="small">We do not sell to residents of the European Union, the European Economic Area, or the United Kingdom.</p>
+
+<h2 id="conditions">Terms of sale</h2>
+<ul>
+<li><strong>Quantity</strong>: one ClipDex Pro license</li>
+<li><strong>Payment</strong>: at the time of your order, by any method shown on the checkout page (cards, Apple Pay, Google Pay, etc.). Payments are processed by Stripe (Link); the developer never sees your card details</li>
+<li><strong>Delivery</strong>: right after payment, your license key is shown on screen and sent by email</li>
+<li><strong>Returns and cancellations</strong>: not accepted once the license key has been issued (refunds for activation problems and similar cases, and refunds by Stripe / Link within 60 days of payment, are described in the <a href="/en/legal#returns">legal notice</a>)</li>
+<li><strong>Where we sell</strong>: not available to residents of the European Union, the European Economic Area, or the United Kingdom</li>
+<li><strong>Requirements</strong>: macOS 14.0 or later</li>
+<li><strong>Invoices</strong>: the developer is not registered for Japan's qualified invoice system and cannot issue qualified invoices</li>
+</ul>
+
+<form action="https://clipdex-license.o2z0.workers.dev/buy" method="get">
+<input type="hidden" name="lang" value="en">
+<label class="check"><input type="checkbox" name="residency" value="confirmed" required> I do not live in the EU, EEA, or UK</label>
+<button class="cta" type="submit">Buy a license</button>
+</form>
+<p class="small">On the checkout page you will be asked to agree to the <a href="/en/terms">Terms of Use</a> (a summary of the terms of sale is at the top) and the <a href="/en/full/privacy/">Privacy Policy</a>.</p>
 
 <h2 id="license">License model</h2>
 <ul>
