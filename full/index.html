@@ -235,6 +235,21 @@
     border-radius:var(--radius-sm);
   }
 
+  /* ---- 機能動画 + クリックで拡大 (LP 撮影 #1〜#4、Remotion で書き出し) ---- */
+  .shot-zoom{display:block; width:100%; padding:0; border:0; background:none; cursor:zoom-in; color:inherit}
+  .shot-zoom video{display:block; width:100%; height:auto}
+  .shot-zoom:focus-visible{outline:2px solid var(--text-2); outline-offset:4px}
+  .zoom{padding:0; border:0; background:#000; width:min(96vw, 1600px, calc(88vh * var(--ar, 1.6))); max-width:none; max-height:none; overflow:visible}
+  /* 背景の暗転はフェード。開く = @starting-style、閉じる = data-closing (WAAPI で本体を縮めている間に戻す) */
+  .zoom::backdrop{background:rgba(0,0,0,.88); transition:background-color 320ms ease}
+  @starting-style{ .zoom[open]::backdrop{background:rgba(0,0,0,0)} }
+  .zoom[data-closing]::backdrop{background:rgba(0,0,0,0)}
+  .zoom[data-closing] .zoom-close, .zoom[data-opening] .zoom-close{opacity:0}
+  .zoom-close{transition:opacity 160ms ease}
+  /* 窓の幅を高さ 88vh から逆算するので、動画は枠いっぱい = 黒帯なし (FLIP の倍率が縦横で一致する) */
+  .zoom video{display:block; width:100%; height:auto}
+  .zoom-close{position:absolute; top:-44px; right:0; width:36px; height:36px; border-radius:50%;
+    border:1px solid var(--line-2); background:var(--surface-2); color:var(--text); font-size:20px; line-height:1; cursor:pointer}
   /* ---- full LP ---- */
   /* 未撮影の枠 (Task 11 で 0 件を確認する)。16:10 = 提出パックの比。 */
   .shot-placeholder{aspect-ratio:16/10; display:flex; align-items:center; justify-content:center;
@@ -302,7 +317,11 @@
     </div>
   </div>
   <div class="hero-shot">
-    <div class="shot-placeholder" data-shot="1">撮影 #1</div>
+    <button type="button" class="shot shot-zoom" data-shot="1" aria-label="動画を拡大して見る">
+      <video muted autoplay loop playsinline preload="metadata" poster="/assets/full-hero-poster.jpg" aria-label="Safari で 2 か所をコピーし、テキストエディットで ⇧⌘V を押すと、今コピーした 2 件が履歴の先頭に並ぶ。2 件目をダブルクリックすると、そのまま貼り付けられる。">
+        <source src="/assets/full-hero.mp4" type="video/mp4">
+      </video>
+    </button>
   </div>
 </div>
 
@@ -322,7 +341,11 @@
         <li>コピーした内容を残すかどうかは、初回起動時に確認します。同意するまで何も保存されません</li>
       </ul>
     </div>
-    <div class="shot-placeholder" data-shot="2">撮影 #2</div>
+    <button type="button" class="shot shot-zoom" data-shot="2" aria-label="動画を拡大して見る">
+      <video muted autoplay loop playsinline preload="metadata" poster="/assets/full-autopaste-poster.jpg" aria-label="履歴で 2 行を選んで Enter を押すと、直前のアプリに 2 行が改行でつながって貼り付けられる。">
+        <source src="/assets/full-autopaste.mp4" type="video/mp4">
+      </video>
+    </button>
   </div>
 </section>
 
@@ -389,7 +412,11 @@
         <li>画像や動画も積める</li>
       </ul>
     </div>
-    <div class="shot-placeholder" data-shot="3">撮影 #3</div>
+    <button type="button" class="shot shot-zoom" data-shot="3" aria-label="動画を拡大して見る">
+      <video muted autoplay loop playsinline preload="metadata" poster="/assets/full-stack-select-poster.jpg" aria-label="履歴で 3 件を選んで ⇧Enter を押すと Paste Stack のパネルに積まれ、フォームで ⌘V を押すたびに 1 件ずつ貼り付けられる。">
+        <source src="/assets/full-stack-select.mp4" type="video/mp4">
+      </video>
+    </button>
   </div>
   <div class="wrap feat subhead">
     <div class="feat-txt">
@@ -400,7 +427,11 @@
         <li>キーは設定で変えられる</li>
       </ul>
     </div>
-    <div class="shot-placeholder" data-shot="4">撮影 #4</div>
+    <button type="button" class="shot shot-zoom" data-shot="4" aria-label="動画を拡大して見る">
+      <video muted autoplay loop playsinline preload="metadata" poster="/assets/full-stack-collect-poster.jpg" aria-label="⌥⇧⌘C でスタックを開始し、ブラウザで 3 か所をコピーして積み、フォームで ⌘V を 3 回押して順に貼り付ける。">
+        <source src="/assets/full-stack-collect.mp4" type="video/mp4">
+      </video>
+    </button>
   </div>
 </section>
 
@@ -633,5 +664,76 @@
   </div>
 </footer>
 
+<dialog class="zoom" id="zoom" closedby="any" aria-label="動画の拡大表示">
+  <button type="button" class="zoom-close" aria-label="閉じる">×</button>
+  <video muted loop playsinline controls></video>
+</dialog>
+<script>
+(() => {
+  const dialog = document.getElementById('zoom');
+  const big = dialog.querySelector('video');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+  const DURATION = 320;
+  const EASE = 'cubic-bezier(.2,.7,.2,1)';
+  let opener = null;
+
+  // サムネの位置から拡大後の位置へ (FLIP)。transform だけを動かすので軽い
+  const fromThumb = () => {
+    const t = opener.querySelector('video').getBoundingClientRect();
+    const d = dialog.getBoundingClientRect();
+    const k = t.width / d.width;  // 縦横比は同じ (下で aspect-ratio を先に与える) なので倍率は 1 つ
+    return `translate(${t.left - d.left}px, ${t.top - d.top}px) scale(${k})`;
+  };
+  const keyframes = () => reduce.matches
+    ? [{ opacity: 0 }, { opacity: 1 }]
+    : [{ transform: fromThumb(), transformOrigin: '0 0' }, { transform: 'none', transformOrigin: '0 0' }];
+
+  document.querySelectorAll('.shot-zoom').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      opener = btn;
+      const v = btn.querySelector('video');
+      big.src = v.currentSrc || v.querySelector('source').src;
+      big.setAttribute('aria-label', v.getAttribute('aria-label') || '');
+      // 読み込み前の video は高さが決まらず、開いた瞬間の寸法が狂う。サムネの縦横比を先に渡す
+      big.style.aspectRatio = `${v.videoWidth} / ${v.videoHeight}`;
+      dialog.style.setProperty('--ar', v.videoWidth / v.videoHeight);
+      big.currentTime = v.currentTime;  // サムネと同じ場面から続けて再生する
+      dialog.dataset.opening = '';
+      dialog.showModal();
+      big.play().catch(() => {});
+      dialog.animate(keyframes(), { duration: reduce.matches ? 120 : DURATION, easing: EASE })
+        .finished.then(() => delete dialog.dataset.opening);
+    });
+  });
+
+  let closing = false;
+  const animatedClose = async () => {
+    if (closing || !dialog.open) return;
+    closing = true;
+    dialog.dataset.closing = '';
+    const anim = dialog.animate(keyframes().reverse(), { duration: reduce.matches ? 120 : DURATION * 0.85, easing: EASE, fill: 'forwards' });
+    try { await anim.finished; } catch {}
+    dialog.close();
+    anim.cancel();
+    delete dialog.dataset.closing;
+    closing = false;
+  };
+
+  dialog.querySelector('.zoom-close').addEventListener('click', animatedClose);
+  // Esc / closedby の light dismiss も縮むアニメーションを通す
+  dialog.addEventListener('cancel', (e) => { e.preventDefault(); animatedClose(); });
+  // Safari はクリックでボタンにフォーカスを移さないので、閉じたら明示的に開いたボタンへ戻す
+  dialog.addEventListener('close', () => { big.pause(); big.removeAttribute('src'); big.load(); opener?.focus(); });
+  // closedby="any" 非対応 (Safari) の背景クリックで閉じるフォールバック
+  if (!('closedBy' in HTMLDialogElement.prototype)) {
+    dialog.addEventListener('click', (e) => {
+      if (e.target !== dialog) return;
+      const r = dialog.getBoundingClientRect();
+      const inside = r.top <= e.clientY && e.clientY <= r.bottom && r.left <= e.clientX && e.clientX <= r.right;
+      if (!inside) animatedClose();
+    });
+  }
+})();
+</script>
 </body>
 </html>
