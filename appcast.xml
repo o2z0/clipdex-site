@@ -1,0 +1,64 @@
+<?xml version="1.0" standalone="yes"?>
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+    <channel>
+        <title>ClipDex</title>
+        <item>
+            <title>1.2</title>
+            <pubDate>Fri, 16 Oct 2026 15:59:43 +0900</pubDate>
+            <link>https://clipdex.o2z0.com/</link>
+            <sparkle:version>20742</sparkle:version>
+            <sparkle:shortVersionString>1.2</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <description><![CDATA[<section lang="ja">
+<h2>1.2 の変更点</h2>
+<p>フル版の最初のリリースです。</p>
+<h3>フル版だけの機能</h3>
+<ul>
+<li>選んだものを直前のアプリにそのまま貼り付け (アクセシビリティの許可が必要。許可しなくても、コピーして元のアプリに戻ります)</li>
+<li>Paste Stack: 複数を選んで ⇧Enter、または ⌥⇧⌘C で集めはじめると、貼り付け先で ⌘V を押すたびに 1 件ずつ出てきます</li>
+<li>ペーストの計測と、ペースト記録 (Pro)</li>
+<li>ライセンスキーによる Pro (購入日から 1 年間に公開された版が使えます)</li>
+<li>App Store 版からのデータ移行 (設定 → データ →「App Store 版から移行…」)</li>
+<li>アプリ内からの更新確認 (メニューバー →「アップデートを確認…」)</li>
+</ul>
+<h3>App Store 版 1.1 からの改良</h3>
+<ul>
+<li>1〜9 のキーで、上から N 番目をすぐに取り出せます (行の右端に番号)</li>
+<li>画像を Finder にファイルとして貼り付け・ドラッグできます。ファイル名は元の名前のまま</li>
+<li>Finder で 1 つだけコピーしたファイルやフォルダも履歴に残り、ファイルとして貼り戻せます</li>
+<li>画像のファイル名でも検索できます</li>
+<li>バックアップ (Pro) に、登録したもの (画像・動画を含む) も入るようになりました</li>
+<li>右クリック「登録したものに保存」で、選んだ複数をまとめて登録できます</li>
+<li>同じものをもう一度コピーすると、履歴の先頭に戻ります</li>
+<li>クイックパネル (⇧⌘V) がカーソルの近くに開きます</li>
+</ul>
+</section>
+<section lang="en">
+<h2>What’s new in 1.2</h2>
+<p>The first release of the full version.</p>
+<h3>Only in the full version</h3>
+<ul>
+<li>Paste the item you pick straight into the previous app (requires Accessibility permission; without it, the item is copied and you are switched back to the previous app)</li>
+<li>Paste Stack: select several items and press ⇧Enter, or start collecting with ⌥⇧⌘C, and each ⌘V in the target app pastes the next one</li>
+<li>Paste tracking, and Paste Records (Pro)</li>
+<li>Pro via license key (use any version released within one year of purchase)</li>
+<li>Migrate your data from the App Store version (Settings → Data → “Migrate from App Store Version…”)</li>
+<li>In-app update checks (menu bar → “Check for Updates…”)</li>
+</ul>
+<h3>Improvements since App Store version 1.1</h3>
+<ul>
+<li>Press 1–9 to take the Nth item from the top (numbers appear at the right edge of each row)</li>
+<li>Paste or drag images into Finder as files, with their original file names</li>
+<li>A single file or folder you copy in Finder is kept in the history and can be pasted back as a file</li>
+<li>Search also matches image file names</li>
+<li>Backups (Pro) now include your saved items, including images and videos</li>
+<li>Right-click “Save to Saved Items” saves all selected items at once</li>
+<li>Copying the same thing again moves it back to the top of the history</li>
+<li>The quick panel (⇧⌘V) opens near your cursor</li>
+</ul>
+</section>
+]]></description>
+            <enclosure url="https://github.com/o2z0/clipdex-releases/releases/download/v1.2-20742/ClipDex-1.2-20742.zip" length="5567291" type="application/octet-stream" sparkle:edSignature="FYcPmKHsUFezDhCb192psZcxJhcAaBjb3z/12jY6QgoVr99+rEGbc9piRlEgSXHyizJdcXeBmhianfUyVvMmCw=="/>
+        </item>
+    </channel>
+</rss>
