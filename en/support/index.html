@@ -33,7 +33,7 @@
 <p>Check whether any of these applies:</p>
 <ul>
 <li><strong>The limit was reached</strong> — once the item limit is exceeded, the oldest items are removed automatically (30 on the free version; 50–1000, 200 by default, on Pro). <strong>Upgrading to Pro later does not bring back items that were already pushed out.</strong></li>
-<li><strong>Pro is no longer active</strong> — after a refund, the limit drops back to the free version's 30 items, and the excess is pushed out the next time you copy something</li>
+<li><strong>Pro is no longer active</strong> — on the App Store version, if Pro ends (for example after a refund), the limit drops back to the free version's 30 items, and the excess is pushed out the next time you copy something. On the Full version, this only happens when you choose <strong>“Remove Key”</strong> yourself (a confirmation appears). If your key is deactivated (for example after a full refund), Pro features stop but the limit stays and no history is removed</li>
 <li><strong>Recording was paused</strong> — nothing is recorded while ClipDex is paused from the menu bar</li>
 <li><strong>You copied in an excluded app</strong> — anything copied in an app on the exclusion list (password managers and the like) is not stored</li>
 <li><strong>Clipboard history was off</strong> — it is off by default</li>
@@ -45,7 +45,8 @@
 <h2 id="privacy-and-permissions">Privacy and permissions</h2>
 
 <h3 id="permissions">Does ClipDex need the Accessibility permission (or any other)?</h3>
-<p>No. ClipDex <strong>does not request any special macOS permissions (such as Accessibility)</strong>, and it never monitors keyboard input. Pasting works by copying the selected item and bringing the previous app to the front — you press ⌘V yourself.</p>
+<p><strong>The App Store version does not request any special macOS permissions (such as Accessibility)</strong>, and it never monitors keyboard input. Pasting works by copying the selected item and bringing the previous app to the front — you press ⌘V yourself.</p>
+<p>The Full version asks for the Accessibility permission to paste automatically (by sending ⌘V), to detect ⌘V for Paste Stack, and to count ⌘V presses. ⌘V is the only keystroke it handles. Without the permission, it works the same way as the App Store version.</p>
 
 <h3 id="saving">Is what I copy stored?</h3>
 <p>Not initially. Clipboard history and image clips are both opt-in, and storing begins only once you turn them on in Settings. See the <a href="/en/privacy">Privacy Policy</a> for details.</p>
@@ -62,6 +63,35 @@
 <h3 id="restore">I bought Pro but it isn't showing / I changed machines</h3>
 <p>Press "Restore Purchase" under "ClipDex Pro" in Settings. Make sure the account signed in to the App Store is the same one used for the purchase.</p>
 
+<h2 id="direct">Full version license</h2>
+
+<h3 id="crossgrade">Switching from App Store Pro</h3>
+<p>Email a screenshot of your Apple purchase receipt to <a href="mailto:support@o2z0.com">support@o2z0.com</a>. We’ll reply with a one-time discount code for 50% off the Full version (valid for 30 days from the date of issue). Enter it under “Add promotion code” at checkout. Your data carries over via Full version → Settings → Data → “Migrate from App Store Version…”.</p>
+
+<h3 id="resend">The key didn’t arrive / I lost my key</h3>
+<p>Enter the email address you used at checkout. If we have an order for it, we resend the key to that address (this page never reveals whether an order exists).</p>
+<form method="post" action="https://clipdex-license.o2z0.workers.dev/recover">
+<input type="hidden" name="lang" value="en">
+<label for="recover-email">Email used at checkout</label>
+<input id="recover-email" name="email" type="email" class="field field-text" placeholder="you@example.com" required>
+<div class="cf-turnstile" data-sitekey="0x4AAAAAAEzo8n0-QgRe1wUf" data-action="recover"></div>
+<p><button class="cta" type="submit">Resend my key</button></p>
+</form>
+<p class="small">Check your spam folder too. The sender is <code>noreply@clipdex.o2z0.com</code>. One request every 10 minutes.</p>
+
+<h3 id="activate">Entering the key</h3>
+<p>In the Full version, open Settings → General → “ClipDex Pro”, paste the one‑line key from the email (it starts with <code>CLIPDEX-</code>) and press Activate. Line breaks from email wrapping are fine.</p>
+
+<h3 id="frozen">It says this version is newer than my license’s update period</h3>
+<p>Your key covers versions released within one year (365 days) of your purchase. On a newer version some Pro actions pause (export, backup, new paste records, Pro settings), but <strong>nothing is deleted</strong> — your limits stay at Pro. Either <a href="/en/renew">buy a renewal</a> or go back to the <a href="/en/downloads">last eligible version</a>.</p>
+
+<h3 id="updates">How do updates arrive?</h3>
+<p>Choose “Check for Updates…” from the menu bar icon to check manually. By default the app also checks once every 24 hours (including at launch if 24 hours have passed since the last check) and lets you know when a newer version exists. Toggle automatic checks in Settings → General → “Check for updates automatically” (the request carries only the app name and the app and Sparkle versions — see <a href="/en/full/privacy/#updates">Full version Privacy Policy 1-1</a>).</p>
+<p>If your license’s update period has passed, versions released after that date show up as “up to date” and are not delivered. Buy a renewal, or pick an eligible version from <a href="/en/downloads">Downloads</a>. If you installed a newer version by hand, the same page lets you go back to the last eligible version (nothing is deleted).</p>
+
+<h3 id="direct-restore">Using it on another Mac</h3>
+<p>Enter the same key. It works on every Mac you personally use. Backups don’t include the key, so enter it again on a new Mac.</p>
+
 <h2 id="usage">Using ClipDex</h2>
 
 <h3 id="change-hotkey">Can I change the shortcut?</h3>
@@ -69,8 +99,9 @@
 
 <h2 id="requirements">Requirements</h2>
 <p>macOS 14.0 or later</p>
-<p>No special permissions are required. Pasting from history and Saved Items works by copying the selected item and bringing the target app to the front — you press ⌘V yourself.</p>
+<p>The App Store version needs no special permissions. Pasting from history and Saved Items works by copying the selected item and bringing the target app to the front — you press ⌘V yourself. The Full version uses the Accessibility permission for automatic pasting, Paste Stack and ⌘V counting (it also works without it).</p>
 
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </div>
 </main>
 
@@ -81,6 +112,7 @@
     <a href="/en/terms">Terms</a>
     <a href="/en/legal">Legal Notice</a>
     <a href="/en/support">Support</a>
+    <a href="/en/full/">Full version</a>
     <span class="copy">© 2026 Masafumi Koyama</span>
   </div>
 </footer>
