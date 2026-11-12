@@ -2,14 +2,27 @@ import { createLoop, reducedMotion } from "./loop.js";
 import { isSettled, SPRING_DEFAULT, stepSpring } from "./spring.js";
 
 export function focusTransform(scene, view, focus) {
-  const scale = focus.zoom;
+  const scale = Math.min(focus.zoom, Math.max(1, focus.maxZoom ?? Infinity));
   const width = scene.w * scale;
   const height = scene.h * scale;
-  const desiredX = view.w * 0.58 - scene.w * focus.x * scale;
-  const desiredY = view.h * 0.5 - scene.h * focus.y * scale;
-  const x = width < view.w ? (view.w - width) / 2 : Math.max(view.w - width, Math.min(0, desiredX));
-  const y = height < view.h ? (view.h - height) / 2 : Math.max(view.h - height, Math.min(0, desiredY));
-  return { x, y, scale };
+  const left = scene.left ?? (view.w - scene.w) / 2;
+  const top = scene.top ?? (view.h - scene.h) / 2;
+  const desiredX = view.w * 0.5 - left - scene.w * focus.x * scale;
+  const desiredY = view.h * 0.5 - top - scene.h * focus.y * scale;
+  // Keep at least 70% of the image visible on each axis. A contained image
+  // needs some freedom to move without forcing its focus back to an edge.
+  const visibleX = Math.min(view.w, width * 0.7);
+  const visibleY = Math.min(view.h, height * 0.7);
+  const x = Math.max(visibleX - width - left, Math.min(view.w - visibleX - left, desiredX));
+  const y = Math.max(visibleY - height - top, Math.min(view.h - visibleY - top, desiredY));
+  return { x, y, scale, clamped: Math.abs(x - desiredX) > 0.01 || Math.abs(y - desiredY) > 0.01 };
+}
+
+export function containScene(image, view) {
+  const scale = Math.min(view.w / image.w, view.h / image.h);
+  const w = image.w * scale;
+  const h = image.h * scale;
+  return { w, h, left: (view.w - w) / 2, top: (view.h - h) / 2 };
 }
 
 export function createStage(section) {
@@ -27,15 +40,33 @@ export function createStage(section) {
   let target = { ...current };
 
   const selectedScene = () => byScene.get(active ?? "overview");
+  const layoutScenes = () => {
+    const box = { w: view.clientWidth, h: view.clientHeight };
+    for (const scene of scenes) {
+      const media = scene.querySelector("img, video");
+      const natural = {
+        w: media.naturalWidth || media.videoWidth || Number(media.getAttribute("width")) || box.w,
+        h: media.naturalHeight || media.videoHeight || Number(media.getAttribute("height")) || box.h,
+      };
+      const fitted = containScene(natural, box);
+      Object.assign(scene.style, {
+        width: `${fitted.w}px`, height: `${fitted.h}px`,
+        left: `${fitted.left}px`, top: `${fitted.top}px`,
+      });
+    }
+  };
   const computeTarget = () => {
     if (!active) return { x: 0, y: 0, scale: 1 };
     const button = buttons.find((item) => item.dataset.feature === active);
     const [x, y, zoom] = button.dataset.focus.split(",").map(Number);
     const scene = selectedScene();
+    const image = scene.querySelector("img, video");
+    const sceneWidth = scene.offsetWidth;
+    const maxZoom = (image.naturalWidth || image.videoWidth || Number(image.getAttribute("width"))) / (sceneWidth * devicePixelRatio);
     return focusTransform(
-      { w: scene.offsetWidth, h: scene.offsetHeight },
+      { w: sceneWidth, h: scene.offsetHeight, left: scene.offsetLeft, top: scene.offsetTop },
       { w: view.clientWidth, h: view.clientHeight },
-      { x, y, zoom },
+      { x, y, zoom, maxZoom },
     );
   };
   const render = () => {
@@ -85,6 +116,7 @@ export function createStage(section) {
       scene.classList.toggle("is-active", selected);
       scene.setAttribute("aria-hidden", String(!selected));
     }
+    layoutScenes();
     target = computeTarget();
     if (reducedMotion.matches) { current = { ...target }; velocities = { x: 0, y: 0, scale: 0 }; }
     render();
@@ -103,8 +135,14 @@ export function createStage(section) {
     if (event.key === "Escape" && active !== null) { event.preventDefault(); open(null); }
   };
   section.addEventListener("keydown", onKey);
-  const onResize = () => { target = computeTarget(); current = { ...target }; velocities = { x: 0, y: 0, scale: 0 }; render(); };
+  const onResize = () => { layoutScenes(); target = computeTarget(); current = { ...target }; velocities = { x: 0, y: 0, scale: 0 }; render(); };
   addEventListener("resize", onResize);
+  for (const scene of scenes) {
+    const media = scene.querySelector("img, video");
+    const event = media.tagName === "VIDEO" ? "loadedmetadata" : "load";
+    media.addEventListener(event, onResize);
+    listeners.push([media, onResize, event]);
+  }
   const offMotion = reducedMotion.on(() => {
     if (reducedMotion.matches) { current = { ...target }; velocities = { x: 0, y: 0, scale: 0 }; render(); }
     else if (active !== null) loop.wake();
@@ -119,7 +157,7 @@ export function createStage(section) {
       removeEventListener("resize", onResize);
       section.removeEventListener("keydown", onKey);
       close.removeEventListener("click", onClose);
-      for (const [button, handler] of listeners) button.removeEventListener("click", handler);
+      for (const [element, handler, event = "click"] of listeners) element.removeEventListener(event, handler);
     },
   };
 }

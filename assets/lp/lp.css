@@ -415,9 +415,8 @@ html.js .pill-body.is-active { opacity: 1; visibility: visible; pointer-events: 
   border-radius: 16px;
   background: #101113;
 }
-.scene { position: absolute; inset: 0; margin: 0; overflow: hidden; transform-origin: 0 0; }
-.scene img, .scene video { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top center; }
-.scene[data-scene="overview"] img { object-fit: contain; object-position: center; }
+.scene { position: absolute; left: 0; top: 0; width: 100%; height: 100%; margin: 0; overflow: hidden; transform-origin: 0 0; }
+.scene img, .scene video { display: block; width: 100%; height: 100%; object-fit: contain; object-position: center; }
 html.js .scene { opacity: 0; pointer-events: none; transition: opacity 220ms ease; }
 html.js .scene.is-active { opacity: 1; pointer-events: auto; }
 .stage-close {
@@ -458,7 +457,7 @@ html:not(.js) .stage-pills > li { height: 48px; }
 html:not(.js) .stage-info { position: relative; left: auto; bottom: auto; width: 100%; height: auto; margin: 24px 0; }
 html:not(.js) .pill-body { position: relative; inset: auto; display: block; margin: 0 0 20px; opacity: 1; visibility: visible; }
 html:not(.js) .stage-view { position: relative; inset: auto; display: grid; gap: var(--s3); width: 100%; height: auto; aspect-ratio: auto; overflow: visible; border: 0; background: transparent; }
-html:not(.js) .scene { position: relative; opacity: 1; overflow: visible; }
+html:not(.js) .scene { position: relative; left: auto; top: auto; height: auto; opacity: 1; overflow: visible; }
 html:not(.js) .scene img, html:not(.js) .scene video { height: auto; object-fit: contain; }
 html:not(.js) .stage-close { display: none; }
 @media (max-width: 767px) {

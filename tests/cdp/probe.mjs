@@ -385,13 +385,15 @@ async function rapid(base, path) {
       const matrix = new DOMMatrixReadOnly(getComputedStyle(scene).transform);
       return { active: document.querySelector('[data-stage]').dataset.activeFeature,
         scenes: [...document.querySelectorAll('.stage .scene')].map(el => ({ id: el.dataset.scene, opacity: getComputedStyle(el).opacity })),
-        scene: { w: scene.offsetWidth, h: scene.offsetHeight }, view: { w: view.clientWidth, h: view.clientHeight },
+        scene: { w: scene.offsetWidth, h: scene.offsetHeight, left: scene.offsetLeft, top: scene.offsetTop },
+        naturalWidth: scene.querySelector('img, video').naturalWidth,
+        dpr: devicePixelRatio, view: { w: view.clientWidth, h: view.clientHeight },
         x: matrix.m41, y: matrix.m42, scale: matrix.m11 };
     })()`);
     const last = buttons.at(-1);
     const focus = await page.ev(`document.querySelector('.pill[data-feature=${JSON.stringify(last)}]').dataset.focus`);
     const [x, y, zoom] = focus.split(",").map(Number);
-    const expected = focusTransform(state.scene, state.view, { x, y, zoom });
+    const expected = focusTransform(state.scene, state.view, { x, y, zoom, maxZoom: state.naturalWidth / (state.scene.w * state.dpr) });
     const failures = [];
     if (state.active !== last || state.scenes.find((scene) => scene.id === last)?.opacity !== "1" ||
         state.scenes.some((scene) => scene.id !== last && scene.opacity !== "0")) failures.push(`最後の scene=${JSON.stringify(state)}`);
@@ -461,6 +463,43 @@ async function stable(base, path) {
     if (page.errors.length) failures.push(errorsOf(page));
     return failures.join("; ");
   });
+}
+
+async function zoom(base, path) {
+  const page = await openPage({ width: 1440, height: 900 });
+  try {
+    await page.send("Emulation.setDeviceMetricsOverride", { width: 1440, height: 900, deviceScaleFactor: 2, mobile: false, screenWidth: 1440, screenHeight: 900 });
+    await page.send("Page.navigate", { url: new URL(path, base).href });
+    await page.idle();
+    await showStage(page);
+    const buttons = await page.ev("[...document.querySelectorAll('.stage .pill')].map(el => el.dataset.feature)");
+    const failures = [];
+    for (let i = 0; i < buttons.length; i++) {
+      await page.click(".stage .pill", i);
+      await sleep(900);
+      const state = await page.ev(`(() => {
+        const view = document.querySelector('.stage-view');
+        const scene = document.querySelector('.scene.is-active');
+        const image = scene.querySelector('img, video');
+        const matrix = new DOMMatrixReadOnly(getComputedStyle(scene).transform);
+        const button = document.querySelector('.stage .pill[aria-expanded="true"]');
+        return { id: scene.dataset.scene, focus: button.dataset.focus,
+          scene: { w: scene.offsetWidth, h: scene.offsetHeight, left: scene.offsetLeft, top: scene.offsetTop },
+          view: { w: view.clientWidth, h: view.clientHeight }, naturalWidth: image.naturalWidth,
+          scale: matrix.m11, x: matrix.m41, y: matrix.m42, dpr: devicePixelRatio };
+      })()`);
+      const [x, y, requested] = state.focus.split(",").map(Number);
+      const maxZoom = state.naturalWidth / (state.scene.w * state.dpr);
+      const expected = focusTransform(state.scene, state.view, { x, y, zoom: requested, maxZoom });
+      const pixelRatio = state.scene.w * state.scale * state.dpr / state.naturalWidth;
+      console.log(`METRIC zoom ${path} ${state.id} focus=${x},${y} requested=${requested.toFixed(2)} effective=${state.scale.toFixed(3)} device/natural=${pixelRatio.toFixed(3)} clamped=${expected.clamped}`);
+      if (!state.naturalWidth || pixelRatio > 1.001) failures.push(`${state.id} device/natural=${pixelRatio}`);
+      if (expected.clamped) failures.push(`${state.id} focus clamped`);
+      if (Math.abs(state.x - expected.x) > 2 || Math.abs(state.y - expected.y) > 2 || Math.abs(state.scale - expected.scale) > 0.02) failures.push(`${state.id} actual=${JSON.stringify(state)} expected=${JSON.stringify(expected)}`);
+    }
+    if (page.errors.length) failures.push(errorsOf(page));
+    return failures.join("; ");
+  } finally { page.close(); }
 }
 
 function frameStats(times) {
@@ -554,7 +593,7 @@ async function frames(base, path) {
   return failures.join("; ");
 }
 
-const checks = { boot, widths, fit, reduced, idle, "reload-mid": reloadMid, nojs, keyboard, rapid, resize, stable, frames };
+const checks = { boot, widths, fit, reduced, idle, "reload-mid": reloadMid, nojs, keyboard, rapid, resize, stable, zoom, frames };
 
 async function main() {
   const { base, only, pages } = parseArgs(process.argv.slice(2));
