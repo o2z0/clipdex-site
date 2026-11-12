@@ -1,5 +1,6 @@
 import { openPage, sleep } from "./kit.mjs";
 import { riseState } from "../../assets/lp/rise.js";
+import { focusTransform } from "../../assets/lp/stage.js";
 
 const usage = "Usage: node tests/cdp/probe.mjs <base-url> [--only <name>] [--pages / /full/ …]";
 const expectedEdition = new Map([
@@ -7,6 +8,7 @@ const expectedEdition = new Map([
   ["/full/", "full"],
   ["/en/full/", "full"],
 ]);
+const expectedFeatures = new Map([["/", 5], ["/full/", 8], ["/en/full/", 8]]);
 const RAF_COUNT = `(() => {
   let count = 0;
   const original = requestAnimationFrame.bind(window);
@@ -262,11 +264,165 @@ async function nojs(base, path) {
     })()`);
     const failures = [];
     if (state.js || state.h <= 0 || state.lede <= 0 || !state.image) failures.push(JSON.stringify(state));
+    const featureCount = expectedFeatures.get(path);
+    if (featureCount === undefined) failures.push(`機能数の期待値が未定義: ${path}`);
+    else {
+      const bodies = await page.ev(`[...document.querySelectorAll('.stage .pill-body')].map(el => el.getBoundingClientRect().height)`);
+      if (bodies.length !== featureCount || bodies.some((height) => height <= 0)) failures.push(`説明文=${JSON.stringify(bodies)} expected=${featureCount}`);
+      const images = await page.ev(`[...document.querySelectorAll('.stage .scene img')].length`);
+      for (let i = 0; i < images; i++) {
+        await page.ev(`document.querySelectorAll('.stage .scene img')[${i}].scrollIntoView({ block: 'center', behavior: 'instant' })`);
+        await sleep(100);
+        await page.idle();
+      }
+      const media = await page.ev(`({
+        images: [...document.querySelectorAll('.stage .scene img')].map(el => ({ complete: el.complete, width: el.naturalWidth })),
+        videos: [...document.querySelectorAll('.stage .scene video')].map(el => ({ poster: el.poster, time: el.currentTime }))
+      })`);
+      if (media.images.some((image) => !image.complete || image.width <= 0)) failures.push(`画像未読込=${JSON.stringify(media.images)}`);
+      if (media.videos.some((video) => !video.poster || video.time !== 0)) failures.push(`動画 poster=${JSON.stringify(media.videos)}`);
+    }
     if (page.errors.length) failures.push(errorsOf(page));
     return failures.join("; ");
   } finally {
     page.close();
   }
+}
+
+async function showStage(page) {
+  const top = await page.ev(`(() => {
+    const stage = document.querySelector('[data-stage]');
+    return stage.getBoundingClientRect().top + scrollY + 72;
+  })()`);
+  await page.scrollTo(top, { io: false });
+  await sleep(100);
+}
+
+async function stageState(page) {
+  return page.ev(`(() => ({
+    expanded: [...document.querySelectorAll('.stage .pill')].map(el => el.getAttribute('aria-expanded')),
+    active: document.querySelector('[data-stage]').dataset.activeFeature,
+    scenes: [...document.querySelectorAll('.stage .scene')].map(el => ({ id: el.dataset.scene, opacity: getComputedStyle(el).opacity })),
+    focus: document.activeElement?.dataset.feature ?? document.activeElement?.className ?? ''
+  }))()`);
+}
+
+async function stageKey(page, name) {
+  const keys = {
+    Enter: { key: "Enter", code: "Enter", windowsVirtualKeyCode: 13, text: "\r" },
+    Space: { key: " ", code: "Space", windowsVirtualKeyCode: 32, text: " " },
+    Tab: { key: "Tab", code: "Tab", windowsVirtualKeyCode: 9 },
+    Escape: { key: "Escape", code: "Escape", windowsVirtualKeyCode: 27 },
+  };
+  const key = keys[name];
+  const down = await page.send("Input.dispatchKeyEvent", { type: "keyDown", ...key });
+  const up = await page.send("Input.dispatchKeyEvent", { type: "keyUp", ...key, text: undefined });
+  if (down.error || up.error) throw new Error(`key ${name}: ${down.error?.message ?? up.error?.message}`);
+}
+
+async function keyboard(base, path) {
+  return visit(base, path, {}, async (page) => {
+    const failures = [];
+    await showStage(page);
+    for (let i = 0; i < 20; i++) {
+      const focused = await page.ev("document.activeElement?.matches('.stage .pill') ?? false");
+      if (focused) break;
+      await stageKey(page, "Tab");
+    }
+    const first = await page.ev("document.activeElement?.dataset.feature");
+    if (first !== "history") failures.push(`Tab の最初=${first}`);
+    const checkOpen = async (label) => {
+      await sleep(250);
+      const state = await stageState(page);
+      if (state.active !== first || state.expanded.filter((value) => value === "true").length !== 1 ||
+          state.scenes.find((scene) => scene.id === first)?.opacity !== "1" ||
+          state.scenes.some((scene) => scene.id !== first && scene.opacity !== "0")) failures.push(`${label} 開く=${JSON.stringify(state)}`);
+    };
+    const checkClosed = async (label) => {
+      await sleep(250);
+      const state = await stageState(page);
+      if (state.active !== "overview" || state.expanded.some((value) => value !== "false") ||
+          state.focus !== first || state.scenes.find((scene) => scene.id === "overview")?.opacity !== "1" ||
+          state.scenes.some((scene) => scene.id !== "overview" && scene.opacity !== "0")) failures.push(`${label} 閉じる=${JSON.stringify(state)}`);
+    };
+    await stageKey(page, "Enter");
+    await checkOpen("Enter");
+    await stageKey(page, "Escape");
+    await checkClosed("Esc");
+    await stageKey(page, "Space");
+    await checkOpen("Space");
+    await stageKey(page, "Escape");
+    await checkClosed("Space→Esc");
+    await stageKey(page, "Enter");
+    await checkOpen("閉じるボタン前");
+    for (let i = 0; i < 10; i++) {
+      if (await page.ev("document.activeElement?.matches('.stage-close') ?? false")) break;
+      await stageKey(page, "Tab");
+    }
+    if (!(await page.ev("document.activeElement?.matches('.stage-close') ?? false"))) failures.push("Tab で閉じるボタンに到達しない");
+    else { await stageKey(page, "Enter"); await checkClosed("閉じるボタン"); }
+    await stageKey(page, "Enter");
+    await sleep(100);
+    await stageKey(page, "Escape");
+    await checkClosed("寄り途中の Esc");
+    if (page.errors.length) failures.push(errorsOf(page));
+    return failures.join("; ");
+  });
+}
+
+async function rapid(base, path) {
+  return visit(base, path, {}, async (page) => {
+    await showStage(page);
+    const buttons = await page.ev("[...document.querySelectorAll('.stage .pill')].map(el => el.dataset.feature)");
+    for (let i = 0; i < buttons.length; i++) {
+      await page.click(".stage .pill", i);
+      if (i < buttons.length - 1) await sleep(50);
+    }
+    await sleep(1000);
+    const state = await page.ev(`(() => {
+      const view = document.querySelector('.stage-view');
+      const scene = document.querySelector('.scene.is-active');
+      const matrix = new DOMMatrixReadOnly(getComputedStyle(scene).transform);
+      return { active: document.querySelector('[data-stage]').dataset.activeFeature,
+        scenes: [...document.querySelectorAll('.stage .scene')].map(el => ({ id: el.dataset.scene, opacity: getComputedStyle(el).opacity })),
+        scene: { w: scene.offsetWidth, h: scene.offsetHeight }, view: { w: view.clientWidth, h: view.clientHeight },
+        x: matrix.m41, y: matrix.m42, scale: matrix.m11 };
+    })()`);
+    const last = buttons.at(-1);
+    const focus = await page.ev(`document.querySelector('.pill[data-feature=${JSON.stringify(last)}]').dataset.focus`);
+    const [x, y, zoom] = focus.split(",").map(Number);
+    const expected = focusTransform(state.scene, state.view, { x, y, zoom });
+    const failures = [];
+    if (state.active !== last || state.scenes.find((scene) => scene.id === last)?.opacity !== "1" ||
+        state.scenes.some((scene) => scene.id !== last && scene.opacity !== "0")) failures.push(`最後の scene=${JSON.stringify(state)}`);
+    if (Math.abs(state.x - expected.x) > 2 || Math.abs(state.y - expected.y) > 2 || Math.abs(state.scale - expected.scale) > 0.02) failures.push(`寄り=${JSON.stringify(state)} expected=${JSON.stringify(expected)}`);
+    if (page.errors.length) failures.push(errorsOf(page));
+    return failures.join("; ");
+  });
+}
+
+async function resize(base, path) {
+  const page = await openPage({ url: new URL(path, base).href, width: 1280, height: 800 });
+  try {
+    await page.idle();
+    await showStage(page);
+    await page.click(".stage .pill", 0);
+    const failures = [];
+    for (const width of [1280, 900, 375]) {
+      await page.send("Emulation.setDeviceMetricsOverride", { width, height: 800, deviceScaleFactor: 1, mobile: width < 768, screenWidth: width, screenHeight: 800 });
+      await sleep(250);
+      const state = await page.ev(`(() => {
+        const stage = document.querySelector('[data-stage]').getBoundingClientRect();
+        const view = document.querySelector('.stage-view').getBoundingClientRect();
+        return { overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+          stage: { left: stage.left, right: stage.right }, view: { left: view.left, right: view.right },
+          active: document.querySelector('[data-stage]').dataset.activeFeature };
+      })()`);
+      if (state.overflow !== 0 || state.view.left < state.stage.left - 1 || state.view.right > state.stage.right + 1 || state.active !== "history") failures.push(`${width}px ${JSON.stringify(state)}`);
+    }
+    if (page.errors.length) failures.push(errorsOf(page));
+    return failures.join("; ");
+  } finally { page.close(); }
 }
 
 function frameStats(times) {
@@ -360,7 +516,7 @@ async function frames(base, path) {
   return failures.join("; ");
 }
 
-const checks = { boot, widths, fit, reduced, idle, "reload-mid": reloadMid, nojs, frames };
+const checks = { boot, widths, fit, reduced, idle, "reload-mid": reloadMid, nojs, keyboard, rapid, resize, frames };
 
 async function main() {
   const { base, only, pages } = parseArgs(process.argv.slice(2));

@@ -65,94 +65,92 @@
 </section>
 
 <!-- ============ 機能 ============ -->
-<section>
-  <div class="wrap feat">
-    <div class="feat-txt">
-      <h2>コピーしたものを、<br>あとから探してすぐ貼れる</h2>
-      <p class="body">コピーしたものが、履歴として残ります。<br>行を選んで <kbd>Enter</kbd> かダブルクリックでその内容をコピーして、直前まで使っていたアプリに戻ります。<br>あとは <kbd>⌘</kbd><kbd>V</kbd> を押すだけです。</p>
-      <ul class="facts">
-        <li>行にコピー元アプリのアイコンが出るので、どこからコピーしたか一目でわかる</li>
-        <li>複数選択すると、新しい順に改行でつないで 1 回で貼れる</li>
-        <li>他のアプリへドラッグしてそのまま渡せる</li>
-        <li>無料で 30 件、Pro で 50〜1000 件（既定 200 件）</li>
-        <li>コピーした内容を残すかどうかは、初回起動時に確認します。同意するまで何も保存されません</li>
+<section class="stage" data-stage>
+  <div class="wrap">
+    <p class="eyebrow">FEATURES</p>
+    <h2>ClipDex を、くわしく。</h2>
+    <div class="stage__layout">
+      <ul class="stage-pills">
+        <li>
+          <button class="pill" type="button" aria-expanded="false" aria-controls="feat-history" data-feature="history" data-focus="0.38,0.32,1.34">履歴</button>
+          <div class="pill-body" id="feat-history">
+            <p>コピーしたものを履歴から探し、選んでコピー。元のアプリで <kbd>⌘</kbd><kbd>V</kbd> ですぐ貼れる。</p>
+            <ul class="facts">
+              <li>行にコピー元アプリのアイコンが出るので、どこからコピーしたか一目でわかる</li>
+              <li>複数選択すると、新しい順に改行でつないで 1 回で貼れる</li>
+              <li>他のアプリへドラッグしてそのまま渡せる</li>
+              <li>無料で 30 件、Pro で 50〜1000 件（既定 200 件）</li>
+              <li>コピーした内容を残すかどうかは、初回起動時に確認します。同意するまで何も保存されません</li>
+            </ul>
+          </div>
+        </li>
+        <li>
+          <button class="pill" type="button" aria-expanded="false" aria-controls="feat-registered" data-feature="registered" data-focus="0.70,0.65,1.40">登録したもの</button>
+          <div class="pill-body" id="feat-registered">
+            <p>定型文・コード片・画像や動画をグループに分け、必要なときに呼び出せる。</p>
+            <ul class="facts">
+              <li>テキストは無料で 10 件、Pro で 300 件</li>
+              <li>画像・動画は別枠で、無料 5 件 / Pro 300 件</li>
+              <li>並べ替え・グループ移動・削除は <kbd>⌘</kbd><kbd>Z</kbd> で多段に取り消せます</li>
+            </ul>
+          </div>
+        </li>
+        <li>
+          <button class="pill" type="button" aria-expanded="false" aria-controls="feat-search" data-feature="search" data-focus="0.52,0.22,1.45">横断検索</button>
+          <div class="pill-body" id="feat-search">
+            <p>履歴と登録を一度に検索。アプリ・グループ・日付でも絞り込める。</p>
+            <ul class="facts">
+              <li>日本語・英語・コードが混ざっていても</li>
+              <li>「今日」「Slack」のような条件を重ねて絞り込める</li>
+            </ul>
+          </div>
+        </li>
+        <li>
+          <button class="pill" type="button" aria-expanded="false" aria-controls="feat-picker" data-feature="picker" data-focus="0.64,0.58,1.42">⇧⌘V で呼び出す</button>
+          <div class="pill-body" id="feat-picker">
+            <p><kbd>⇧</kbd><kbd>⌘</kbd><kbd>V</kbd> でカーソルの近くにパネルを呼び出す。ショートカットは変更できる。</p>
+            <ul class="facts">
+              <li>履歴・登録・グループをタブで切り替えられる</li>
+              <li>画像はその場で大きく確認できる（寸法とファイル容量も）</li>
+              <li><kbd>esc</kbd>または<kbd>⌘</kbd><kbd>W</kbd>で閉じる。<kbd>⌘</kbd> を押しながら選べば窓に留まり、続けてコピーできる</li>
+            </ul>
+          </div>
+        </li>
+        <li>
+          <button class="pill" type="button" aria-expanded="false" aria-controls="feat-report" data-feature="report" data-focus="0.55,0.76,1.30">レポート</button>
+          <div class="pill-body" id="feat-report">
+            <p>コピー回数や文字数、コピー元アプリを期間ごとに確認できる。</p>
+            <ul class="facts">
+              <li>どのアプリからコピーしたかの内訳</li>
+              <li>コピーの回数と、文字数の合計</li>
+              <li>曜日 × 時間のヒートマップ</li>
+              <li>今日・週次・直近 4 週間・今月・今年の 5 期間（無料版の集計は直近 7 日）</li>
+            </ul>
+          </div>
+        </li>
       </ul>
-    </div>
-    <div class="shot">
-      <img loading="lazy" src="/assets/02-history.png" width="1440" height="1100"
-           alt="クリップボード履歴の一覧。画像・コード・URL・チャットの文章・メモが、それぞれのコピー元アプリのアイコンと時刻つきで並んでいる。">
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="wrap feat">
-    <div class="feat-txt">
-      <h2>よく使う文章や画像・動画を、<br>グループごとに整理</h2>
-      <p class="body">よく使うものは、登録しておけます。<br>定型文・コード片・住所や連絡先を自分のグループに分けて、必要なときに呼び出せます。</p>
-      <ul class="facts">
-        <li>テキストは無料で 10 件、Pro で 300 件</li>
-        <li>画像・動画は別枠で、無料 5 件 / Pro 300 件</li>
-        <li>並べ替え・グループ移動・削除は <kbd>⌘</kbd><kbd>Z</kbd> で多段に取り消せます</li>
-      </ul>
-    </div>
-    <div class="shot">
-      <img loading="lazy" src="/assets/03-registered.png" width="1440" height="1100"
-           alt="登録したものの一覧。画像素材と定型文が「定型文」「コード」「住所・連絡先」のグループに分かれて並んでいる。">
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="wrap feat">
-    <div class="feat-txt">
-      <h2>履歴も登録も、<br>横断して検索</h2>
-      <p class="body">履歴と登録を一度に検索して、ヒットした箇所をハイライトします。<br>アプリ・グループ・日付での絞り込みも、検索欄から行えます。</p>
-      <ul class="facts">
-        <li>日本語・英語・コードが混ざっていても</li>
-        <li>「今日」「Slack」のような条件を重ねて絞り込める</li>
-      </ul>
-    </div>
-    <div class="shot">
-      <img loading="lazy" src="/assets/04-search.png" width="1440" height="1100"
-           alt="横断検索の画面。「ありがとう」で検索した結果がクリップボード履歴と登録したものに分かれて表示され、アプリ・グループ・日付の絞り込みパネルが開いている。">
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="wrap feat">
-    <div class="feat-txt">
-      <h2>ショートカットキーで<br>呼び出して、すぐに貼れる</h2>
-      <p class="body">作業中のアプリから手を離さずに <kbd>⇧</kbd><kbd>⌘</kbd><kbd>V</kbd>。<br>カーソルの近くにパネルが出ます。<br>ショートカットキーは好きな組み合わせに変えられます。</p>
-      <ul class="facts">
-        <li>履歴・登録・グループをタブで切り替えられる</li>
-        <li>画像はその場で大きく確認できる（寸法とファイル容量も）</li>
-        <li><kbd>esc</kbd>または<kbd>⌘</kbd><kbd>W</kbd>で閉じる。<kbd>⌘</kbd> を押しながら選べば窓に留まり、続けてコピーできる</li>
-      </ul>
-    </div>
-    <div class="shot">
-      <img loading="lazy" src="/assets/05-picker.png" width="1440" height="1100"
-           alt="ショートカットキーで呼び出したクイックパネル。画像とテキストが並び、選択中の画像がプレビュー表示されている。">
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="wrap feat">
-    <div class="feat-txt">
-      <h2>コピーの傾向を、<br>期間ごとに確認できる</h2>
-      <p class="body">何をどれだけコピーしたか確認できます。<br>アプリを開いていた時間ではなく、実際に手を動かした記録です。</p>
-      <ul class="facts">
-        <li>どのアプリからコピーしたかの内訳</li>
-        <li>コピーの回数と、文字数の合計</li>
-        <li>曜日 × 時間のヒートマップ</li>
-        <li>今日・週次・直近 4 週間・今月・今年の 5 期間（無料版の集計は直近 7 日）</li>
-      </ul>
-    </div>
-    <div class="shot">
-      <img loading="lazy" src="/assets/06-report.png" width="1440" height="1100"
-           alt="週次レポート。コピー 342 件・17,274 文字の集計と、アプリ別の内訳バー、曜日と時間のヒートマップが表示されている。">
+      <div class="stage-view">
+        <figure class="scene" data-scene="overview">
+          <img loading="lazy" src="/assets/01-hero.png" width="1600" height="1185" alt="ClipDex の統合ウインドウ全景。">
+        </figure>
+        <figure class="scene" data-scene="history">
+          <img loading="lazy" src="/assets/02-history.png" width="1440" height="1100" alt="クリップボード履歴の一覧。画像・コード・URL・チャットの文章・メモが、それぞれのコピー元アプリのアイコンと時刻つきで並んでいる。">
+        </figure>
+        <figure class="scene" data-scene="registered">
+          <img loading="lazy" src="/assets/03-registered.png" width="1440" height="1100" alt="登録したものの一覧。画像素材と定型文が「定型文」「コード」「住所・連絡先」のグループに分かれて並んでいる。">
+        </figure>
+        <figure class="scene" data-scene="search">
+          <img loading="lazy" src="/assets/04-search.png" width="1440" height="1100" alt="横断検索の画面。「ありがとう」で検索した結果がクリップボード履歴と登録したものに分かれて表示され、アプリ・グループ・日付の絞り込みパネルが開いている。">
+        </figure>
+        <figure class="scene" data-scene="picker">
+          <img loading="lazy" src="/assets/05-picker.png" width="1440" height="1100" alt="ショートカットキーで呼び出したクイックパネル。画像とテキストが並び、選択中の画像がプレビュー表示されている。">
+        </figure>
+        <figure class="scene" data-scene="report">
+          <img loading="lazy" src="/assets/06-report.png" width="1440" height="1100" alt="週次レポート。コピー 342 件・17,274 文字の集計と、アプリ別の内訳バー、曜日と時間のヒートマップが表示されている。">
+        </figure>
+        <button class="stage-close" type="button" aria-label="全景に戻る">×</button>
+      </div>
+      <div class="stage-detail" aria-live="polite"></div>
     </div>
   </div>
 </section>

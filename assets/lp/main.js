@@ -1,5 +1,6 @@
 import { reducedMotion } from "./loop.js";
 import { createRise } from "./rise.js";
+import { createStage } from "./stage.js";
 import { createWall } from "./wall.js";
 import { CARDS } from "./wall-cards.js";
 
@@ -39,3 +40,5 @@ function start(reduced) {
 
 start(reducedMotion.matches);
 reducedMotion.on(start);
+const stage = document.querySelector("[data-stage]");
+if (stage) createStage(stage);
