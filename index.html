@@ -26,6 +26,7 @@
 <link rel="modulepreload" href="/assets/lp/stage.js">
 <link rel="modulepreload" href="/assets/lp/wall.js">
 <link rel="modulepreload" href="/assets/lp/wall-cards.js">
+<link rel="modulepreload" href="/assets/lp/nudge.js">
 </head>
 <body>
 
@@ -162,6 +163,34 @@
 </section>
 
 <!-- ============ プライバシー ============ -->
+<section class="full-band" id="full-band">
+  <div class="wrap">
+    <p class="eyebrow">FULL VERSION</p>
+    <h2>貼り付けまで任せるならフル版</h2>
+    <p class="full-band__lede">このサイトから配布しているフル版は、App Store 版のすべてに自動の貼り付けを足した版です。</p>
+    <div class="full-band__cols">
+      <div class="full-band__col">
+        <p class="full-band__name">App Store 版</p>
+        <ul>
+          <li>選ぶとコピーして元のアプリへ戻る。<kbd>⌘</kbd><kbd>V</kbd> は自分で押す</li>
+          <li>権限の許可は不要</li>
+          <li class="is-none">順番に貼る (Paste Stack)</li>
+          <li class="is-none">ペースト記録</li>
+        </ul>
+      </div>
+      <div class="full-band__col full-band__col--full">
+        <p class="full-band__name">フル版 <span>FULL</span></p>
+        <ul>
+          <li>選ぶだけで元のアプリに貼り付け</li>
+          <li>macOS のアクセシビリティの許可を使う</li>
+          <li>選んだ順に 1 件ずつ貼る (Paste Stack)</li>
+          <li>何を貼ったかをあとから探せる (ペースト記録)</li>
+        </ul>
+      </div>
+    </div>
+    <a class="full-band__cta" href="/full/">フル版を見る →</a>
+  </div>
+</section>
 <section class="lower lower--privacy" id="privacy">
   <div class="wrap">
     <p class="eyebrow">PRIVACY</p>
@@ -436,6 +465,28 @@
   </div>
   <p class="wrap trademark">Apple、Apple のロゴ、Mac、App Store は、米国およびその他の国で登録された Apple Inc. の商標です。</p>
 </footer>
+
+<div class="full-nudge" id="full-nudge" hidden>
+  <span class="full-nudge__lens" aria-hidden="true"></span>
+  <span class="full-nudge__rim" aria-hidden="true"></span>
+  <span class="full-nudge__edge" aria-hidden="true"></span>
+  <a href="/full/">貼り付けまで自動のフル版 <span aria-hidden="true">→</span></a>
+  <button type="button" aria-label="閉じる"><svg viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><path d="M2 2l8 8M10 2l-8 8" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></button>
+  <!-- Chromium だけが使う屈折用のフィルタ (JS が寸法と変位マップを入れる。入らなければ使われない) -->
+  <svg class="full-nudge__defs" width="0" height="0" aria-hidden="true" focusable="false">
+    <filter id="full-nudge-lens" filterUnits="userSpaceOnUse" primitiveUnits="userSpaceOnUse" x="0" y="0" width="1" height="1" color-interpolation-filters="sRGB">
+      <feImage x="0" y="0" width="1" height="1" preserveAspectRatio="none" result="map"/>
+      <feDisplacementMap in="SourceGraphic" in2="map" scale="30" xChannelSelector="R" yChannelSelector="G" result="dr"/>
+      <feColorMatrix in="dr" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="r"/>
+      <feDisplacementMap in="SourceGraphic" in2="map" scale="31.5" xChannelSelector="R" yChannelSelector="G" result="dg"/>
+      <feColorMatrix in="dg" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="map" scale="33" xChannelSelector="R" yChannelSelector="G" result="db"/>
+      <feColorMatrix in="db" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="b"/>
+      <feBlend in="r" in2="g" mode="screen" result="rg"/>
+      <feBlend in="rg" in2="b" mode="screen"/>
+    </filter>
+  </svg>
+</div>
 
 </body>
 </html>

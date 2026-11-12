@@ -563,6 +563,32 @@ async function storeFacts(base, path) {
   });
 }
 
+// トップだけ: 浮かぶ「フル版」案内が、入口では出ず・入口を過ぎると出て・帯 / 最後の CTA で引っ込み・× で閉じたら出ない
+async function nudge(base, path) {
+  if (path !== "/") return "";
+  return visit(base, path, {}, async (page) => {
+    const failures = [];
+    const at = async (label, expr, want) => {
+      const y = await page.ev(expr);
+      await page.scrollTo(y, { io: false });
+      await sleep(600);
+      const on = await page.ev("document.getElementById('full-nudge').classList.contains('is-on')");
+      if (on !== want) failures.push(`${label} is-on=${on} 期待=${want}`);
+    };
+    await at("入口", "0", false);
+    await at("プライバシー", "document.getElementById('privacy').getBoundingClientRect().top + scrollY + 300", true);
+    await at("帯", "document.getElementById('full-band').getBoundingClientRect().top + scrollY - 200", false);
+    await at("最後の CTA", "document.getElementById('download').getBoundingClientRect().top + scrollY - 200", false);
+    await at("プライバシー (戻り)", "document.getElementById('privacy').getBoundingClientRect().top + scrollY + 300", true);
+    await page.ev("document.querySelector('#full-nudge button').click()");
+    await sleep(300);
+    if (await page.ev("document.getElementById('full-nudge').classList.contains('is-on')")) failures.push("× のあとも出ている");
+    const errors = errorsOf(page);
+    if (errors) failures.push(errors);
+    return failures.join("; ");
+  });
+}
+
 function frameStats(times) {
   const intervals = times.slice(1).map((time, index) => time - times[index]).sort((a, b) => a - b);
   return {
@@ -654,7 +680,7 @@ async function frames(base, path) {
   return failures.join("; ");
 }
 
-const checks = { boot, widths, fit, reduced, idle, "reload-mid": reloadMid, nojs, keyboard, rapid, resize, stable, zoom, video, "store-facts": storeFacts, frames };
+const checks = { boot, widths, fit, reduced, idle, "reload-mid": reloadMid, nojs, keyboard, rapid, resize, stable, zoom, video, "store-facts": storeFacts, nudge, frames };
 
 async function main() {
   const { base, only, pages } = parseArgs(process.argv.slice(2));

@@ -82,7 +82,10 @@ try {
   const failures = [];
   for (const heading of headings) {
     const renamed = RENAMED.get(heading);
-    const oldText = renamed ? before.sections.get(heading)?.replace(heading, renamed) : before.sections.get(heading);
+    // main が既に新しい見出しになっていれば (変更を main へ入れた後)、そのまま比べる
+    const oldText = renamed
+      ? (before.sections.get(renamed) ?? before.sections.get(heading)?.replace(heading, renamed))
+      : before.sections.get(heading);
     const newText = after.sections.get(renamed ?? heading);
     console.log(`${heading}: main ${oldText?.length ?? 0} / current ${newText?.length ?? 0} 文字`);
     if (!oldText || !newText) failures.push(`${heading}: 節がないか空`);

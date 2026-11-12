@@ -1,5 +1,6 @@
 import { reducedMotion } from "./loop.js";
 import { createRise } from "./rise.js";
+import { createFullNudge } from "./nudge.js";
 import { createStage } from "./stage.js";
 import { createWall } from "./wall.js";
 import { CARDS } from "./wall-cards.js";
@@ -9,11 +10,12 @@ document.documentElement.classList.add("js");
 let wall = null;
 let rise = null;
 let stageHandle = null;
+let nudgeHandle = null;
 
 // どこか 1 つでも初期化に失敗したら、作ったものを外して JS なしの組み方 (検証済み) に戻す。
 // html.js のまま残すと、舞台の場面が全部 opacity 0 の空の舞台になる
 function fallBackToStatic(error) {
-  try { wall?.destroy(); rise?.destroy(); stageHandle?.destroy(); } catch {}
+  try { wall?.destroy(); rise?.destroy(); stageHandle?.destroy(); nudgeHandle?.destroy(); } catch {}
   document.documentElement.classList.remove("js");
   console.warn("ClipDex LP: 動きの初期化に失敗したので静的な表示にしました", error);
 }
@@ -82,6 +84,8 @@ try {
   reducedMotion.on(start);
   const stage = document.querySelector("[data-stage]");
   if (stage) stageHandle = createStage(stage);
+  const nudge = document.getElementById("full-nudge");
+  if (nudge) nudgeHandle = createFullNudge(nudge);
 } catch (error) {
   fallBackToStatic(error);
 }
