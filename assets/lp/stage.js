@@ -38,8 +38,21 @@ export function createStage(section) {
   let current = { x: 0, y: 0, scale: 1 };
   let velocities = { x: 0, y: 0, scale: 0 };
   let target = { ...current };
+  let playingVideo = null;
 
   const selectedScene = () => byScene.get(active ?? "overview");
+  const syncSceneVideos = () => {
+    const next = active !== null && !reducedMotion.matches ? selectedScene().querySelector("video") : null;
+    if (playingVideo && playingVideo !== next) {
+      playingVideo.pause();
+      playingVideo.load();
+      playingVideo = null;
+    }
+    if (next && next !== playingVideo) {
+      playingVideo = next;
+      next.play().catch(() => {});
+    }
+  };
   const layoutScenes = () => {
     const box = { w: view.clientWidth, h: view.clientHeight };
     for (const scene of scenes) {
@@ -116,6 +129,7 @@ export function createStage(section) {
       scene.classList.toggle("is-active", selected);
       scene.setAttribute("aria-hidden", String(!selected));
     }
+    syncSceneVideos();
     layoutScenes();
     target = computeTarget();
     if (reducedMotion.matches) { current = { ...target }; velocities = { x: 0, y: 0, scale: 0 }; }
@@ -144,6 +158,7 @@ export function createStage(section) {
     listeners.push([media, onResize, event]);
   }
   const offMotion = reducedMotion.on(() => {
+    syncSceneVideos();
     if (reducedMotion.matches) { current = { ...target }; velocities = { x: 0, y: 0, scale: 0 }; render(); }
     else if (active !== null) loop.wake();
   });
@@ -152,6 +167,7 @@ export function createStage(section) {
   return {
     open,
     destroy() {
+      if (playingVideo) { playingVideo.pause(); playingVideo.load(); playingVideo = null; }
       loop.destroy();
       offMotion();
       removeEventListener("resize", onResize);

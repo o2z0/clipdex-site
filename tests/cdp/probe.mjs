@@ -9,6 +9,7 @@ const expectedEdition = new Map([
   ["/en/full/", "full"],
 ]);
 const expectedFeatures = new Map([["/", 5], ["/full/", 8], ["/en/full/", 8]]);
+const firstFeature = new Map([["/", "history"], ["/full/", "autopaste"], ["/en/full/", "autopaste"]]);
 const RAF_COUNT = `(() => {
   let count = 0;
   const original = requestAnimationFrame.bind(window);
@@ -339,10 +340,16 @@ async function keyboard(base, path) {
       await stageKey(page, "Tab");
     }
     const first = await page.ev("document.activeElement?.dataset.feature");
-    if (first !== "history") failures.push(`Tab の最初=${first}`);
+    if (first !== firstFeature.get(path)) failures.push(`Tab の最初=${first}`);
     const checkOpen = async (label) => {
-      await sleep(250);
-      const state = await stageState(page);
+      // 切り替えの完了を最大 600ms 待つ (動画の scene は再生開始の処理で数十 ms 遅れることがある)
+      let state;
+      for (let waited = 0; waited <= 600; waited += 50) {
+        await sleep(50);
+        state = await stageState(page);
+        if (state.scenes.find((scene) => scene.id === first)?.opacity === "1" &&
+            state.scenes.every((scene) => scene.id === first || scene.opacity === "0")) break;
+      }
       if (state.active !== first || state.expanded.filter((value) => value === "true").length !== 1 ||
           state.scenes.find((scene) => scene.id === first)?.opacity !== "1" ||
           state.scenes.some((scene) => scene.id !== first && scene.opacity !== "0")) failures.push(`${label} 開く=${JSON.stringify(state)}`);
@@ -395,7 +402,7 @@ async function rapid(base, path) {
       return { active: document.querySelector('[data-stage]').dataset.activeFeature,
         scenes: [...document.querySelectorAll('.stage .scene')].map(el => ({ id: el.dataset.scene, opacity: getComputedStyle(el).opacity })),
         scene: { w: scene.offsetWidth, h: scene.offsetHeight, left: scene.offsetLeft, top: scene.offsetTop },
-        naturalWidth: scene.querySelector('img, video').naturalWidth,
+        naturalWidth: scene.querySelector('img, video').naturalWidth || scene.querySelector('video')?.videoWidth,
         dpr: devicePixelRatio, view: { w: view.clientWidth, h: view.clientHeight },
         x: matrix.m41, y: matrix.m42, scale: matrix.m11 };
     })()`);
@@ -429,7 +436,7 @@ async function resize(base, path) {
           stage: { left: stage.left, right: stage.right }, view: { left: view.left, right: view.right },
           active: document.querySelector('[data-stage]').dataset.activeFeature };
       })()`);
-      if (state.overflow !== 0 || state.view.left < state.stage.left - 1 || state.view.right > state.stage.right + 1 || state.active !== "history") failures.push(`${width}px ${JSON.stringify(state)}`);
+      if (state.overflow !== 0 || state.view.left < state.stage.left - 1 || state.view.right > state.stage.right + 1 || state.active !== firstFeature.get(path)) failures.push(`${width}px ${JSON.stringify(state)}`);
     }
     if (page.errors.length) failures.push(errorsOf(page));
     return failures.join("; ");
@@ -494,7 +501,7 @@ async function zoom(base, path) {
         const button = document.querySelector('.stage .pill[aria-expanded="true"]');
         return { id: scene.dataset.scene, focus: button.dataset.focus,
           scene: { w: scene.offsetWidth, h: scene.offsetHeight, left: scene.offsetLeft, top: scene.offsetTop },
-          view: { w: view.clientWidth, h: view.clientHeight }, naturalWidth: image.naturalWidth,
+          view: { w: view.clientWidth, h: view.clientHeight }, naturalWidth: image.naturalWidth || image.videoWidth || Number(image.getAttribute('width')),
           scale: matrix.m11, x: matrix.m41, y: matrix.m42, dpr: devicePixelRatio };
       })()`);
       const [x, y, requested] = state.focus.split(",").map(Number);
@@ -509,6 +516,49 @@ async function zoom(base, path) {
     if (page.errors.length) failures.push(errorsOf(page));
     return failures.join("; ");
   } finally { page.close(); }
+}
+
+async function video(base, path) {
+  if (path === "/") return "";
+  const failures = [];
+  await visit(base, path, {}, async (page) => {
+    await showStage(page);
+    await page.click('.stage .pill[data-feature="autopaste"]');
+    await sleep(700);
+    const playing = await page.ev(`(() => {
+      const v = document.querySelector('.scene[data-scene="autopaste"] video');
+      return { paused: v.paused, time: v.currentTime, ready: v.readyState };
+    })()`);
+    if (playing.paused || playing.time <= 0) failures.push(`autopaste 再生=${JSON.stringify(playing)}`);
+    await page.click('.stage .pill[data-feature="autopaste"]');
+    const closed = await page.ev(`(() => {
+      const v = document.querySelector('.scene[data-scene="autopaste"] video');
+      return { paused: v.paused, time: v.currentTime };
+    })()`);
+    if (!closed.paused || closed.time !== 0) failures.push(`autopaste 停止=${JSON.stringify(closed)}`);
+    if (page.errors.length) failures.push(errorsOf(page));
+  });
+  await visit(base, path, { reduced: true }, async (page) => {
+    await showStage(page);
+    await page.click('.stage .pill[data-feature="autopaste"]');
+    const state = await page.ev(`(() => {
+      const v = document.querySelector('.scene[data-scene="autopaste"] video');
+      return { paused: v.paused, time: v.currentTime, poster: v.poster };
+    })()`);
+    if (!state.paused || state.time !== 0 || !state.poster) failures.push(`reduced poster=${JSON.stringify(state)}`);
+    if (page.errors.length) failures.push(errorsOf(page));
+  });
+  return failures.join("; ");
+}
+
+async function storeFacts(base, path) {
+  if (path !== "/") return "";
+  return visit(base, path, {}, async (page) => {
+    const text = await page.ev("document.querySelector('.entry').textContent + document.querySelector('.stage').textContent");
+    const forbidden = ["自動ペースト", "Paste Stack", "ペースト記録", "アクセシビリティ", "貼り付けます"];
+    const found = forbidden.filter((word) => text.includes(word));
+    return found.length ? `App Store 版に ${found.join(" / ")} が混入` : errorsOf(page);
+  });
 }
 
 function frameStats(times) {
@@ -602,7 +652,7 @@ async function frames(base, path) {
   return failures.join("; ");
 }
 
-const checks = { boot, widths, fit, reduced, idle, "reload-mid": reloadMid, nojs, keyboard, rapid, resize, stable, zoom, frames };
+const checks = { boot, widths, fit, reduced, idle, "reload-mid": reloadMid, nojs, keyboard, rapid, resize, stable, zoom, video, "store-facts": storeFacts, frames };
 
 async function main() {
   const { base, only, pages } = parseArgs(process.argv.slice(2));

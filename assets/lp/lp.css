@@ -582,7 +582,9 @@ html:not(.js) .stage-close { display: none; }
   border-radius: 0 15px 15px 0;
   background: linear-gradient(90deg, transparent, #08090a);
   pointer-events: none;
+  opacity: 0;
 }
+.lower--compare .cmp-frame.has-overflow::after { opacity: 1; }
 .lower--compare .cmp-scroll {
   max-width: 100%;
   margin-top: 0;
@@ -665,4 +667,71 @@ footer .foot-mark img { opacity: .72; }
   .lower--bento .cell, .lower--bento .cell.w2, .lower--bento .cell.full { grid-column: auto; }
   .lower--faq .faq details { padding-inline: 16px; }
   .lower--faq .faq summary { font-size: 15px; }
+  .lower--compare .cmp tbody tr:first-child > * { padding-block: 7px; font-size: 12px; line-height: 1.42; }
+}
+
+/* ---- full edition ---- */
+html[data-edition="full"] header { background: rgba(11, 8, 6, .86); }
+html[data-edition="full"] .edition-badge {
+  display: inline-flex;
+  align-items: center;
+  height: 18px;
+  padding: 0 6px;
+  border: 1px solid var(--text-2);
+  border-radius: 4px;
+  color: var(--text);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .14em;
+  line-height: 1;
+}
+html[data-edition="full"] .hero-cta { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; }
+html[data-edition="full"] .btn-ghost { background: transparent; color: var(--text); border-color: var(--line); }
+html[data-edition="full"] .btn-ghost:hover { background: var(--surface); }
+html[data-edition="full"] .stage__layout {
+  background: radial-gradient(ellipse at 77% 48%, #251b15, #16100d 58%, #0d0907);
+}
+html[data-edition="full"] .stage-info { height: 325px; }
+html[data-edition="full"] .stage-view { border-radius: 16px; }
+html[data-edition="full"] .lower--bento .cell { background: linear-gradient(145deg, #231a14, var(--surface) 67%); }
+html[data-edition="full"] .lower--bento .cell:nth-child(3n+2) { background: linear-gradient(150deg, #211810, var(--surface) 72%); }
+html[data-edition="full"] .lower--privacy .diagram { background: linear-gradient(145deg, #231a14, var(--surface) 67%); }
+html[data-edition="full"] .lower--license .price { display: flex; align-items: baseline; flex-wrap: wrap; gap: 16px; margin: 0 0 28px; }
+html[data-edition="full"] .lower--license .price strong { color: var(--text); font-size: clamp(34px, 4vw, 48px); line-height: 1.2; }
+html[data-edition="full"] .lower--license .price span { color: var(--text-2); font-size: 15px; }
+html[data-edition="full"] .lower--license .priv {
+  gap: 12px;
+  margin-top: 0;
+  border: 0;
+  border-radius: 0;
+  overflow: visible;
+  background: transparent;
+}
+html[data-edition="full"] .lower--license .priv > div {
+  padding: 25px 22px 28px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+}
+html[data-edition="full"] .lower--license .priv + p { margin: 24px 0 0; }
+html[data-edition="full"] footer { background: #100c09; }
+@media (max-width: 767px) {
+  html[data-edition="full"] .stage-info { height: auto; }
+  html[data-edition="full"] .lower--license .priv { grid-template-columns: 1fr 1fr; }
+  html:not(.js) .lower--compare .cmp-frame::after { opacity: 1; }
+}
+@media (max-width: 520px) {
+  html[data-edition="full"] .lower--license .priv { grid-template-columns: 1fr; }
+}
+
+/* 320〜359px: フル版のヘッダーはロゴ + FULL + リンク 3 つ + ボタンで 1 行に収まらないので、ロゴとバッジと間隔を詰める */
+@media (max-width: 359px) {
+  .navrow { gap: 4px; }
+  .brand { gap: 4px; }
+  .logo-mark { width: 15px; height: 15px; }
+  .logo-type { height: 10px; }
+  .edition-badge { font-size: 9px; padding: 1px 4px; }
+  .navlinks { gap: 6px; }
+  .navlink { font-size: 11px; }
+  .navlinks .btn-sm { padding: 7px 6px; font-size: 10px; }
 }

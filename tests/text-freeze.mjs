@@ -6,19 +6,29 @@ import { openPage, sleep } from "./cdp/kit.mjs";
 const pagePath = process.argv[2];
 if (!pagePath) throw new Error("Usage: node tests/text-freeze.mjs <page>");
 
-const headings = [
-  "コピペの記録は、外部に出ない",
-  "そのほかにできること",
-  "こんな人に",
-  "ほかのアプリと比べると",
-  "よくある質問",
-  "今日から、コピーしたものが残る",
-];
+const headingsByPage = {
+  "index.html": [
+    "コピペの記録は、外部に出ない", "そのほかにできること", "こんな人に",
+    "ほかのアプリと比べると", "よくある質問", "今日から、コピーしたものが残る",
+  ],
+  "full/index.html": [
+    "コピペの記録は、外部に出ない", "そのほかにできること", "こんな人に",
+    "無料で使えて、Pro 版は買い切り", "よくある質問", "今日から、コピーしたものが残る",
+  ],
+  "en/full/index.html": [
+    "Your clipboard data never leaves your Mac", "More you can do", "Made for",
+    "Free to use. Pro is a one-time purchase.", "Frequently asked questions", "Start keeping what you copy today",
+  ],
+};
+const headings = headingsByPage[pagePath];
+if (!headings) throw new Error(`凍結見出しが未定義: ${pagePath}`);
 const normalize = (value) => value.replace(/\s+/g, " ").trim();
 const attributes = (node) => Object.fromEntries(
   Array.from({ length: (node.attributes?.length ?? 0) / 2 }, (_, i) => [node.attributes[i * 2], node.attributes[i * 2 + 1]]),
 );
-const nodes = (node) => [node, ...(node.children ?? []).flatMap(nodes)];
+// script / style / template の中身は本文ではない (撤去した inline script の `${...}` を価格と誤認しないため)
+const SKIP_CONTENT = new Set(["SCRIPT", "STYLE", "TEMPLATE"]);
+const nodes = (node) => SKIP_CONTENT.has(node.nodeName) ? [] : [node, ...(node.children ?? []).flatMap(nodes)];
 const textOf = (node) => node.nodeName === "#text"
   ? node.nodeValue ?? ""
   : (node.children ?? []).map(textOf).join("");
@@ -76,14 +86,15 @@ try {
       failures.push(`${heading}: ${Math.max(0, index)} 文字目 main=${JSON.stringify(oldText.slice(index, index + 36))} current=${JSON.stringify(newText.slice(index, index + 36))}`);
     }
   }
-  for (const fact of before.facts) if (!after.pillFacts.includes(fact)) failures.push(`facts: ${fact}`);
+  const currentFacts = after.pillFacts.length ? after.pillFacts : after.facts;
+  for (const fact of before.facts) if (!currentFacts.includes(fact)) failures.push(`facts: ${fact}`);
   for (const href of before.hrefs) if (!after.hrefs.has(href)) failures.push(`href: ${href}`);
   for (const price of before.prices) if (!after.prices.has(price)) failures.push(`価格: ${price}`);
   if (failures.length) {
     console.error(`NG text-freeze ${pagePath}\n${failures.slice(0, 12).join("\n")}`);
     process.exitCode = 1;
   } else {
-    console.log(`OK text-freeze ${pagePath}: 6 節 / facts ${before.facts.length} 件 / href ${before.hrefs.size} 件 / 価格 ${before.prices.size} 件`);
+    console.log(`OK text-freeze ${pagePath}: ${headings.length} 節 / facts ${before.facts.length} 件 / href ${before.hrefs.size} 件 / 価格 ${before.prices.size} 件`);
   }
 } finally {
   page.close();

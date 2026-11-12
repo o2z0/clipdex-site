@@ -6,6 +6,15 @@ import { CARDS } from "./wall-cards.js";
 
 document.documentElement.classList.add("js");
 
+for (const frame of document.querySelectorAll(".cmp-frame")) {
+  const scroller = frame.querySelector(".cmp-scroll");
+  const syncOverflow = () => frame.classList.toggle("has-overflow", scroller.scrollWidth > scroller.clientWidth + 1);
+  const observer = new ResizeObserver(syncOverflow);
+  observer.observe(scroller);
+  observer.observe(scroller.querySelector("table"));
+  syncOverflow();
+}
+
 const entry = document.querySelector("[data-rise]");
 const wallEl = entry?.querySelector("[data-wall]");
 const noWall = new URLSearchParams(location.search).has("nowall");
