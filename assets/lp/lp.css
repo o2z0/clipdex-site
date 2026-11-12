@@ -311,20 +311,25 @@ html:not(.js) .window__fallback { display: block; position: absolute; inset: 0; 
   letter-spacing: -.025em;
   white-space: nowrap;
 }
+/* 左の列 (ボタン → 説明パネル) は流れで縦に積み、舞台の高さはその中身で決まる最小値を下回らない。
+   以前は説明パネルを下端基準で置いていたため、舞台が低い画面ではボタンと重なった */
 .stage__layout {
   position: relative;
-  height: min(620px, 78vh);
-  min-height: 580px;
+  display: grid;
+  grid-template-columns: 296px;
+  grid-template-rows: auto auto;
+  align-content: start;
+  row-gap: 20px;
+  padding: 34px 32px 24px;
+  min-height: min(620px, 78vh);
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 24px;
   background: radial-gradient(ellipse at 77% 48%, #1b1e25, #101114 58%, #0b0b0d);
 }
 .stage-pills {
-  position: absolute;
+  position: relative;
   z-index: 3;
-  top: 34px;
-  left: 32px;
   width: 296px;
   list-style: none;
   padding: 0;
@@ -378,10 +383,8 @@ html:not(.js) .window__fallback { display: block; position: absolute; inset: 0; 
 .pill[aria-expanded="true"]::after { transform: rotate(45deg); }
 .pill:focus-visible, .stage-close:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
 .stage-info {
-  position: absolute;
+  position: relative;
   z-index: 3;
-  left: 32px;
-  bottom: 24px;
   width: 296px;
   height: 270px;
   border-top: 1px solid rgba(230,235,245,.2);
@@ -411,9 +414,7 @@ html.js .pill-body.is-active { opacity: 1; visibility: visible; pointer-events: 
   min-width: 0;
   aspect-ratio: auto;
   overflow: hidden;
-  border: 1px solid rgba(230,235,245,.14);
   border-radius: 16px;
-  background: #101113;
 }
 .scene { position: absolute; left: 0; top: 0; width: 100%; height: 100%; margin: 0; overflow: hidden; transform-origin: 0 0; }
 .scene img, .scene video { display: block; width: 100%; height: 100%; object-fit: contain; object-position: center; }
@@ -429,18 +430,29 @@ html.js .scene.is-active { opacity: 1; pointer-events: auto; }
   border: 1px solid rgba(255,255,255,.4);
   border-radius: 50%;
   background: rgba(12,12,12,.8);
-  color: #fff;
-  font: inherit;
-  font-size: 25px;
-  line-height: 1;
+  color: transparent;
+  font-size: 0;
   cursor: pointer;
 }
+/* 「×」の文字はフォントごとに字面の位置がずれるので、2 本の線で円の中心に描く (文字は aria-label で読まれる) */
+.stage-close::before, .stage-close::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 14px;
+  height: 1.5px;
+  border-radius: 1px;
+  background: #fff;
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+.stage-close::after { transform: translate(-50%, -50%) rotate(-45deg); }
 html.js .stage-close { visibility: hidden; }
 html.js .stage--open .stage-close { visibility: visible; }
 @media (max-width: 767px) {
   .stage { padding: var(--s5) 0; }
   .stage > .wrap > h2 { margin-bottom: var(--s3); font-size: clamp(28px, 8vw, 42px); white-space: normal; }
-  .stage__layout { display: flex; flex-direction: column; gap: 18px; height: auto; min-height: 0; overflow: visible; border: 0; border-radius: 0; background: transparent; }
+  .stage__layout { display: flex; flex-direction: column; gap: 18px; height: auto; min-height: 0; padding: 0; overflow: visible; border: 0; border-radius: 0; background: transparent; }
   .stage-pills { position: relative; top: auto; left: auto; width: 100%; display: flex; overflow-x: auto; padding: 2px 3px 10px; scroll-snap-type: x proximity; }
   .stage-pills > li { flex: 0 0 auto; scroll-snap-align: start; }
   .pill { min-height: 48px; padding: 0 15px; white-space: nowrap; }
