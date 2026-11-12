@@ -21,7 +21,7 @@ App Store Connect に登録済みの URL なので、**パスを変えない**�
 `python3 -m http.server 8765` で配信し、別のターミナルで検査する。
 
 ```sh
-node --test tests/unit/
+node --test "tests/unit/*.test.mjs"
 node tests/cdp/probe.mjs http://127.0.0.1:8765
 bash tools/originality.sh
 ```
