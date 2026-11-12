@@ -24,20 +24,8 @@ export function createWall(el, { cards, reduced = false }) {
   const plane = document.createElement("div");
   plane.className = "wall__plane";
   plane.setAttribute("aria-hidden", "true");
-  const tracks = [];
-  for (let column = 0; column < 3; column++) {
-    const col = document.createElement("div");
-    col.className = "wall__column";
-    const track = document.createElement("div");
-    track.className = "wall__track";
-    const first = document.createElement("div");
-    first.className = "wall__set";
-    cards.slice(column * 8, column * 8 + 8).forEach((card, index) => first.append(cardNode(card, column * 8 + index)));
-    track.append(first, first.cloneNode(true), first.cloneNode(true));
-    col.append(track);
-    plane.append(col);
-    tracks.push({ track, first, offset: 0, height: 1 });
-  }
+  let tracks = [];
+  let columns = 0;
   el.replaceChildren(plane);
 
   const measure = () => {
@@ -47,26 +35,50 @@ export function createWall(el, { cards, reduced = false }) {
       item.track.style.transform = `translate3d(0, ${-item.offset}px, 0)`;
     });
   };
-  measure();
+  const render = () => {
+    const nextColumns = innerWidth <= 767 ? 3 : 7;
+    if (nextColumns === columns) { measure(); return; }
+    columns = nextColumns;
+    tracks = [];
+    const fragment = document.createDocumentFragment();
+    for (let column = 0; column < columns; column++) {
+      const col = document.createElement("div");
+      col.className = "wall__column";
+      const track = document.createElement("div");
+      track.className = "wall__track";
+      const first = document.createElement("div");
+      first.className = "wall__set";
+      for (let index = 0; index < 7; index++) {
+        const cardIndex = column * 7 + index;
+        first.append(cardNode(cards[cardIndex % cards.length], cardIndex));
+      }
+      track.append(first, first.cloneNode(true), first.cloneNode(true));
+      col.append(track);
+      fragment.append(col);
+      tracks.push({ track, first, offset: 0, height: 1 });
+    }
+    plane.replaceChildren(fragment);
+    measure();
+  };
+  render();
   let loop = null;
   if (!reduced) {
     loop = createLoop((dt) => {
-      const count = innerWidth <= 767 ? 2 : 3;
-      for (let i = 0; i < count; i++) {
+      for (let i = 0; i < tracks.length; i++) {
         const item = tracks[i];
-        item.offset = (item.offset + [22, 27, 19][i] * dt) % item.height;
+        item.offset = (item.offset + [18, 23, 20, 26, 19, 24, 21][i] * dt) % item.height;
         item.track.style.transform = `translate3d(0, ${-item.offset}px, 0)`;
       }
       return true;
     }, { root: el });
     loop.wake();
-    addEventListener("resize", measure);
+    addEventListener("resize", render);
   }
 
   return {
     destroy() {
       loop?.destroy();
-      removeEventListener("resize", measure);
+      removeEventListener("resize", render);
       el.replaceChildren();
     },
   };

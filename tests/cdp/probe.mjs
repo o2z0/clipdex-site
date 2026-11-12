@@ -85,6 +85,42 @@ async function widths(base, path) {
   return failures.join("; ");
 }
 
+async function fit(base, path) {
+  const failures = [];
+  for (const [width, height] of [[1280, 800], [1440, 900], [900, 800]]) {
+    const result = await visit(base, path, { width, height }, async (page) => {
+      const end = await page.ev(`(() => {
+        const entry = document.querySelector('[data-rise]');
+        return entry.getBoundingClientRect().top + scrollY + entry.offsetHeight - innerHeight;
+      })()`);
+      await page.scrollTo(end, { io: false });
+      await sleep(100);
+      return {
+        state: await page.ev(`(() => {
+          const el = document.querySelector('[data-window]');
+          const rect = el.getBoundingClientRect();
+          const header = document.querySelector('header').getBoundingClientRect().height;
+          const style = getComputedStyle(el);
+          return { x: rect.x, y: rect.y, right: rect.right, bottom: rect.bottom,
+            width: rect.width, height: rect.height, header,
+            progress: Number(document.querySelector('[data-rise]').dataset.riseProgress),
+            border: style.borderTopColor, shadow: style.boxShadow };
+        })()`),
+        errors: errorsOf(page),
+      };
+    });
+    const s = result.state;
+    const tolerance = 1;
+    if (s.progress < 0.99 || s.x < -tolerance || s.right > width + tolerance ||
+        s.y < s.header - tolerance || s.bottom > height + tolerance ||
+        s.width > width * 0.94 + tolerance || s.height > height - s.header - 32 + tolerance) {
+      failures.push(`${width}x${height} 窓=${JSON.stringify(s)}`);
+    }
+    if (result.errors) failures.push(`${width}x${height} ${result.errors}`);
+  }
+  return failures.join("; ");
+}
+
 async function reduced(base, path) {
   return visit(base, path, { reduced: true, initScript: RAF_COUNT }, async (page) => {
     const before = await page.ev(`({
@@ -324,7 +360,7 @@ async function frames(base, path) {
   return failures.join("; ");
 }
 
-const checks = { boot, widths, reduced, idle, "reload-mid": reloadMid, nojs, frames };
+const checks = { boot, widths, fit, reduced, idle, "reload-mid": reloadMid, nojs, frames };
 
 async function main() {
   const { base, only, pages } = parseArgs(process.argv.slice(2));
