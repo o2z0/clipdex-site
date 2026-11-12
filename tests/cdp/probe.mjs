@@ -425,6 +425,44 @@ async function resize(base, path) {
   } finally { page.close(); }
 }
 
+async function stable(base, path) {
+  return visit(base, path, { width: 1280, height: 800 }, async (page) => {
+    await showStage(page);
+    const snapshot = () => page.ev(`(() => {
+      const rect = (el) => { const r = el.getBoundingClientRect(); return [r.x, r.y, r.width, r.height]; };
+      return { heading: rect(document.querySelector('.stage h2')),
+        pills: [...document.querySelectorAll('.stage .pill')].map(rect),
+        panel: rect(document.querySelector('.stage-info')) };
+    })()`);
+    const baseline = await snapshot();
+    const failures = [];
+    const compare = async (label) => {
+      const current = await snapshot();
+      for (const key of ["heading", "panel"]) {
+        if (current[key].some((value, index) => Math.abs(value - baseline[key][index]) > 0.5)) failures.push(`${label} ${key} moved ${JSON.stringify(current[key])}`);
+      }
+      current.pills.forEach((rect, index) => {
+        if (rect.some((value, axis) => Math.abs(value - baseline.pills[index][axis]) > 0.5)) failures.push(`${label} pill ${index} moved ${JSON.stringify(rect)}`);
+      });
+    };
+    const buttons = await page.ev("document.querySelectorAll('.stage .pill').length");
+    for (let i = 0; i < buttons; i++) {
+      await page.click(".stage .pill", i);
+      await sleep(250);
+      await compare(`open ${i}`);
+      const content = await page.ev(`(() => {
+        const panel = document.querySelector('.stage-info .pill-body.is-active');
+        return { client: panel?.clientHeight ?? 0, scroll: panel?.scrollHeight ?? 0 };
+      })()`);
+      if (content.scroll > content.client + 0.5) failures.push(`panel ${i} overflow=${JSON.stringify(content)}`);
+      await page.click(".stage .pill", i);
+      await compare(`close ${i}`);
+    }
+    if (page.errors.length) failures.push(errorsOf(page));
+    return failures.join("; ");
+  });
+}
+
 function frameStats(times) {
   const intervals = times.slice(1).map((time, index) => time - times[index]).sort((a, b) => a - b);
   return {
@@ -516,7 +554,7 @@ async function frames(base, path) {
   return failures.join("; ");
 }
 
-const checks = { boot, widths, fit, reduced, idle, "reload-mid": reloadMid, nojs, keyboard, rapid, resize, frames };
+const checks = { boot, widths, fit, reduced, idle, "reload-mid": reloadMid, nojs, keyboard, rapid, resize, stable, frames };
 
 async function main() {
   const { base, only, pages } = parseArgs(process.argv.slice(2));

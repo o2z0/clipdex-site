@@ -15,7 +15,8 @@ export function focusTransform(scene, view, focus) {
 export function createStage(section) {
   const view = section.querySelector(".stage-view");
   const close = section.querySelector(".stage-close");
-  const detail = section.querySelector(".stage-detail");
+  const info = section.querySelector(".stage-info");
+  const panels = [...info.querySelectorAll(".pill-body")];
   const buttons = [...section.querySelectorAll(".pill[data-feature]")];
   const scenes = [...section.querySelectorAll(".scene[data-scene]")];
   const byScene = new Map(scenes.map((scene) => [scene.dataset.scene, scene]));
@@ -74,12 +75,16 @@ export function createStage(section) {
       button.closest("li").classList.toggle("is-active", selected);
       if (selected) lastButton = button;
     }
+    for (const panel of panels) {
+      const selected = panel.id === `feat-${id}`;
+      panel.classList.toggle("is-active", selected);
+      panel.setAttribute("aria-hidden", String(!selected));
+    }
     for (const scene of scenes) {
       const selected = scene.dataset.scene === (id ?? "overview");
       scene.classList.toggle("is-active", selected);
       scene.setAttribute("aria-hidden", String(!selected));
     }
-    detail.innerHTML = id ? section.querySelector(`#feat-${id}`).innerHTML : "";
     target = computeTarget();
     if (reducedMotion.matches) { current = { ...target }; velocities = { x: 0, y: 0, scale: 0 }; }
     render();
