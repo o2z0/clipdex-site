@@ -12,3 +12,10 @@ SpringForce
 tryRequestAnimationFrame
 websketch
 kit-lp
+mixSpring
+PANE_PARAMS
+aap-
+entice
+camera_360
+weights_pt
+PT_00

@@ -29,8 +29,14 @@ export function createWall(el, { cards, reduced = false }) {
   el.replaceChildren(plane);
 
   const measure = () => {
+    // 流れる 1 列は「同じ束」を縦に重ねたもの。1 束分ずれても面の下端まで埋まる数だけ重ねる
+    // (背の高い画面で列の下が途切れないように。面の高さは CSS で表示枠より大きい)
+    const planeHeight = plane.getBoundingClientRect().height || innerHeight * 1.6;
     tracks.forEach((item, index) => {
       item.height = Math.max(1, item.first.offsetHeight);
+      const sets = Math.max(3, Math.ceil(planeHeight / item.height) + 1);
+      while (item.track.children.length < sets) item.track.append(item.first.cloneNode(true));
+      while (item.track.children.length > sets) item.track.lastElementChild.remove();
       item.offset = (index * item.height * 0.24) % item.height;
       item.track.style.transform = `translate3d(0, ${-item.offset}px, 0)`;
     });
@@ -72,8 +78,9 @@ export function createWall(el, { cards, reduced = false }) {
       return true;
     }, { root: el });
     loop.wake();
-    addEventListener("resize", render);
   }
+  // reduced でも幅をまたいだら列数を合わせる
+  addEventListener("resize", render);
 
   return {
     destroy() {

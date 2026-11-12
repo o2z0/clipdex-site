@@ -44,8 +44,9 @@ export function createStage(section) {
   const syncSceneVideos = () => {
     const next = active !== null && !reducedMotion.matches ? selectedScene().querySelector("video") : null;
     if (playingVideo && playingVideo !== next) {
+      // load() で巻き戻すと loadedmetadata がもう一度来て、寄りの途中を打ち切ってしまう
       playingVideo.pause();
-      playingVideo.load();
+      try { playingVideo.currentTime = 0; } catch {}
       playingVideo = null;
     }
     if (next && next !== playingVideo) {
@@ -75,7 +76,8 @@ export function createStage(section) {
     const scene = selectedScene();
     const image = scene.querySelector("img, video");
     const sceneWidth = scene.offsetWidth;
-    const maxZoom = (image.naturalWidth || image.videoWidth || Number(image.getAttribute("width"))) / (sceneWidth * devicePixelRatio);
+    const sourceWidth = image.naturalWidth || image.videoWidth || Number(image.getAttribute("width")) || sceneWidth * devicePixelRatio;
+    const maxZoom = sceneWidth > 0 ? sourceWidth / (sceneWidth * devicePixelRatio) : 1;
     return focusTransform(
       { w: sceneWidth, h: scene.offsetHeight, left: scene.offsetLeft, top: scene.offsetTop },
       { w: view.clientWidth, h: view.clientHeight },
@@ -149,13 +151,21 @@ export function createStage(section) {
     if (event.key === "Escape" && active !== null) { event.preventDefault(); open(null); }
   };
   section.addEventListener("keydown", onKey);
+  // 窓の大きさが変わったときだけ、寄りを目標へ即座に揃える
   const onResize = () => { layoutScenes(); target = computeTarget(); current = { ...target }; velocities = { x: 0, y: 0, scale: 0 }; render(); };
+  // 素材の読み込みが終わったときは配置と目標だけ直し、ばねの途中なら続きをばねに任せる
+  const onMediaReady = () => {
+    layoutScenes();
+    target = computeTarget();
+    if (reducedMotion.matches) { current = { ...target }; velocities = { x: 0, y: 0, scale: 0 }; render(); }
+    else loop.wake();
+  };
   addEventListener("resize", onResize);
   for (const scene of scenes) {
     const media = scene.querySelector("img, video");
     const event = media.tagName === "VIDEO" ? "loadedmetadata" : "load";
-    media.addEventListener(event, onResize);
-    listeners.push([media, onResize, event]);
+    media.addEventListener(event, onMediaReady);
+    listeners.push([media, onMediaReady, event]);
   }
   const offMotion = reducedMotion.on(() => {
     syncSceneVideos();
@@ -167,7 +177,7 @@ export function createStage(section) {
   return {
     open,
     destroy() {
-      if (playingVideo) { playingVideo.pause(); playingVideo.load(); playingVideo = null; }
+      if (playingVideo) { playingVideo.pause(); try { playingVideo.currentTime = 0; } catch {} playingVideo = null; }
       loop.destroy();
       offMotion();
       removeEventListener("resize", onResize);
