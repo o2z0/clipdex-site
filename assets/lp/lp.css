@@ -758,3 +758,17 @@ html[data-edition="full"] footer { background: #100c09; }
 .store-badge:focus-visible { outline: 2px solid var(--text); outline-offset: 4px; }
 .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 footer .trademark { margin-top: 14px; color: var(--text-3); font-size: 11px; line-height: 1.6; }
+
+/* ヘッダー: 言語の切り替えは小さく右側の一番左に置き、細い線でページ内の項目と分ける (Masa 2026-11-12 の F2)。
+   ダウンロードボタンは文字を小さく。狭幅では「価格」「購入」を出さない (縦に折れるのを避ける) */
+.lang-switch { font-size: 12px; letter-spacing: .04em; color: var(--text-3); white-space: nowrap; }
+.lang-switch a { color: var(--text-3); text-decoration: none; }
+.lang-switch a:hover { color: var(--text); }
+.lang-switch a[aria-current="page"] { color: var(--text); font-weight: 600; }
+.nav-sep { width: 1px; height: 16px; background: var(--line); }
+.navlinks .btn-sm { padding: 7px 14px; font-size: 13px; }
+@media (max-width: 520px) {
+  .navlink--wide, .nav-sep { display: none; }
+  .lang-switch { font-size: 11px; }
+  .navlinks .btn-sm { padding: 7px 10px; font-size: 11px; }
+}

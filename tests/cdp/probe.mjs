@@ -83,13 +83,15 @@ async function widths(base, path) {
       header: width === 375 ? await page.ev(`(() => {
         const row = document.querySelector('header .navrow');
         const box = (el) => { const r = el.getBoundingClientRect(); return { left: r.left, right: r.right, mid: r.top + r.height / 2, height: r.height }; };
-        return { row: box(row), items: [row.querySelector('.brand'), ...row.querySelectorAll('.navlinks > *')].map(box) };
+        return { row: box(row), items: [row.querySelector('.brand'), ...row.querySelectorAll('.navlinks > :not(.navlink--wide):not(.nav-sep)')].map(box), wideHidden: [...row.querySelectorAll('.navlink--wide')].every((el) => el.getBoundingClientRect().height === 0) };
       })()`) : null,
       errors: errorsOf(page),
     }));
     if (result.overflow !== 0) failures.push(`${width}px overflow=${result.overflow}`);
     if (result.header) {
-      const { row, items } = result.header;
+      const { row, items, wideHidden } = result.header;
+      // 狭幅では「価格」「購入」(.navlink--wide) を出さない (縦に折れるのを避ける、Masa 2026-11-12)。それ以外は全部 1 行に見えていること
+      if (!wideHidden) failures.push(`${width}px 価格・購入が狭幅で出ている`);
       if (items.some((item) => item.height > 40 || Math.abs(item.mid - row.mid) > 3 || item.left < row.left - 1 || item.right > row.right + 1)) failures.push(`${width}px header=${JSON.stringify(result.header)}`);
     }
     if (result.errors) failures.push(`${width}px ${result.errors}`);
