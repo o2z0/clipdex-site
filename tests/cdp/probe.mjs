@@ -5,11 +5,13 @@ import { focusTransform } from "../../assets/lp/stage.js";
 const usage = "Usage: node tests/cdp/probe.mjs <base-url> [--only <name>] [--pages / /full/ …]";
 const expectedEdition = new Map([
   ["/", "store"],
+  ["/en/", "store"],
   ["/full/", "full"],
   ["/en/full/", "full"],
 ]);
-const expectedFeatures = new Map([["/", 5], ["/full/", 8], ["/en/full/", 8]]);
-const firstFeature = new Map([["/", "history"], ["/full/", "autopaste"], ["/en/full/", "autopaste"]]);
+const expectedFeatures = new Map([["/", 5], ["/en/", 5], ["/full/", 8], ["/en/full/", 8]]);
+const firstFeature = new Map([["/", "history"], ["/en/", "history"], ["/full/", "autopaste"], ["/en/full/", "autopaste"]]);
+const STORE_PAGES = new Set(["/", "/en/"]);
 const RAF_COUNT = `(() => {
   let count = 0;
   const original = requestAnimationFrame.bind(window);
@@ -521,7 +523,7 @@ async function zoom(base, path) {
 }
 
 async function video(base, path) {
-  if (path === "/") return "";
+  if (STORE_PAGES.has(path)) return "";
   const failures = [];
   await visit(base, path, {}, async (page) => {
     await showStage(page);
@@ -554,10 +556,10 @@ async function video(base, path) {
 }
 
 async function storeFacts(base, path) {
-  if (path !== "/") return "";
+  if (!STORE_PAGES.has(path)) return "";
   return visit(base, path, {}, async (page) => {
     const text = await page.ev("document.querySelector('.entry').textContent + document.querySelector('.stage').textContent");
-    const forbidden = ["自動ペースト", "Paste Stack", "ペースト記録", "アクセシビリティ", "貼り付けます"];
+    const forbidden = ["自動ペースト", "Paste Stack", "ペースト記録", "アクセシビリティ", "貼り付けます", "Auto-paste", "Paste Records", "Accessibility", "it’s pasted", "it's pasted"];
     const found = forbidden.filter((word) => text.includes(word));
     return found.length ? `App Store 版に ${found.join(" / ")} が混入` : errorsOf(page);
   });
@@ -565,7 +567,7 @@ async function storeFacts(base, path) {
 
 // トップだけ: 浮かぶ「フル版」案内が、入口では出ず・入口を過ぎると出て・帯 / 最後の CTA で引っ込み・× で閉じたら出ない
 async function nudge(base, path) {
-  if (path !== "/") return "";
+  if (!STORE_PAGES.has(path)) return "";
   return visit(base, path, {}, async (page) => {
     const failures = [];
     const at = async (label, expr, want) => {

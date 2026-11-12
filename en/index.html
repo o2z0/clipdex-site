@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="en" data-edition="store">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<title>ClipDex — Clipboard, Just Right</title>
+<meta name="description" content="A menu bar clipboard manager for macOS. Everything you copy is kept, the things you use often stay close at hand, and you can find any of it later. Your data stays on your Mac and is never sent anywhere.">
+<meta property="og:title" content="ClipDex — Clipboard, Just Right">
+<meta property="og:description" content="Everything you copy is kept. Keep what you use often. Find it later. Your data never leaves your Mac.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://clipdex.o2z0.com/en/">
+<meta property="og:image" content="https://clipdex.o2z0.com/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://clipdex.o2z0.com/en/">
+<link rel="alternate" hreflang="ja" href="https://clipdex.o2z0.com/">
+<link rel="alternate" hreflang="en" href="https://clipdex.o2z0.com/en/">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-J2Q8470VZ0"></script>
+<script defer src="/js/ga.js" data-ga-id="G-J2Q8470VZ0" data-ga-host="clipdex.o2z0.com"></script>
+<link rel="stylesheet" href="/assets/lp/tokens.css">
+<link rel="stylesheet" href="/assets/lp/lp.css">
+<script type="module" src="/assets/lp/main.js"></script>
+<link rel="modulepreload" href="/assets/lp/loop.js">
+<link rel="modulepreload" href="/assets/lp/spring.js">
+<link rel="modulepreload" href="/assets/lp/rise.js">
+<link rel="modulepreload" href="/assets/lp/stage.js">
+<link rel="modulepreload" href="/assets/lp/wall.js">
+<link rel="modulepreload" href="/assets/lp/wall-cards.js">
+<link rel="modulepreload" href="/assets/lp/nudge.js">
+</head>
+<body>
+
+<header>
+  <div class="wrap navrow">
+    <!-- ロゴはアプリ本体と同じ原本 (ClipDex/Assets.xcassets の LogoMark / LogoType)。
+         currentColor で塗るためインライン展開している。原本を直したらここも直す。 -->
+    <a class="brand" href="/en/" aria-label="ClipDex">
+      <svg class="logo-mark" viewBox="0 0 1024 1024" aria-hidden="true"><path d="M587.58,344.76c141.4-106.33,366.06,49.26,422.04,194.95,85.82,206.54-233.42,463.51-403.2,359.68-62.75-37.83-90.19-119.32-65.47-188.84,17.39-53.95,56.54-103.98,56.45-156.75,2.85-66.64-67.47-144.89-12.72-205.98l2.9-3.06ZM438.74,353.96c10.01-47.44,56.25-89.99,62.02-141.09,5.35-85.58-89.92-117.48-170.51-111.34C189.31,114.47,18.23,213.86.82,366.94c-16.03,175.25,207.05,400.24,366.61,330.71,68.36-27.97,109.1-104.27,95.91-177.48-8.35-56.45-36.43-112-25.56-161.68l.97-4.52Z"/></svg>
+      <svg class="logo-type" viewBox="0 0 1024 194" aria-hidden="true"><path d="M1022.25,4.67l-44.26,89.82,46.02,94.02h-51.54l-22.72-57.52-23.58,57.52h-50.09l46.02-93.5-44.26-90.35h51.82l20.69,53.85,21.82-53.85h50.09Z"/><path d="M130.09,52.45c-3.99-4.84-8.88-8.57-14.67-11.17-5.81-2.59-12.51-3.89-20.14-3.89s-14.67,1.47-21.15,4.42c-6.49,2.94-12.13,7.05-16.88,12.33-4.75,5.28-8.47,11.56-11.16,18.83-2.68,7.27-4.04,15.15-4.04,23.63s1.35,16.58,4.04,23.76c2.68,7.18,6.36,13.42,11.03,18.69,4.67,5.28,10.16,9.39,16.48,12.34,6.32,2.94,13.12,4.41,20.39,4.41,8.3,0,15.66-1.72,22.06-5.19s11.69-8.32,15.85-14.54l33.75,25.19c-7.78,10.9-17.65,18.96-29.61,24.14-11.94,5.2-24.24,7.79-36.85,7.79-14.39,0-27.62-2.25-39.75-6.75-12.11-4.49-22.59-10.95-31.4-19.35-8.83-8.39-15.72-18.56-20.65-30.5C2.45,124.64,0,111.31,0,96.59s2.45-28.04,7.4-39.99c4.92-11.94,11.81-22.1,20.65-30.5,8.81-8.4,19.29-14.85,31.4-19.35C71.57,2.25,84.8,0,99.19,0c5.18,0,10.59.48,16.23,1.43,5.62.95,11.16,2.46,16.61,4.54,5.45,2.08,10.69,4.85,15.7,8.32,5.03,3.46,9.53,7.7,13.5,12.72l-31.15,25.44Z"/><path d="M185.33,4.67h40.51v146.45h75.04v37.39h-115.55V4.67Z"/><path d="M319.49,4.67h40.51v183.85h-40.51V4.67Z"/><path d="M400.51,4.67h68.3c9.53,0,18.53.87,27.01,2.6,8.47,1.73,15.89,4.72,22.21,8.96,6.32,4.24,11.33,9.95,15.07,17.14,3.72,7.18,5.58,16.23,5.58,27.13s-1.73,19.74-5.2,27.01c-3.47,7.27-8.22,13.07-14.29,17.4-6.06,4.32-13.25,7.4-21.55,9.21-8.3,1.82-17.31,2.73-27.01,2.73h-29.61v71.67h-40.51V4.67ZM441.02,82.57h27.01c3.63,0,7.14-.35,10.52-1.04,3.38-.7,6.4-1.86,9.09-3.51s4.84-3.9,6.49-6.75,2.47-6.45,2.47-10.78c0-4.67-1.08-8.44-3.25-11.29-2.16-2.85-4.92-5.06-8.3-6.62-3.38-1.55-7.14-2.55-11.28-2.98-4.16-.43-8.14-.66-11.96-.66h-20.77v43.63Z"/><path d="M727.89,4.67h124.89v37.39h-84.38v34.28h79.71v37.39h-79.71v37.39h89.05v37.39h-129.56V4.67Z"/><path d="M545.54,27.01c3.97-5.02,8.47-9.27,13.5-12.72,5.01-3.47,10.25-6.23,15.7-8.32,5.45-2.08,10.99-3.59,16.61-4.54C596.99.48,602.4,0,607.58,0c14.39,0,27.62,2.25,39.75,6.75,12.11,4.5,22.59,10.95,31.4,19.35,8.83,8.4,15.72,18.56,20.65,30.5,4.94,11.95,7.4,25.28,7.4,39.99,0,14.72-2.45,28.04-7.4,39.99-4.92,11.94-11.81,22.11-20.65,30.5-8.81,8.4-19.29,14.86-31.4,19.35-12.13,4.5-25.36,6.75-39.75,6.75-12.62,0-24.91-2.59-36.85-7.79-11.96-5.19-21.83-13.24-29.61-24.14l33.75-25.19c4.16,6.22,9.45,11.07,15.85,14.54s13.76,5.19,22.06,5.19c7.27,0,14.07-1.47,20.39-4.41,6.32-2.95,11.81-7.06,16.48-12.34,4.67-5.27,8.35-11.51,11.03-18.69,2.68-7.18,4.04-15.1,4.04-23.76s-1.35-16.36-4.04-23.63c-2.68-7.27-6.4-13.55-11.16-18.83-4.75-5.28-10.4-9.39-16.88-12.33-6.49-2.95-13.55-4.42-21.15-4.42-7.63,0-14.33,1.3-20.14,3.89-5.79,2.6-10.67,6.33-14.67,11.17l-31.15-25.44Z"/></svg>
+    </a>
+    <nav class="navlinks">
+      <span class="lang-switch"><a href="/" hreflang="ja" lang="ja">JA</a> / <a href="/en/" aria-current="page">EN</a></span>
+      <a class="btn btn-sm" href="https://apps.apple.com/app/id6801129211">Get it on the App Store</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<!-- ============ 入口 ============ -->
+<section class="entry" data-rise>
+  <div class="entry__sticky">
+    <div class="wall" data-wall data-wall-lang="en" aria-hidden="true"></div>
+    <div class="entry__veil" aria-hidden="true"></div>
+    <div class="entry__content">
+      <div class="entry__intro">
+        <p class="entry__label">The clipboard that’s just right</p>
+        <h1>That thing you just copied? It’s right here.</h1>
+        <p class="lede">Your history, your go-to snippets, your images. All just a ⇧⌘V away.</p>
+        <a class="store-badge" href="https://apps.apple.com/app/id6801129211"><img src="/assets/badges/mac-app-store-en-black.svg" alt="" width="187" height="48"><span class="visually-hidden">Download on the Mac App Store</span></a>
+        <p class="req">macOS 14.0 or later / Apple silicon and Intel</p>
+      </div>
+      <figure class="window" data-window>
+        <video muted autoplay loop playsinline preload="metadata" poster="/assets/hero-poster.jpg"
+               aria-label="The main ClipDex window. Each time you copy, a new clip is added to the top of the history.">
+          <source src="/assets/hero.mp4" type="video/mp4">
+        </video>
+        <img class="window__fallback" src="/assets/hero-poster.jpg" alt="" aria-hidden="true">
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 機能 ============ -->
+<section class="stage" data-stage>
+  <div class="wrap">
+    <p class="eyebrow">FEATURES</p>
+    <h2>ClipDex, in detail.</h2>
+    <div class="stage__layout">
+      <ul class="stage-pills">
+        <li>
+          <button class="pill" type="button" aria-expanded="false" aria-controls="feat-history" data-feature="history" data-focus="0.50,0.30,1.34">History</button>
+        </li>
+        <li>
+          <button class="pill" type="button" aria-expanded="false" aria-controls="feat-registered" data-feature="registered" data-focus="0.72,0.38,1.40">Saved Items</button>
+        </li>
+        <li>
+          <button class="pill" type="button" aria-expanded="false" aria-controls="feat-search" data-feature="search" data-focus="0.65,0.27,1.45">Search everything</button>
+        </li>
+        <li>
+          <button class="pill" type="button" aria-expanded="false" aria-controls="feat-picker" data-feature="picker" data-focus="0.75,0.43,1.42">Open with ⇧⌘V</button>
+        </li>
+        <li>
+          <button class="pill" type="button" aria-expanded="false" aria-controls="feat-report" data-feature="report" data-focus="0.60,0.75,1.30">Reports</button>
+        </li>
+      </ul>
+      <div class="stage-info" aria-live="polite">
+          <div class="pill-body" id="feat-history">
+            <p>Find what you copied in your history and pick it to copy it again. Back in your app, press <kbd>⌘</kbd><kbd>V</kbd> to paste.</p>
+            <ul class="facts">
+              <li>Each row shows the icon of the app you copied from</li>
+              <li>Select several items to paste them in one go, newest first, one per line</li>
+              <li>Drag items straight into other apps</li>
+              <li>30 items free; 50–1,000 with Pro (200 by default)</li>
+              <li>ClipDex asks on first launch whether to keep what you copy. Nothing is saved until you agree</li>
+            </ul>
+          </div>
+          <div class="pill-body" id="feat-registered">
+            <p>Keep snippets, code, images and videos in groups, ready to use again.</p>
+            <ul class="facts">
+              <li>Text: 10 items free, 300 with Pro</li>
+              <li>Images and videos are counted separately: 5 free / 300 with Pro</li>
+              <li>Reordering, moving and deleting can be undone step by step with <kbd>⌘</kbd><kbd>Z</kbd></li>
+            </ul>
+          </div>
+          <div class="pill-body" id="feat-search">
+            <p>Search history and Saved Items together, and filter by app, group or date.</p>
+            <ul class="facts">
+              <li>Works with mixed Japanese, English and code</li>
+              <li>Combine filters such as “Today” and “Slack”</li>
+            </ul>
+          </div>
+          <div class="pill-body" id="feat-picker">
+            <p>Press <kbd>⇧</kbd><kbd>⌘</kbd><kbd>V</kbd> to open the panel near your cursor. You can change the shortcut.</p>
+            <ul class="facts">
+              <li>Switch between history, Saved Items and groups with tabs</li>
+              <li>Preview images at a larger size, with dimensions and file size</li>
+              <li>Close with <kbd>Esc</kbd> or <kbd>⌘</kbd><kbd>W</kbd>. Hold <kbd>⌘</kbd> while picking an item to stay in the panel and keep copying</li>
+            </ul>
+          </div>
+          <div class="pill-body" id="feat-report">
+            <p>See how much you copied and which apps you copied from, period by period.</p>
+            <ul class="facts">
+              <li>Breakdown by the app you copied from</li>
+              <li>Copy counts and total characters</li>
+              <li>Day-of-week × hour heatmap</li>
+              <li>Five periods: today, this week, last 4 weeks, this month, this year (the free version covers the last 7 days)</li>
+            </ul>
+          </div>
+      </div>
+      <div class="stage-view">
+        <figure class="scene" data-scene="overview">
+          <img loading="lazy" src="/assets/01-hero.png" width="1600" height="1185" alt="The full ClipDex window.">
+        </figure>
+        <figure class="scene" data-scene="history">
+          <img loading="lazy" src="/assets/02-history.png" width="1440" height="1100" alt="The clipboard history list. Images, code, URLs, chat messages and notes, each with the icon of the app it was copied from and the time.">
+        </figure>
+        <figure class="scene" data-scene="registered">
+          <img loading="lazy" src="/assets/03-registered.png" width="1440" height="1100" alt="Saved Items. Image assets and snippets sorted into groups for snippets, code, and addresses and contacts.">
+        </figure>
+        <figure class="scene" data-scene="search">
+          <img loading="lazy" src="/assets/04-search.png" width="1440" height="1100" alt="Search across everything. Results for a query are split into clipboard history and Saved Items, with the app, group and date filter panel open.">
+        </figure>
+        <figure class="scene" data-scene="picker">
+          <img loading="lazy" src="/assets/05-picker.png" width="1440" height="1100" alt="The quick panel opened with a shortcut. Images and text are listed, with a preview of the selected image.">
+        </figure>
+        <figure class="scene" data-scene="report">
+          <img loading="lazy" src="/assets/06-report.png" width="1440" height="1100" alt="Weekly report: 342 copies and 17,274 characters, a breakdown bar for each source app, and a day × hour heatmap.">
+        </figure>
+        <button class="stage-close" type="button" aria-label="Back to overview">×</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ プライバシー ============ -->
+<section class="full-band" id="full-band">
+  <div class="wrap">
+    <p class="eyebrow">FULL VERSION</p>
+    <h2>Want automatic pasting? Get the Full version</h2>
+    <p class="full-band__lede">The Full version, available directly on this site, adds automatic pasting to everything in the App Store version.</p>
+    <div class="full-band__cols">
+      <div class="full-band__col">
+        <p class="full-band__name">App Store version</p>
+        <ul>
+          <li>Picking an item copies it and returns you to your app. You press <kbd>⌘</kbd><kbd>V</kbd></li>
+          <li>No permissions to grant</li>
+          <li class="is-none">Paste in order (Paste Stack)</li>
+          <li class="is-none">Paste Records</li>
+        </ul>
+      </div>
+      <div class="full-band__col full-band__col--full">
+        <p class="full-band__name">Full version <span>FULL</span></p>
+        <ul>
+          <li>Pick an item and it’s pasted into your app</li>
+          <li>Uses the macOS Accessibility permission</li>
+          <li>Paste one at a time, in the order you picked (Paste Stack)</li>
+          <li>Find what you pasted later (Paste Records)</li>
+        </ul>
+      </div>
+    </div>
+    <a class="full-band__cta" href="/en/full/">See the Full version →</a>
+  </div>
+</section>
+<section class="lower lower--privacy" id="privacy">
+  <div class="wrap">
+    <p class="eyebrow">PRIVACY</p>
+    <h2>Your clipboard data never leaves your Mac</h2>
+    <p class="body">ClipDex sends no data anywhere.<br>No analytics server, no account.<br>Statistics and search all happen on your Mac.</p>
+
+    <div class="a-grid">
+    <div class="diagram">
+      <svg viewBox="0 0 520 250" role="img" aria-label="A diagram showing that everything from copying to saving happens on your Mac, with the path to the outside cut off. Nothing is sent to a server and there is no account.">
+        <defs>
+          <marker id="privArrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+            <path d="M0 0 L8 4 L0 8 z" fill="#9a9a9a"/>
+          </marker>
+        </defs>
+        <rect x="8" y="8" width="504" height="150" rx="12" fill="#1c1c1c" stroke="#3a3a3a"/>
+        <text x="26" y="34" fill="#6e6e6e" font-size="12" letter-spacing="1.6" font-family="-apple-system,sans-serif">YOUR MAC</text>
+        <g font-family="-apple-system,sans-serif" font-size="13" fill="#f2f2f2" text-anchor="middle">
+          <rect x="34" y="62" width="118" height="56" rx="9" fill="#242424" stroke="#3a3a3a"/>
+          <text x="93" y="95">Copy</text>
+          <rect x="201" y="62" width="118" height="56" rx="9" fill="#2e2e2e" stroke="#565656"/>
+          <text x="260" y="88">ClipDex</text>
+          <text x="260" y="106" font-size="11" fill="#9a9a9a">Stats · Search</text>
+          <rect x="368" y="62" width="118" height="56" rx="9" fill="#242424" stroke="#3a3a3a"/>
+          <text x="427" y="88">Local files</text>
+          <text x="427" y="106" font-size="11" fill="#9a9a9a">On your Mac only</text>
+        </g>
+        <line x1="156" y1="90" x2="196" y2="90" stroke="#9a9a9a" stroke-width="1.4" marker-end="url(#privArrow)"/>
+        <line x1="323" y1="90" x2="363" y2="90" stroke="#9a9a9a" stroke-width="1.4" marker-end="url(#privArrow)"/>
+        <line x1="260" y1="158" x2="260" y2="196" stroke="#4a4a4a" stroke-width="1.4" stroke-dasharray="4 5"/>
+        <g stroke="#6e6e6e" stroke-width="1.6">
+          <line x1="252" y1="188" x2="268" y2="204"/><line x1="268" y1="188" x2="252" y2="204"/>
+        </g>
+        <text x="260" y="234" fill="#6e6e6e" font-size="12.5" text-anchor="middle" font-family="-apple-system,sans-serif">Nothing sent to a server. No account.</text>
+      </svg>
+    </div>
+      <div class="shot-real">
+        <img loading="lazy" src="/assets/07-pause.png" width="658" height="514"
+             alt="The ClipDex menu in the menu bar, with Pause offering 15 minutes, 30 minutes and 1 hour.">
+      </div>
+    </div>
+
+    <div class="priv">
+      <div><h3>Nothing is sent out</h3><p>The app sends nothing over the network. No account needed.</p></div>
+      <div><h3>Saving content is your choice</h3><p>You decide whether the actual content you copy is kept. It is off by default.</p></div>
+      <div><h3>Password managers are excluded</h3><p>Eight apps, including 1Password, Bitwarden and Keychain Access, are excluded by default. You can add more.</p></div>
+      <div><h3>Pause any time</h3><p>Pause for 15 minutes, 30 minutes or 1 hour from the menu bar. Statistics and clipboard history can be deleted in one step, too.</p></div>
+    </div>
+    <p class="note">See the <a href="/en/privacy">Privacy Policy</a> for details.</p>
+  </div>
+</section>
+
+<!-- ============ ベントー ============ -->
+<section class="lower lower--bento">
+  <div class="wrap">
+    <p class="eyebrow">MORE</p>
+    <h2>More you can do</h2>
+    <div class="bento">
+      <div class="cell w2"><h3>Images go into history too</h3><p>Copy a screenshot or an image file in Finder and it is kept with a thumbnail.<br>It pastes as an image or as a file name, depending on the target app.<br>Off by default, and counted separately from text clips.</p></div>
+      <div class="cell"><h3>Drag to paste</h3><p>Grab a row and drop it into another app.</p></div>
+      <div class="cell w2"><h3>Undo with <kbd>⌘</kbd><kbd>Z</kbd></h3><p>Undo deletes, reordering and group moves. Redo with <kbd>⇧</kbd><kbd>⌘</kbd><kbd>Z</kbd>.</p></div>
+      <div class="cell"><h3>Your shortcut</h3><p>Set the shortcut to whatever you like.</p></div>
+      <div class="cell full"><h3>Rich text keeps its formatting</h3><p>Bold and colored text is kept with its formatting. Hold <kbd>⌥</kbd> to paste plain text.</p></div>
+      <div class="cell full"><h3>Export and backup</h3><p>Export reports as PNG images. PDF export, CSV and JSON export of statistics, and restoring from a backup require Pro. A backup contains settings and statistics, not the content of your clips.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 対象者 ============ -->
+<section class="lower lower--who">
+  <div class="wrap">
+    <p class="eyebrow">WHO</p>
+    <h2>Made for</h2>
+    <div class="who">
+      <div><h3>People juggling snippets</h3><p>Writing while moving between code, logs and URLs. The deeper the history, the more it helps.</p></div>
+      <div><h3>People moving assets between apps</h3><p>Carrying images and videos from one app to another. Save them once, then just drag them in.</p></div>
+      <div><h3>People typing the same text</h3><p>Save it once, then pick it and press <kbd>⌘</kbd><kbd>V</kbd>.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 比較 ============ -->
+<section class="lower lower--compare">
+  <div class="wrap">
+    <p class="eyebrow">COMPARE</p>
+    <h2>How it compares</h2>
+    <p class="body">Two other clipboard managers for macOS.<br>A is a feature-rich app built around a subscription; B is a popular app you can use for free.</p>
+
+    <div class="cmp-frame">
+    <div class="cmp-scroll">
+      <table class="cmp">
+        <thead>
+          <tr>
+            <td></td>
+            <th scope="col" class="mine">ClipDex Free</th>
+            <th scope="col" class="mine">ClipDex Pro</th>
+            <th scope="col">App A</th>
+            <th scope="col">App B</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Price</th>
+            <td class="mine">$0</td>
+            <td class="mine"><strong>$9.99 one-time</strong></td>
+            <td>No permanent free tier (free trial available).<br>Subscription, or $99.99 one-time</td>
+            <td>$0 from the developer / $9.99 on the App Store</td>
+          </tr>
+          <tr>
+            <th scope="row">Paste behavior</th>
+            <td class="mine" colspan="2"><strong>Copies it and returns you to your app. You press ⌘V</strong></td>
+            <td>Automatic by default (needs a permission)</td>
+            <td>Copy only by default.<br>Can be set to paste automatically (needs a permission)</td>
+          </tr>
+          <tr>
+            <th scope="row">Permissions required</th>
+            <td class="mine" colspan="2"><strong>None</strong></td>
+            <td>Accessibility</td>
+            <td>Accessibility, if you paste automatically</td>
+          </tr>
+          <tr>
+            <th scope="row">Where your data lives</th>
+            <td class="mine" colspan="2"><strong>On this Mac only</strong></td>
+            <td>Syncs with your other devices</td>
+            <td>On this Mac only</td>
+          </tr>
+          <tr>
+            <th scope="row">Clipboard history</th>
+            <td class="mine">30 items</td>
+            <td class="mine"><strong>50–1,000 items</strong></td>
+            <td>Kept by time (30 days by default; unlimited available)</td>
+            <td>200 items by default (1–999)</td>
+          </tr>
+          <tr>
+            <th scope="row">Saved snippets</th>
+            <td class="mine">10 items, <strong>with groups</strong></td>
+            <td class="mine"><strong>300 items</strong>, with groups</td>
+            <td>Supported, with groups</td>
+            <td>Pinning only, <strong>no groups</strong></td>
+          </tr>
+          <tr>
+            <th scope="row">Saved images and videos</th>
+            <td class="mine">5 items</td>
+            <td class="mine"><strong>300 items</strong></td>
+            <td>Images supported (video not confirmed)</td>
+            <td><strong>None</strong></td>
+          </tr>
+          <tr>
+            <th scope="row">Copy activity reports</th>
+            <td class="mine"><strong>Last 7 days</strong></td>
+            <td class="mine"><strong>All time</strong></td>
+            <td>None found in what we checked</td>
+            <td>None found in what we checked</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    </div>
+
+    <p class="cmp-note">Details for A and B are based on publicly available information as of August 2026 (US prices as of November 2026). Each app’s features and pricing may change.</p>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section class="lower lower--faq">
+  <div class="wrap">
+    <p class="eyebrow">FAQ</p>
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <details>
+        <summary>How does the App Store version differ from the Full version?</summary>
+        <div class="ans">
+          <p>The biggest difference is <strong>whether picking an item pastes it for you</strong>.</p>
+          <ul>
+            <li>App Store version (this page): picking an item copies it and switches back to the previous app; you press <kbd>⌘</kbd><kbd>V</kbd> yourself. It asks for no permissions at all</li>
+            <li><a href="/en/full/">Full version</a> (distributed on this site): picking an item switches back to the previous app and pastes it. Paste Stack (paste in order) and paste tracking and records are included. It uses the macOS Accessibility permission</li>
+          </ul>
+          <p>Everything else, including history, Saved Items, search and reports, is the same.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>Doesn’t it paste automatically after I pick an item?</summary>
+        <div class="ans">
+          <p>No. Pasting into other apps automatically requires the macOS Accessibility permission, a very powerful permission that lets an app control keyboard input across the whole system. ClipDex chose to ask for no permissions at all.</p>
+          <p>Instead, picking a row copies its content and takes you back to the app you were just using. All you press is <kbd>⌘</kbd><kbd>V</kbd>.</p>
+          <p>If you want automatic pasting, use the <a href="/en/full/">Full version</a> distributed on this site.</p>
+        </div>
+      </details>
+      <details>
+        <summary>What is transferred when I drag an item?</summary>
+        <div class="ans">
+          <p>Dragging a single image or video passes it as a file. Anything else (text, or a selection of several items) is passed as text.</p>
+        </div>
+      </details>
+      <details>
+        <summary>How much rich text formatting is kept when I copy text?</summary>
+        <div class="ans">
+          <p>Bold and colored text is kept with its formatting. Pasting keeps formatting by default; hold <kbd>⌥</kbd> while picking to get plain text just that once (you can swap the default in Settings).</p>
+          <p>Copying with <kbd>⌘</kbd><kbd>C</kbd> always keeps formatting, regardless of that setting. Several items passed together, or a saved item whose text you have edited, become plain text.</p>
+          <p>If the formatting data is too large (2 MB per format in history, 512 KB in Saved Items), only that format is dropped and the text is kept.</p>
+        </div>
+      </details>
+      <details>
+        <summary>How are images saved?</summary>
+        <div class="ans">
+          <p>Images, including JPEGs, are converted to PNG<sup class="fnref">*1</sup> when saved. When you pass an image to another app as a file, it keeps its original name with the extension changed (<code>photo.jpg</code> → <code>photo.png</code>).</p>
+          <p>Saving images is off by default; turn it on in Settings. Images are counted separately from text clips.</p>
+          <p class="fn">*1 PNG is a lossless format. Copied images arrive in many forms, such as JPEG or TIFF, depending on the app, so ClipDex stores them in one format without losing quality. As a result, photos can take more space than the original JPEG.</p>
+        </div>
+      </details>
+      <details>
+        <summary>Can I set any shortcut I like?</summary>
+        <div class="ans">
+          <p>Any combination that includes <kbd>⌘</kbd>, <kbd>⌃</kbd> or <kbd>⌥</kbd>. A key with only <kbd>⇧</kbd>, or with no modifier at all, cannot be used.</p>
+        </div>
+      </details>
+      <details>
+        <summary>How far back can I undo?</summary>
+        <div class="ans">
+          <p>Up to 20 steps. While you are typing in a text field, that field’s own undo takes priority.</p>
+        </div>
+      </details>
+      <details>
+        <summary>How many items can I keep?</summary>
+        <div class="ans">
+          <ul>
+            <li>Clipboard history (text): 30 items free / 50–1,000 with Pro (200 by default)</li>
+            <li>Clipboard history (images): 15 images, 50 MB total, 10 MB each free / 50–500 images, 1 GB total, 100 MB each with Pro</li>
+            <li>Saved Items (text): 10 free / 300 with Pro</li>
+            <li>Saved Items (images and videos): 5 free / 300 with Pro; up to 100 MB per image and 500 MB per video</li>
+          </ul>
+          <p>Clipboard history drops the oldest items once it reaches the limit. Saved Items are never removed; you simply can’t add more once you reach the limit. Upgrading to Pro raises the limits, but history items that were already dropped do not come back.</p>
+        </div>
+      </details>
+      <details>
+        <summary>What does a backup contain?</summary>
+        <div class="ans">
+          <p>Settings and statistics (the numbers behind the reports). Clipboard history, Saved Items, and image and video files are not included.</p>
+        </div>
+      </details>
+      <details>
+        <summary>What is deleted when I erase my data?</summary>
+        <div class="ans">
+          <p>“All Data” in Settings deletes statistics and clipboard history. <strong>Saved Items are kept</strong>; to remove them, select the items and delete them.</p>
+        </div>
+      </details>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section class="lower cta" id="download">
+  <div class="wrap">
+    <h2>Start keeping what you copy today</h2>
+    <a class="store-badge" href="https://apps.apple.com/app/id6801129211"><img src="/assets/badges/mac-app-store-en-black.svg" alt="" width="187" height="48"><span class="visually-hidden">Download on the Mac App Store</span></a>
+    <p class="req">macOS 14.0 or later / Apple silicon and Intel</p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap footrow">
+    <a class="foot-mark" href="/en/" aria-label="ClipDex home"><img src="/assets/logo-mark.svg" alt="" width="18" height="18"></a>
+    <a href="/en/privacy">Privacy Policy</a>
+    <a href="/en/terms">Terms</a>
+    <a href="/en/legal">Legal Notice</a>
+    <a href="/en/support">Support</a>
+    <a href="/en/full/">Full version</a>
+    <span class="copy">© 2026 o2z0</span>
+  </div>
+  <p class="wrap trademark">Apple, the Apple logo, Mac, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries and regions.</p>
+</footer>
+
+<div class="full-nudge" id="full-nudge" hidden>
+  <span class="full-nudge__lens" aria-hidden="true"></span>
+  <span class="full-nudge__rim" aria-hidden="true"></span>
+  <span class="full-nudge__edge" aria-hidden="true"></span>
+  <a href="/en/full/">The Full version pastes for you <span aria-hidden="true">→</span></a>
+  <button type="button" aria-label="Close"><svg viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><path d="M2 2l8 8M10 2l-8 8" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></button>
+  <!-- Chromium だけが使う屈折用のフィルタ (JS が寸法と変位マップを入れる。入らなければ使われない) -->
+  <svg class="full-nudge__defs" width="0" height="0" aria-hidden="true" focusable="false">
+    <filter id="full-nudge-lens" filterUnits="userSpaceOnUse" primitiveUnits="userSpaceOnUse" x="0" y="0" width="1" height="1" color-interpolation-filters="sRGB">
+      <feImage x="0" y="0" width="1" height="1" preserveAspectRatio="none" result="map"/>
+      <feDisplacementMap in="SourceGraphic" in2="map" scale="30" xChannelSelector="R" yChannelSelector="G" result="dr"/>
+      <feColorMatrix in="dr" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="r"/>
+      <feDisplacementMap in="SourceGraphic" in2="map" scale="31.5" xChannelSelector="R" yChannelSelector="G" result="dg"/>
+      <feColorMatrix in="dg" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="map" scale="33" xChannelSelector="R" yChannelSelector="G" result="db"/>
+      <feColorMatrix in="db" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="b"/>
+      <feBlend in="r" in2="g" mode="screen" result="rg"/>
+      <feBlend in="rg" in2="b" mode="screen"/>
+    </filter>
+  </svg>
+</div>
+
+</body>
+</html>
