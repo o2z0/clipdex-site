@@ -67,6 +67,17 @@ export function createWall(el, { cards, reduced = false }) {
     measure();
   };
   render();
+  // iPhone はスクロール中にバーが出入りして、幅が同じまま resize が何度も来る。そのたびに並べ直すと列の位置が飛ぶので、
+  // 幅か面の高さが変わったときだけ並べ直す
+  let lastWidth = innerWidth;
+  let lastPlaneHeight = plane.offsetHeight;
+  const onResize = () => {
+    const planeHeight = plane.offsetHeight;
+    if (innerWidth === lastWidth && planeHeight === lastPlaneHeight) return;
+    lastWidth = innerWidth;
+    lastPlaneHeight = planeHeight;
+    render();
+  };
   let loop = null;
   if (!reduced) {
     loop = createLoop((dt) => {
@@ -80,12 +91,12 @@ export function createWall(el, { cards, reduced = false }) {
     loop.wake();
   }
   // reduced でも幅をまたいだら列数を合わせる
-  addEventListener("resize", render);
+  addEventListener("resize", onResize);
 
   return {
     destroy() {
       loop?.destroy();
-      removeEventListener("resize", render);
+      removeEventListener("resize", onResize);
       el.replaceChildren();
     },
   };

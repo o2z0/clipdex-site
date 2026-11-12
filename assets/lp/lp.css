@@ -252,7 +252,8 @@
   padding: 20px 24px 32px;
   text-align: center;
 }
-.entry__intro { position: relative; z-index: 1; opacity: var(--intro-opacity, 1); }
+/* opacity は rise.js が直接書く。自前のレイヤーにして、スクロール中に見出しを塗り直さない */
+.entry__intro { position: relative; z-index: 1; will-change: opacity; }
 .entry__label { margin: 0 0 14px; color: var(--text-3); font-size: 12px; letter-spacing: .2em; }
 .entry h1 {
   max-width: 19em;
@@ -282,7 +283,7 @@
 }
 .window video { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top center; }
 .window__fallback { display: none; }
-.entry[data-rise-progress="1"] .window { border-color: transparent; box-shadow: none; }
+.window.is-risen { border-color: transparent; box-shadow: none; }
 .no-wall .wall { display: none; }
 @media (max-width: 767px) {
   .wall__plane { grid-template-columns: repeat(3, minmax(0, 1fr)); inset: -15% -15%; gap: 10px; }
@@ -301,6 +302,7 @@ html:not(.js) .window__fallback { display: block; position: absolute; inset: 0; 
 @media (prefers-reduced-motion: reduce) {
   .window { transform: none !important; }
   .wall__track { will-change: auto; }
+  .entry__intro { will-change: auto; }
 }
 
 /* ---- feature stage ---- */
@@ -366,19 +368,18 @@ html:not(.js) .window__fallback { display: block; position: absolute; inset: 0; 
   text-align: left;
   cursor: pointer;
 }
+/* 「+」の文字は字面が行の中心より下にあり (19px で約 1.6px)、45° 回して「×」にすると斜めにずれて見える。
+   閉じるボタンと同じく 2 本の線で円の中心に描く */
 .pill::after {
-  content: "+";
+  content: "";
   flex: 0 0 auto;
-  display: grid;
-  place-items: center;
   width: 23px;
   height: 23px;
   border: 1px solid var(--line-2);
   border-radius: 50%;
-  color: var(--text-2);
-  font-size: 19px;
-  line-height: 1;
-  font-weight: 400;
+  background:
+    linear-gradient(var(--text-2), var(--text-2)) center / 9px 1.5px no-repeat,
+    linear-gradient(var(--text-2), var(--text-2)) center / 1.5px 9px no-repeat;
   transition: transform 220ms ease;
 }
 .pill[aria-expanded="true"]::after { transform: rotate(45deg); }
@@ -646,6 +647,8 @@ footer .foot-mark img { opacity: .72; }
   .lower { padding: 48px 0; }
   .lower.cta { padding: 48px 0; }
   .lower h2 { font-size: clamp(32px, 8.7vw, 42px); }
+  /* 「コピーしたものが残る」(10 字) を 1 行に収める。36px 固定だと 393 幅以下で 3 行に割れる */
+  .lower.cta h2 { font-size: min(36px, 8.6vw); }
   .lower--privacy .a-grid { margin-top: 32px; }
   .lower--privacy .priv { grid-template-columns: 1fr 1fr; }
   .lower--bento .bento { grid-template-columns: repeat(2, minmax(0, 1fr)); }
