@@ -35,6 +35,21 @@ try {
   const noWall = new URLSearchParams(location.search).has("nowall");
   if (noWall) document.documentElement.classList.add("no-wall");
 
+  // Safari は muted の自動再生でも、読み込みや表示の都合で止まったままになることがある。
+  // 再生できる状態になったとき・画面に入ったときにもう一度 play() する (止まっている間だけ)
+  const autoplayWatch = new IntersectionObserver((entries) => {
+    for (const entry of entries) if (entry.isIntersecting && !reducedMotion.matches) resume(entry.target);
+  });
+  const resume = (video) => { if (video.paused && !reducedMotion.matches) video.play().catch(() => {}); };
+  const startAutoplay = (video) => {
+    resume(video);
+    if (!video.dataset.autoplayWatched) {
+      video.dataset.autoplayWatched = "1";
+      video.addEventListener("canplay", () => resume(video));
+      autoplayWatch.observe(video);
+    }
+  };
+
   const syncVideos = (reduced) => {
     for (const video of document.querySelectorAll("video")) {
       if (reduced) {
@@ -44,7 +59,7 @@ try {
           if (reducedMotion.matches) { video.pause(); video.currentTime = 0; }
         }, { once: true });
       } else if (video.autoplay) {
-        video.play().catch(() => {});
+        startAutoplay(video);
       }
     }
   };

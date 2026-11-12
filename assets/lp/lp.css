@@ -295,8 +295,9 @@
 html:not(.js) .entry { height: auto; min-height: calc(100vh - 56px); }
 html:not(.js) .entry__sticky { position: relative; top: 0; height: auto; min-height: calc(100vh - 56px); }
 html:not(.js) .window { transform: none; }
-html:not(.js) .window video { visibility: hidden; }
-html:not(.js) .window__fallback { display: block; position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+/* JS なしでも video は隠さず、上に静止画を重ねるだけにする。Safari は「見えていない」muted 動画の自動再生を止め、
+   あとで見えるようになっても再開しないことがある (2026-11-12、Mac の Safari で最初の読み込みだけ動画が止まっていた) */
+html:not(.js) .window__fallback { display: block; position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; object-fit: cover; object-position: top center; }
 @media (prefers-reduced-motion: reduce) {
   .window { transform: none !important; }
   .wall__track { will-change: auto; }
