@@ -20,6 +20,10 @@ const headingsByPage = {
     "Free to use. Pro is a one-time purchase.", "Frequently asked questions", "Start keeping what you copy today",
   ],
 };
+// Masa が意図して変えた見出し (旧 → 新)。本文は旧と同じであることを、見出しだけ置き換えて照合する
+const RENAMED = new Map([
+  ["コピペの記録は、外部に出ない", "コピペの記録は外部に出ない"], // 2026-11-12 Masa「、」を外す
+]);
 const headings = headingsByPage[pagePath];
 if (!headings) throw new Error(`凍結見出しが未定義: ${pagePath}`);
 const normalize = (value) => value.replace(/\s+/g, " ").trim();
@@ -61,7 +65,7 @@ async function load(page, html) {
     if (response.error) throw new Error(response.error.message);
     const root = response.result.root;
     const found = inspect(root).sections;
-    if (headings.every((heading) => found.has(heading))) return inspect(root);
+    if (headings.every((heading) => found.has(heading) || found.has(RENAMED.get(heading)))) return inspect(root);
     await sleep(50);
   }
   throw new Error("凍結節の読み込みが終わらない");
@@ -77,8 +81,9 @@ try {
   const after = await load(page, current);
   const failures = [];
   for (const heading of headings) {
-    const oldText = before.sections.get(heading);
-    const newText = after.sections.get(heading);
+    const renamed = RENAMED.get(heading);
+    const oldText = renamed ? before.sections.get(heading)?.replace(heading, renamed) : before.sections.get(heading);
+    const newText = after.sections.get(renamed ?? heading);
     console.log(`${heading}: main ${oldText?.length ?? 0} / current ${newText?.length ?? 0} 文字`);
     if (!oldText || !newText) failures.push(`${heading}: 節がないか空`);
     else if (oldText !== newText) {
