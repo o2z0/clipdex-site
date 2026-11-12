@@ -686,7 +686,7 @@ html[data-edition="full"] .edition-badge {
   line-height: 1;
 }
 html[data-edition="full"] .hero-cta { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; }
-html[data-edition="full"] .btn-ghost { background: transparent; color: var(--text); border-color: var(--line); }
+html[data-edition="full"] .btn-ghost { background: transparent; color: var(--text); border-color: rgba(255, 240, 225, .32); }
 html[data-edition="full"] .btn-ghost:hover { background: var(--surface); }
 html[data-edition="full"] .stage__layout {
   background: radial-gradient(ellipse at 77% 48%, #251b15, #16100d 58%, #0d0907);
@@ -734,4 +734,19 @@ html[data-edition="full"] footer { background: #100c09; }
   .navlinks { gap: 6px; }
   .navlink { font-size: 11px; }
   .navlinks .btn-sm { padding: 7px 6px; font-size: 10px; }
+}
+
+/* フル版はボタンが 8 つあるので、舞台が 1 画面 (800px 前後) に収まるようにボタンを詰める */
+@media (min-width: 768px) {
+  html[data-edition="full"] .stage__layout { padding-top: 28px; }
+  html[data-edition="full"] .stage-pills { gap: 5px; }
+  html[data-edition="full"] .stage-pills > li { height: 38px; }
+}
+/* カードが 6 枚の節は 4 + 2 で右が空くので 3 列にする */
+@media (min-width: 900px) {
+  .priv:has(> :nth-child(6):last-child) { grid-template-columns: repeat(3, 1fr); }
+}
+/* 狭幅のボタン列は横にスクロールするので、右端を消して続きがあると分かるようにする */
+@media (max-width: 767px) {
+  html.js .stage-pills { -webkit-mask-image: linear-gradient(to right, #000 82%, transparent); mask-image: linear-gradient(to right, #000 82%, transparent); }
 }
