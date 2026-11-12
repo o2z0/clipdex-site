@@ -79,9 +79,18 @@ async function widths(base, path) {
   for (const width of [1280, 900, 375]) {
     const result = await visit(base, path, { width, height: 900 }, async (page) => ({
       overflow: await page.ev("document.documentElement.scrollWidth - document.documentElement.clientWidth"),
+      header: width === 375 ? await page.ev(`(() => {
+        const row = document.querySelector('header .navrow');
+        const box = (el) => { const r = el.getBoundingClientRect(); return { left: r.left, right: r.right, mid: r.top + r.height / 2, height: r.height }; };
+        return { row: box(row), items: [row.querySelector('.brand'), ...row.querySelectorAll('.navlinks > *')].map(box) };
+      })()`) : null,
       errors: errorsOf(page),
     }));
     if (result.overflow !== 0) failures.push(`${width}px overflow=${result.overflow}`);
+    if (result.header) {
+      const { row, items } = result.header;
+      if (items.some((item) => item.height > 40 || Math.abs(item.mid - row.mid) > 3 || item.left < row.left - 1 || item.right > row.right + 1)) failures.push(`${width}px header=${JSON.stringify(result.header)}`);
+    }
     if (result.errors) failures.push(`${width}px ${result.errors}`);
   }
   return failures.join("; ");
