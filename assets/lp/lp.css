@@ -483,7 +483,9 @@ html:not(.js) .stage-close { display: none; }
 
 /* ---- lower page: the same dark surfaces and title light as the entrance ---- */
 .lower {
-  padding: clamp(88px, 10vw, 136px) 0;
+  --text-2: #b0b0b0;
+  --text-3: #a3a3a3;
+  padding: clamp(64px, 6vw, 72px) 0;
   border-bottom: 0;
   border-top: 1px solid var(--line);
   background: var(--bg);
@@ -499,7 +501,10 @@ html:not(.js) .stage-close { display: none; }
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  word-break: auto-phrase;
+  text-wrap: balance;
 }
+.lower p { text-wrap: pretty; line-break: strict; word-break: auto-phrase; }
 .lower .body { max-width: 46em; font-size: 16px; line-height: 1.9; }
 
 .lower--privacy .a-grid { gap: 18px; margin-top: 45px; }
@@ -533,7 +538,6 @@ html:not(.js) .stage-close { display: none; }
 .lower--bento .bento { grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 14px; margin-top: 40px; }
 .lower--bento .cell {
   grid-column: span 4;
-  min-height: 178px;
   padding: 27px 28px;
   border: 1px solid var(--line);
   border-radius: 18px;
@@ -566,9 +570,22 @@ html:not(.js) .stage-close { display: none; }
 .lower--who .who > div:nth-child(3)::before { content: "03"; }
 .lower--who .who h3 { font-size: 18px; }
 
+.lower--compare .cmp-frame { position: relative; max-width: 100%; margin-top: 42px; }
+.lower--compare .cmp-frame::after {
+  content: "";
+  position: absolute;
+  z-index: 4;
+  top: 1px;
+  right: 1px;
+  bottom: 1px;
+  width: 32px;
+  border-radius: 0 15px 15px 0;
+  background: linear-gradient(90deg, transparent, #08090a);
+  pointer-events: none;
+}
 .lower--compare .cmp-scroll {
   max-width: 100%;
-  margin-top: 42px;
+  margin-top: 0;
   overflow-x: auto;
   overscroll-behavior-inline: contain;
   border: 1px solid var(--line);
@@ -576,8 +593,19 @@ html:not(.js) .stage-close { display: none; }
   background: #111215;
 }
 .lower--compare .cmp { min-width: 820px; border-collapse: separate; border-spacing: 0; }
-.lower--compare .cmp th, .lower--compare .cmp td { border: 0; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 16px; }
-.lower--compare .cmp tr > :last-child { border-right: 0; }
+.lower--compare .cmp th, .lower--compare .cmp td { border: 0; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 12px 13px; }
+.lower--compare .cmp tr > :first-child {
+  position: sticky;
+  z-index: 2;
+  left: 0;
+  width: 96px;
+  min-width: 96px;
+  max-width: 96px;
+  background: #17191d;
+}
+.lower--compare .cmp thead tr > :first-child { z-index: 3; background: #1b1e24; }
+.lower--compare .cmp tbody tr:first-child > * { padding-block: 9px; line-height: 1.5; }
+.lower--compare .cmp tr > :last-child { border-right: 0; padding-right: 35px; }
 .lower--compare .cmp tbody tr:last-child > * { border-bottom: 0; }
 .lower--compare .cmp thead { background: #1b1e24; }
 .lower--compare .cmp .mine { background: rgba(135, 150, 185, .075); }
@@ -599,8 +627,8 @@ html:not(.js) .stage-close { display: none; }
 .lower.cta {
   display: grid;
   place-items: center;
-  min-height: 490px;
-  padding: 100px 0;
+  min-height: 0;
+  padding: 72px 0;
   background: radial-gradient(ellipse 65% 80% at 50% 68%, var(--glow), transparent 72%), var(--bg);
 }
 .lower.cta h2 { max-width: none; margin-bottom: 31px; font-size: clamp(36px, 4.6vw, 60px); }
@@ -612,7 +640,8 @@ footer .footrow { row-gap: 13px; }
 footer .foot-mark img { opacity: .72; }
 
 @media (max-width: 767px) {
-  .lower { padding: 78px 0; }
+  .lower { padding: 48px 0; }
+  .lower.cta { padding: 48px 0; }
   .lower h2 { font-size: clamp(32px, 8.7vw, 42px); }
   .lower--privacy .a-grid { margin-top: 32px; }
   .lower--privacy .priv { grid-template-columns: 1fr 1fr; }
@@ -633,7 +662,7 @@ footer .foot-mark img { opacity: .72; }
   .lower--privacy .diagram { padding: 14px 10px; }
   .lower--privacy .priv { grid-template-columns: 1fr; }
   .lower--bento .bento { grid-template-columns: 1fr; }
-  .lower--bento .cell, .lower--bento .cell.w2, .lower--bento .cell.full { grid-column: auto; min-height: 0; }
+  .lower--bento .cell, .lower--bento .cell.w2, .lower--bento .cell.full { grid-column: auto; }
   .lower--faq .faq details { padding-inline: 16px; }
   .lower--faq .faq summary { font-size: 15px; }
 }
