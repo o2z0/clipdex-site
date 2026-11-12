@@ -1,12 +1,11 @@
-/* プライバシーポリシー / サポートの共通スタイル。
-   トークンの値は index.html の :root と同じものを写している。
-   index.html 側が正本なので、色や間隔を変えるときは両方直すこと
-   (LP はインライン、こちらは 4 ページ共有の外部ファイル)。 */
+/* 文書ページ (購入・更新・規約・特商法・プライバシー・サポート・ダウンロード・リリースノート) の共通スタイル。
+   色は LP の assets/lp/tokens.css の App Store 版 (無彩の黒) と、LP 後半の読みやすい灰色に揃えている。
+   LP 側の値を変えるときはここも直すこと (文書ページは版を問わず 1 色、2026-11-12 決定)。 */
 
 :root{
   color-scheme: dark;
-  --bg:#000; --surface:#161616; --surface-2:#1c1c1c;
-  --text:#f2f2f2; --text-2:#9a9a9a; --text-3:#6e6e6e;
+  --bg:#060606; --surface:#161616; --surface-2:#1c1c1c;
+  --text:#f2f2f2; --text-2:#b0b0b0; --text-3:#a3a3a3; --title-end:#8a8f99;
   --line:#262626; --line-2:#333;
   --maxw:1080px;   /* index.html と同じ。ヘッダー / フッター / 表がこの幅で揃う */
   --radius:12px; --radius-sm:6px;
@@ -31,7 +30,7 @@ body{
    (flex + margin-left:auto だとロゴが切替のぶん左へずれる)。 */
 header{
   position:sticky; top:0; z-index:50;
-  background:rgba(0,0,0,.82); backdrop-filter:saturate(180%) blur(14px);
+  background:rgba(6,6,6,.82); backdrop-filter:saturate(180%) blur(14px);
   border-bottom:1px solid var(--line);
 }
 .navrow{display:grid; grid-template-columns:1fr auto 1fr; align-items:center; height:56px}
@@ -45,7 +44,8 @@ header{
 
 /* ---- document ---- */
 main{padding:var(--s5) 0 var(--s6)}
-h1{font-size:28px; line-height:1.45; margin:0 0 var(--s1); font-weight:700; letter-spacing:.01em; text-wrap:balance}
+h1{font-size:28px; line-height:1.45; margin:0 0 var(--s1); font-weight:700; letter-spacing:.01em; text-wrap:balance;
+  background:linear-gradient(180deg, var(--text) 35%, var(--title-end)); -webkit-background-clip:text; background-clip:text; color:transparent}
 h2{
   font-size:19px; font-weight:650; margin:var(--s5) 0 var(--s2);
   padding-top:var(--s3); border-top:1px solid var(--line); text-wrap:balance;

@@ -1,0 +1,22 @@
+:root {
+  color-scheme: dark;
+  --bg: #060606;
+  --glow: rgba(130, 150, 200, .28);
+  --title-end: #8a8f99;
+  --text: #f2f2f2;
+  --text-2: #9a9a9a;
+  --text-3: #6e6e6e;
+  --line: #262626;
+  --surface: #161616;
+}
+
+html[data-edition="full"] {
+  --bg: #0b0806;
+  --glow: rgba(230, 160, 80, .30);
+  --title-end: #a08a72;
+  --text: #f2eee9;
+  --text-2: #a69a8e;
+  --text-3: #756b62;
+  --line: #322923;
+  --surface: #1a1410;
+}
