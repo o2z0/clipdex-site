@@ -772,3 +772,9 @@ footer .trademark { margin-top: 14px; color: var(--text-3); font-size: 11px; lin
   .lang-switch { font-size: 11px; }
   .navlinks .btn-sm { padding: 7px 10px; font-size: 11px; }
 }
+
+/* 入口のコピーをヘッダーと窓の中間へ (Masa 2026-11-12)。窓の位置は変えず、コピーだけ下げる
+   (窓は傾き + 0.78 倍で見た目の上端が下がるので、流れの上の余白だけでは中間にならない) */
+@media (min-width: 768px) {
+  .entry__intro { transform: translateY(60px); }
+}
