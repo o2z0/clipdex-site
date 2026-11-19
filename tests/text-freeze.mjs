@@ -23,6 +23,7 @@ const headingsByPage = {
 // Masa が意図して変えた見出し (旧 → 新)。本文は旧と同じであることを、見出しだけ置き換えて照合する
 const RENAMED = new Map([
   ["コピペの記録は、外部に出ない", "コピペの記録は外部に出ない"], // 2026-11-12 Masa「、」を外す
+  ["無料で使えて、Pro 版は買い切り", "無料で使えて、Pro は買い切り"], // 2026-11-19 呼び名の統一で「Pro 版」→「Pro」
 ]);
 const headings = headingsByPage[pagePath];
 if (!headings) throw new Error(`凍結見出しが未定義: ${pagePath}`);
