@@ -88,8 +88,11 @@ footer{border-top:1px solid var(--line); padding:var(--s4) 0; color:var(--text-3
 footer a{color:var(--text-2); text-decoration:none; transition:color 120ms ease}
 footer a:hover{color:var(--text)}
 /* 著作権表示だけフッターの 14px から一段落とす (読ませる情報ではないため)。 */
-/* 版の切替は右端、© は下の段の中央 */
-.foot-switch{margin-left:auto}
+/* 版の表示は右端 (JA / EN と同じ作り: いまの版は明るい文字、もう一方はリンク。共通ページは両方リンク)。© は下の段の中央 */
+.foot-editions{margin-left:auto; display:flex; flex-wrap:wrap; align-items:center; gap:4px 8px}
+.foot-editions > *{white-space:nowrap}
+.foot-editions [aria-current]{color:var(--text)}
+.foot-editions .sep{color:var(--line-2)}
 .copy{flex-basis:100%; margin-top:var(--s2); text-align:center; color:var(--text-3); font-size:12px}
 /* フッター先頭の「トップ」はロゴマークにしている。原本は白ベタ塗りなので、
    平常時の濃さは opacity で作る (0.55 の合成が --text-2 とほぼ同じ明るさ)。 */
@@ -97,7 +100,7 @@ footer a:hover{color:var(--text)}
 .foot-mark img{display:block; height:18px; width:auto; opacity:.55; transition:opacity 120ms ease}
 .foot-mark:hover img{opacity:1}
 .alt-lang{color:var(--text-3)}
-@media (max-width:640px){ .foot-switch{margin-left:0} }
+@media (max-width:640px){ .foot-editions{margin-left:0} }
 
 a:focus-visible{outline:2px solid var(--text); outline-offset:3px; border-radius:var(--radius-sm)}
 
