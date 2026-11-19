@@ -88,14 +88,16 @@ footer{border-top:1px solid var(--line); padding:var(--s4) 0; color:var(--text-3
 footer a{color:var(--text-2); text-decoration:none; transition:color 120ms ease}
 footer a:hover{color:var(--text)}
 /* 著作権表示だけフッターの 14px から一段落とす (読ませる情報ではないため)。 */
-.copy{margin-left:auto; color:var(--text-3); font-size:12px}
+/* 版の切替は右端、© は下の段の中央 */
+.foot-switch{margin-left:auto}
+.copy{flex-basis:100%; margin-top:var(--s2); text-align:center; color:var(--text-3); font-size:12px}
 /* フッター先頭の「トップ」はロゴマークにしている。原本は白ベタ塗りなので、
    平常時の濃さは opacity で作る (0.55 の合成が --text-2 とほぼ同じ明るさ)。 */
 .foot-mark{display:block; line-height:0}
 .foot-mark img{display:block; height:18px; width:auto; opacity:.55; transition:opacity 120ms ease}
 .foot-mark:hover img{opacity:1}
 .alt-lang{color:var(--text-3)}
-@media (max-width:640px){ .copy{margin-left:0; width:100%} }
+@media (max-width:640px){ .foot-switch{margin-left:0} }
 
 a:focus-visible{outline:2px solid var(--text); outline-offset:3px; border-radius:var(--radius-sm)}
 

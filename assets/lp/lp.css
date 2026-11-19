@@ -171,13 +171,15 @@
   footer a{color:var(--text-2); text-decoration:none; transition:color 120ms ease}
   footer a:hover{color:var(--text)}
   /* 著作権表示だけフッターの 14px から一段落とす (読ませる情報ではないため)。 */
-  .copy{margin-left:auto; color:var(--text-3); font-size:12px}
+  /* 版の切替は右端、© は下の段の中央 */
+  .foot-switch{margin-left:auto}
+  .copy{flex-basis:100%; margin-top:var(--s2); text-align:center; color:var(--text-3); font-size:12px}
   /* フッター先頭の「トップ」はロゴマーク。原本は白ベタ塗りなので濃さは opacity で作る。 */
   .foot-mark{display:block; line-height:0}
   .foot-mark img{display:block; height:18px; width:auto; opacity:.55; transition:opacity 120ms ease}
   .foot-mark:hover img{opacity:1}
   .en-links{color:var(--text-3)}
-  @media (max-width:640px){ .copy{margin-left:0; width:100%} }
+  @media (max-width:640px){ .foot-switch{margin-left:0} }
   a:focus-visible,
   .btn:focus-visible{
     outline:2px solid var(--text);
@@ -802,7 +804,7 @@ footer .trademark { margin-top: 14px; color: var(--text-3); font-size: 11px; lin
    → ::before ガラスの中の光と影 → __edge 縁の鏡面反射 (光の向き --ang に追随) → 文字。
    外枠には opacity / filter を掛けない (掛けると中の backdrop-filter が背景を見失う)。出入りは transform だけ。 */
 .full-nudge{--mx:28%;--my:-20%;--ang:-38deg;--s:1;--lit:0;
-  position:fixed;left:50%;bottom:22px;z-index:60;display:flex;align-items:center;padding:6px 6px 6px 22px;border-radius:999px;isolation:isolate;
+  position:fixed;left:50%;bottom:22px;z-index:60;display:flex;align-items:center;padding:0;border-radius:999px;isolation:isolate;
   box-shadow:0 18px 40px -8px rgba(0,0,0,.62),0 6px 14px -4px rgba(0,0,0,.5),0 0 0 .5px rgba(0,0,0,.55);
   transform:translate(-50%,calc(100% + 70px)) scale(.94);visibility:hidden;
   transition:transform .55s cubic-bezier(.2,.9,.25,1.12),visibility 0s .55s;-webkit-tap-highlight-color:transparent}
@@ -840,13 +842,23 @@ footer .trademark { margin-top: 14px; color: var(--text-3); font-size: 11px; lin
   -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;
   mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude}
 .full-nudge__defs{position:absolute;width:0;height:0;pointer-events:none}
-.full-nudge a{color:#fff;text-decoration:none;font-size:14px;font-weight:600;letter-spacing:.01em;white-space:nowrap;line-height:20px;padding:6px 0;text-shadow:0 1px 2px rgba(0,0,0,.5),0 0 10px rgba(0,0,0,.3)}
+.full-nudge a{color:#fff;text-decoration:none;font-size:14px;font-weight:600;letter-spacing:.01em;white-space:nowrap;line-height:20px;padding:12px 24px;border-radius:999px;text-shadow:0 1px 2px rgba(0,0,0,.5),0 0 10px rgba(0,0,0,.3)}
 .full-nudge a span{display:inline-block;transition:transform .3s}
-.full-nudge button{position:relative;display:grid;place-items:center;border:0;padding:0;width:32px;height:32px;margin-left:12px;border-radius:50%;cursor:pointer;color:rgba(255,255,255,.92);
-  background:radial-gradient(120% 120% at 30% 15%,rgba(255,255,255,.26),rgba(255,255,255,.07) 60%);
+.full-nudge button{display:grid;place-items:center;border:0;padding:0;position:absolute;top:-7px;left:-7px;z-index:1;width:22px;height:22px;border-radius:50%;cursor:pointer;color:rgba(255,255,255,.92);
+  background:radial-gradient(120% 120% at 30% 15%,rgba(255,255,255,.26),rgba(255,255,255,.07) 60%),rgba(36,32,28,.92);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.5),inset 0 -1px 0 rgba(255,255,255,.10),inset 0 0 0 .5px rgba(255,255,255,.22),0 2px 6px rgba(0,0,0,.35);
   transition:transform .25s cubic-bezier(.2,.9,.25,1.3),background-color .2s;-webkit-tap-highlight-color:transparent}
 .full-nudge a:focus-visible,.full-nudge button:focus-visible{outline:2px solid #ffd9a8;outline-offset:3px;border-radius:999px}
+/* × は小さく見せ、押せる範囲は周りへ広げる */
+.full-nudge button::after{content:"";position:absolute;inset:-9px;border-radius:50%}
+.full-nudge button svg{width:8px;height:8px}
+/* PC は大きく (帯や他の要素に紛れて気づかれにくかったため) */
+@media (min-width:768px){
+  .full-nudge{bottom:28px}
+  .full-nudge a{font-size:17px;line-height:24px;padding:16px 34px}
+  .full-nudge button{width:24px;height:24px}
+}
 @media (hover:hover){
   .full-nudge:hover{--s:1.025;--lit:1}
   .full-nudge a:hover span{transform:translateX(3px)}
